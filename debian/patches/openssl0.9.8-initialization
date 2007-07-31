@@ -1,3 +1,7 @@
+# Patch from Kurt Roeckx <kurt@roeckx.be> to fix initialization
+# problem with openssl 0.9.8 (Closes: #334180)
+# (But previous maintainer did not apply it, just had it in the debian/ dir)
+
 diff -bBdNrw -U5 stunnel-4.12/src/stunnel.c stunnel-4.12.modif/src/stunnel.c
 --- stunnel-4.12/src/stunnel.c	2005-09-29 22:06:16.000000000 +0200
 +++ stunnel-4.12.modif/src/stunnel.c	2005-10-26 17:50:52.000000000 +0200

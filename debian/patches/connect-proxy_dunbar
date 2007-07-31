@@ -1,3 +1,5 @@
+# Connect thru an http proxy. Would close #267533, but
+# does not apply on 4.07 sources.
 diff -urN stunnel-4.05.orig/src/client.c stunnel-4.05/src/client.c
 --- stunnel-4.05.orig/src/client.c	2004-02-10 19:17:54.000000000 +0000
 +++ stunnel-4.05/src/client.c	2004-03-08 18:39:51.000000000 +0000

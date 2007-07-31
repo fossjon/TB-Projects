@@ -1,0 +1,29 @@
+# Change references to the binary from stunnel to stunnel4
+Index: stunnel-4.20/src/stunnel3.in
+===================================================================
+--- stunnel-4.20.orig/src/stunnel3.in	2007-05-01 23:55:55.000000000 -0500
++++ stunnel-4.20/src/stunnel3.in	2007-05-01 23:55:55.000000000 -0500
+@@ -27,7 +27,7 @@
+ use Getopt::Std;
+ 
+ # Configuration - path to stunnel (version >=4.05)
+-$stunnel_bin='/usr/bin/stunnel';
++$stunnel_bin='/usr/bin/stunnel4';
+ 
+ # stunnel3 script body begins here
+ ($read_fd, $write_fd)=POSIX::pipe();
+Index: stunnel-4.20/doc/stunnel.8
+===================================================================
+--- stunnel-4.20.orig/doc/stunnel.8	2007-05-01 23:50:57.000000000 -0500
++++ stunnel-4.20/doc/stunnel.8	2007-05-01 23:55:55.000000000 -0500
+@@ -128,8 +128,8 @@
+ .rm #[ #] #H #V #F C
+ .\" ========================================================================
+ .\"
+-.IX Title "STUNNEL 8"
+-.TH STUNNEL 8 "2006.11.15" "4.08" "stunnel"
++.IX Title "STUNNEL4 8"
++.TH STUNNEL4 8 "2006.11.15" "4.08" "stunnel4"
+ .SH "NAME"
+ stunnel \- universal SSL tunnel
+ .SH "SYNOPSIS"

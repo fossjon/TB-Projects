@@ -3,6 +3,8 @@
 # debian/rules file for the Debian/GNU Linux stunnel package
 # Copyright 2003 by Julien LEMOINE <speedblue@debian.org>
 
+include /usr/share/quilt/quilt.make
+
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 PROXY_CONNECT	     = debian/connect-proxy_dunbar.patch
@@ -13,7 +15,7 @@ else
   CFLAGS += -O2
 endif
 
-build: build-stamp
+build: patch build-stamp
 build-stamp:
 	dh_testdir
 	if grep stunnel_bin= src/stunnel3.in | grep "stunnel[']"; then	\
@@ -24,8 +26,7 @@ build-stamp:
 	  echo "invalid src/stunnel3.in";				\
 	  exit 1;							\
 	fi
-#	cat $(PROXY_CONNECT) | patch -p1
-#	touch patched
+
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr 			\
 	  --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE)	\
 	  --localstatedir=/var --enable-ssllib-cs 			\
@@ -35,10 +36,11 @@ build-stamp:
 	cd doc; $(MAKE)
 	touch build-stamp
 
-clean:
+clean: clean-patched unpatch
+clean-patched:
 	dh_testdir
 	dh_testroot
-#	if test -f patched; then cat $(PROXY_CONNECT) | patch -p1 -R; fi
+
 	rm -rf build-stamp config.cache stunnel.rnd src/stunnel.exe 	\
 	  doc/stunnel4.8 config.log config.status src/stunnel src/.libs	\
 	  src/*.o src/*.lo src/*.la src/Makefile doc/Makefile 		\

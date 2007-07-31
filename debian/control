@@ -1,7 +1,7 @@
 Source: stunnel4
 Section: net
 Priority: optional
-Build-Depends: debhelper(>=4), libssl-dev (>= 0.9.8-1), openssl (>= 0.9.8-1), libwrap0-dev, sdf
+Build-Depends: debhelper(>=4), quilt, libssl-dev (>= 0.9.8-1), openssl (>= 0.9.8-1), libwrap0-dev, sdf
 Maintainer: Debian QA Group <packages@qa.debian.org>
 Standards-Version: 3.7.2
 
