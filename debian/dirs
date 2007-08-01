@@ -1,5 +1,5 @@
 usr/sbin
 usr/bin
 etc/stunnel
-usr/share/doc/stunnel4
+usr/share/doc/
 usr/share/lintian/overrides

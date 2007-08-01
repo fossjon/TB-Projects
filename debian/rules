@@ -33,36 +33,40 @@ clean-patched:
 	dh_testdir
 	dh_testroot
 
-	rm -rf build-stamp config.cache stunnel.rnd src/stunnel.exe 	\
-	  doc/stunnel4.8 config.log config.status src/stunnel src/.libs	\
-	  src/*.o src/*.lo src/*.la src/Makefile doc/Makefile 		\
-	  tools/Makefile tools/stunnel.conf-sample tools/stunnel.init	\
-	  Makefile libtool patched src/.deps src/stunnel3 
-	-$(MAKE) clean
-	-$(MAKE) distclean
-	dh_clean
+	[ ! -f Makefile ] || $(MAKE) distclean
+
+	dh_clean build-stamp doc/stunnel4.8
 
 install: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+
 	cd src; $(MAKE) install prefix=$(CURDIR)/debian/stunnel4/usr
 	cd doc; $(MAKE) install prefix=$(CURDIR)/debian/stunnel4/usr
-	install -p -m 0644 tools/stunnel.conf-sample 			\
-	  $(CURDIR)/debian/stunnel4/etc/stunnel/stunnel.conf
+
+	ln doc/stunnel.8 doc/stunnel4.8
+
+	# Manpages will be installed by dh_installman
 	rm -rf $(CURDIR)/debian/stunnel4/man
 	rm -rf $(CURDIR)/debian/stunnel4/usr/man
-	cp doc/stunnel.8 doc/stunnel4.8
+
+	install -p -m 0644 tools/stunnel.conf-sample 			\
+	  $(CURDIR)/debian/stunnel4/etc/stunnel/stunnel.conf
+
+	# mv executables into /usr/bin, with propper names
 	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel 			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
 	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel3			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel
-	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel/*		\
+
+	# Move docs into propper dir
+	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
 	  $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel4
-	rm -rf $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel
+
 	install -p -m 0644 $(CURDIR)/debian/lintian.overrides		\
-        $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
+	  $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
 
 binary-indep:
 #Nothing to do here
