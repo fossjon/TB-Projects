@@ -10,6 +10,7 @@ Architecture: any
 Conflicts: stunnel
 Depends: ${shlibs:Depends}, openssl, netbase, perl-modules
 Pre-Depends: adduser
+Suggests: logcheck-database
 Description: Universal SSL tunnel for network daemons
  The stunnel program is designed to work  as  SSL  encryption
  wrapper between remote client and local (inetd-startable) or

@@ -6,6 +6,7 @@ stunnel4 (3:4.20-3) unstable; urgency=low
   * Ship upstream Changelog (Closes: #419842).
   * Do not compress StunnelConf-0.1.pl (Closes: #432304).
   * Add watch file.
+  * Suggests: logcheck-database (Closes: #382099).
 
  --
 
