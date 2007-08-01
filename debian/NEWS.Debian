@@ -1,1 +1,8 @@
-WARNING: Since stunnel >= 4.140-6, stunnel/stunnel4 binaries are located in /usr/bin instead of /usr/sbin in order to be FHS compliant (they can be used by normal user). You need to update your script to refer to this new location
+stunnel (2:4.140-5) unstable; urgency=low
+
+  * stunnel/stunnel4 binaries are located in /usr/bin instead of /usr/sbin
+    in order to be FHS compliant (they can be used by normal user). You
+    need to update your scripts to refer to this new location
+
+ -- Julien Lemoine <speedblue@debian.org>  Sun, 19 Feb 2006 17:31:24 +0100
+  

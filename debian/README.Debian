@@ -1,6 +1,9 @@
 stunnel4 package for Debian.
 
-WARNING: Since stunnel >= 4.140-6, stunnel/stunnel4 binaries are located in /usr/bin instead of /usr/sbin in order to be FHS compliant (they can be used by normal user). You need to update your script to refer to this new location
+WARNING: Since stunnel >= 4.140-6, stunnel/stunnel4 binaries are
+located in /usr/bin instead of /usr/sbin in order to be FHS compliant
+(they can be used by normal user). You need to update your script to
+refer to this new location
 
 "Sergio Rua" <srua@debian.org> made a perl front-end for the stunnel 
 configuration. It is very simple and only includes a couple of configuration
@@ -50,4 +53,4 @@ Julien LEMOINE
 speedblue@debian.org
 
 
- -- Julien Lemoine <speedblue@morpheus>, Sun, 12 Mar 2006 21:36:35 +0100
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>, Tue, 31 Jul 2007 20:22:41 z
