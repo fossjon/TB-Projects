@@ -1,3 +1,4 @@
+libstunnel_is_private_lib
 fix-paths
 rename-binary
 runas-user

@@ -2,8 +2,8 @@
 ## binaries install location from sbin to bin, to comply with the FHS
 Index: stunnel4-4.20/src/stunnel3.in
 ===================================================================
---- stunnel4-4.20.orig/src/stunnel3.in	2007-07-31 15:49:34.000000000 -0500
-+++ stunnel4-4.20/src/stunnel3.in	2007-07-31 15:54:51.000000000 -0500
+--- stunnel4-4.20.orig/src/stunnel3.in	2007-07-31 16:03:35.000000000 -0500
++++ stunnel4-4.20/src/stunnel3.in	2007-07-31 21:43:08.000000000 -0500
 @@ -27,7 +27,7 @@
  use Getopt::Std;
  
@@ -15,21 +15,21 @@ Index: stunnel4-4.20/src/stunnel3.in
  ($read_fd, $write_fd)=POSIX::pipe();
 Index: stunnel4-4.20/src/Makefile.in
 ===================================================================
---- stunnel4-4.20.orig/src/Makefile.in	2007-07-31 15:49:34.000000000 -0500
-+++ stunnel4-4.20/src/Makefile.in	2007-07-31 15:56:45.000000000 -0500
-@@ -221,7 +221,7 @@
+--- stunnel4-4.20.orig/src/Makefile.in	2007-07-31 21:37:51.000000000 -0500
++++ stunnel4-4.20/src/Makefile.in	2007-07-31 21:43:08.000000000 -0500
+@@ -225,7 +225,7 @@
  INCLUDES = -I/usr/kerberos/include
  
  # Additional compiler flags
--AM_CPPFLAGS = -DLIBDIR='"$(libdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' -DPIDFILE='"$(prefix)/var/run/stunnel/stunnel.pid"'
-+AM_CPPFLAGS = -DLIBDIR='"$(libdir)"' -DCONFDIR='"/etc/stunnel"' -DPIDFILE='"/var/run/stunnel4.pid"'
+-AM_CPPFLAGS = -DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' -DPIDFILE='"$(prefix)/var/run/stunnel/stunnel.pid"'
++AM_CPPFLAGS = -DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"/etc/stunnel"' -DPIDFILE='"/var/run/stunnel4.pid"'
  
  # Win32 executable
  EXTRA_DIST = stunnel.exe make.bat mingw.mak makece.bat evc.mak vc.mak nogui.c os2.mak
 Index: stunnel4-4.20/tools/stunnel.conf-sample.in
 ===================================================================
---- stunnel4-4.20.orig/tools/stunnel.conf-sample.in	2007-07-31 15:49:34.000000000 -0500
-+++ stunnel4-4.20/tools/stunnel.conf-sample.in	2007-07-31 15:58:16.000000000 -0500
+--- stunnel4-4.20.orig/tools/stunnel.conf-sample.in	2007-07-31 16:03:35.000000000 -0500
++++ stunnel4-4.20/tools/stunnel.conf-sample.in	2007-07-31 21:43:08.000000000 -0500
 @@ -3,18 +3,18 @@
  ; Please make sure you understand them (especially the effect of chroot jail)
  
@@ -75,8 +75,8 @@ Index: stunnel4-4.20/tools/stunnel.conf-sample.in
  ;client = yes
 Index: stunnel4-4.20/tools/stunnel.init.in
 ===================================================================
---- stunnel4-4.20.orig/tools/stunnel.init.in	2007-07-31 15:49:34.000000000 -0500
-+++ stunnel4-4.20/tools/stunnel.init.in	2007-07-31 15:54:51.000000000 -0500
+--- stunnel4-4.20.orig/tools/stunnel.init.in	2007-07-31 16:03:35.000000000 -0500
++++ stunnel4-4.20/tools/stunnel.init.in	2007-07-31 21:43:08.000000000 -0500
 @@ -4,7 +4,7 @@
  
  PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin

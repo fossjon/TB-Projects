@@ -6,8 +6,5 @@ if [ x$1 = "xpurge" ]; then
 	echo You may want to delete the generated stunnel.pem file
 	echo in /etc/ssl/certs.
 fi
-if [ "$1" = "remove" ]; then
-        ldconfig
-fi
 
 #DEBHELPER#

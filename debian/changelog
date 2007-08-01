@@ -7,6 +7,7 @@ stunnel4 (3:4.20-3) unstable; urgency=low
   * Do not compress StunnelConf-0.1.pl (Closes: #432304).
   * Add watch file.
   * Suggests: logcheck-database (Closes: #382099).
+  * Move libstunnel.so into /usr/lib/stunnel, as it is a private DSO.
 
  --
 

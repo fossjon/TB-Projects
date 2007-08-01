@@ -64,8 +64,4 @@ if ! test -f /var/log/stunnel4/stunnel.log; then
   $CHOWN -R $USER:$USER /var/log/stunnel4/stunnel.log
 fi
 
-if [ "$1" = "configure" ]; then
-        ldconfig
-fi
-
 #DEBHELPER#
