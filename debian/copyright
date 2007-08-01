@@ -20,3 +20,6 @@ respects for all of the code used other than OpenSSL.  If you modify
 this file, you may extend this exception to your version of the
 file, but you are not obligated to do so.  If you do not wish to
 do so, delete this exception statement from your version.
+
+The packaging itself is copyright Paolo Molaro, Julien Lemoine, and 
+Rodrigo Gallardo, and is licensed under the terms of the GPL.
