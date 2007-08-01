@@ -65,8 +65,9 @@ install: build-stamp
 	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
 	  $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel4
 
-	install -p -m 0644 $(CURDIR)/debian/lintian.overrides		\
-	  $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
+	[ ! -s debian/lintian.overrides ] || \
+	  install -p -m 0644 $(CURDIR)/debian/lintian.overrides		\
+	    $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
 
 binary-indep:
 #Nothing to do here
