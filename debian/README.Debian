@@ -49,8 +49,4 @@ ln -sf stunnel.pem `openssl x509 -noout -hash < stunnel.pem`.0
 
 Read the manual page for openssl for more info on the various options.
 
-Julien LEMOINE
-speedblue@debian.org
-
-
- -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>, Tue, 31 Jul 2007 20:22:41 z
+ -- Julien LEMOINE <speedblue@debian.org>, Sun, 19 Feb 2006 17:31:24 +0100
