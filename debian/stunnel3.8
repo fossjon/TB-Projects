@@ -380,14 +380,14 @@ In order to provide \s-1SSL\s0 encapsulation to your local \fIimapd\fR service,
 use
 .PP
 .Vb 1
-\&  stunnel -d 993 -l /usr/sbin/imapd -- imapd
+\&  stunnel \-d 993 \-l /usr/sbin/imapd \-\- imapd
 .Ve
 .PP
 If you want to provide tunneling to your \fIpppd\fR daemon on port 2020,
 use something like
 .PP
 .Vb 1
-\&  stunnel -d 2020 -L /usr/sbin/pppd -- pppd local
+\&  stunnel \-d 2020 \-L /usr/sbin/pppd \-\- pppd local
 .Ve
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
@@ -427,13 +427,13 @@ appended on the top of generated certificate should be discarded. So
 the file should look like this:
 .Sp
 .Vb 8
-\&  -----BEGIN RSA PRIVATE KEY-----
+\&  \-\-\-\-\-BEGIN RSA PRIVATE KEY\-\-\-\-\-
 \&  [encoded key]
-\&  -----END RSA PRIVATE KEY-----
+\&  \-\-\-\-\-END RSA PRIVATE KEY\-\-\-\-\-
 \&  [empty line]
-\&  -----BEGIN CERTIFICATE-----
+\&  \-\-\-\-\-BEGIN CERTIFICATE\-\-\-\-\-
 \&  [encoded certificate]
-\&  -----END CERTIFICATE-----
+\&  \-\-\-\-\-END CERTIFICATE\-\-\-\-\-
 \&  [empty line]
 .Ve
 .SH "RANDOMNESS"
