@@ -64,13 +64,6 @@ if ! test -f /var/log/stunnel4/stunnel.log; then
   $CHOWN -R $USER:$USER /var/log/stunnel4/stunnel.log
 fi
 
-if [ -x "/etc/init.d/stunnel4" ]; then
-	if [ -x /usr/sbin/invoke-rc.d ] ; then
-		invoke-rc.d stunnel4 stop
-	else
-		/etc/init.d/stunnel4 stop
-	fi
-fi
 if [ "$1" = "configure" ]; then
         ldconfig
 fi
