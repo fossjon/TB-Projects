@@ -59,7 +59,7 @@ install: build-stamp
 	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel 			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
 	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel3			\
-	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel
+	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel3
 
 	# Move docs into propper dir
 	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
@@ -77,13 +77,13 @@ binary-arch: install
 	dh_installdocs
 	dh_installexamples
 	dh_installman
-	dh_installchangelogs
+	dh_installchangelogs ChangeLog
 	dh_installinit -- defaults
 	dh_installppp --name=0stunnel4
 	dh_installlogrotate
 	dh_link
 	dh_strip
-	dh_compress
+	dh_compress --exclude=StunnelConf-0.1.pl
 	dh_fixperms
 	dh_makeshlibs -l debian/stunnel4/usr/lib
 	dh_installdeb
