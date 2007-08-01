@@ -1,6 +1,7 @@
 stunnel4 (3:4.20-3) unstable; urgency=low
 
   * Manage patches to upstream source with quilt.
+  * Use less cmd line args to debhelper commands in debian/rules.
 
  --
 

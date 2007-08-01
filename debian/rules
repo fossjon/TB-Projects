@@ -18,14 +18,6 @@ endif
 build: patch build-stamp
 build-stamp:
 	dh_testdir
-	if grep stunnel_bin= src/stunnel3.in | grep "stunnel[']"; then	\
-	  echo "invalid src/stunnel3.in";				\
-	  exit 1;							\
-	fi
-	if grep stunnel_bin= src/stunnel3.in | grep "sbin/stunnel"; then\
-	  echo "invalid src/stunnel3.in";				\
-	  exit 1;							\
-	fi
 
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr 			\
 	  --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE)	\
@@ -50,7 +42,7 @@ clean-patched:
 	-$(MAKE) distclean
 	dh_clean
 
-install:
+install: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
@@ -72,21 +64,20 @@ install:
 	install -p -m 0644 $(CURDIR)/debian/lintian.overrides		\
         $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
 
-binary-indep: build install
+binary-indep:
+#Nothing to do here
 
-binary-arch: build install
+binary-arch: install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
-	dh_installexamples tools/ca.html tools/ca.pl tools/importCA.html\
-	  tools/importCA.sh tools/stunnel.cnf tools/stunnel.conf-sample	\
-	  tools/stunnel.init
-	dh_installman doc/stunnel4.8 debian/stunnel.8
+	dh_installexamples
+	dh_installman
 	dh_installchangelogs
 	dh_installinit -- defaults
 	dh_installppp --name=0stunnel4
 	dh_installlogrotate
-	dh_link /usr/lib/libstunnel.so /usr/lib/libstunnel.so.4
+	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms

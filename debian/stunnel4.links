@@ -1,0 +1,3 @@
+/usr/bin/stunnel3 /usr/bin/stunnel
+/usr/share/man/man8/stunnel3.8.gz /usr/share/man/man8/stunnel.8.gz
+/usr/lib/libstunnel.so /usr/lib/libstunnel.so.4
