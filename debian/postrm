@@ -5,6 +5,9 @@ set -e
 if [ x$1 = "xpurge" ]; then
 	echo You may want to delete the generated stunnel.pem file
 	echo in /etc/ssl/certs.
+
+        # Remove this dir if empty
+        rmdir /var/lib/stunnel4 || true
 fi
 
 #DEBHELPER#
