@@ -1,0 +1,25 @@
+Source: stunnel4
+Section: net
+Priority: optional
+Build-Depends: debhelper(>=4), libssl-dev (>= 0.9.8-1), openssl (>= 0.9.8-1), libwrap0-dev, sdf
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Standards-Version: 3.7.2
+
+Package: stunnel4
+Architecture: any
+Conflicts: stunnel
+Depends: ${shlibs:Depends}, openssl, netbase, perl-modules
+Pre-Depends: adduser
+Description: Universal SSL tunnel for network daemons
+ The stunnel program is designed to work  as  SSL  encryption
+ wrapper between remote client and local (inetd-startable) or
+ remote server. The concept is that having non-SSL aware daemons
+ running  on  your  system you can easily setup them to
+ communicate with clients over secure SSL channel.
+ .
+ stunnel can be used to add  SSL  functionality  to  commonly
+ used  inetd  daemons  like  POP-2,  POP-3  and  IMAP servers
+ without any changes in the programs' code.
+ .
+ This package is compatible with stunnel 3.x version (via a wrapper).
+ Stunnel 4.x is more actively maintained upstream.

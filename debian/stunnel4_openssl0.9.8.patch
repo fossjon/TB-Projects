@@ -1,0 +1,29 @@
+diff -bBdNrw -U5 stunnel-4.12/src/stunnel.c stunnel-4.12.modif/src/stunnel.c
+--- stunnel-4.12/src/stunnel.c	2005-09-29 22:06:16.000000000 +0200
++++ stunnel-4.12.modif/src/stunnel.c	2005-10-26 17:50:52.000000000 +0200
+@@ -79,10 +79,12 @@
+ #endif
+ 
+ void main_initialize(char *arg1, char *arg2) {
+     struct stat st; /* buffer for stat */
+ 
++    ssl_init(); /* initialize SSL library */
++    context_init(); /* initialize global SSL context */
+     sthreads_init(); /* initialize critical sections & SSL callbacks */
+     parse_config(arg1, arg2);
+     log_open();
+     s_log(LOG_NOTICE, "%s", stunnel_info());
+ 
+@@ -100,12 +102,10 @@
+ #endif /* defined USE_WIN32 */
+     }
+ }
+ 
+ void main_execute(void) {
+-    ssl_init(); /* initialize SSL library */
+-    context_init(); /* initialize global SSL context */
+     /* check if started from inetd */
+     if(local_options.next) { /* there are service sections -> daemon mode */
+         daemon_loop();
+     } else { /* inetd mode */
+ #if !defined (USE_WIN32) && !defined (__vms)

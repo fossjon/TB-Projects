@@ -1,0 +1,99 @@
+#!/usr/bin/make -f
+#                                                       -*- makefile -*-
+# debian/rules file for the Debian/GNU Linux stunnel package
+# Copyright 2003 by Julien LEMOINE <speedblue@debian.org>
+
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+PROXY_CONNECT	     = debian/connect-proxy_dunbar.patch
+CFLAGS 		     = -Wall -g
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  CFLAGS += -O0
+else
+  CFLAGS += -O2
+endif
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	if grep stunnel_bin= src/stunnel3.in | grep "stunnel[']"; then	\
+	  echo "invalid src/stunnel3.in";				\
+	  exit 1;							\
+	fi
+	if grep stunnel_bin= src/stunnel3.in | grep "sbin/stunnel"; then\
+	  echo "invalid src/stunnel3.in";				\
+	  exit 1;							\
+	fi
+#	cat $(PROXY_CONNECT) | patch -p1
+#	touch patched
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr 			\
+	  --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE)	\
+	  --localstatedir=/var --enable-ssllib-cs 			\
+	  --with-cert-dir=/etc/ssl/certs --with-pem-dir=/etc/ssl/certs	\
+	  --enable-ipv6 --with-threads=pthread
+	cd src; $(MAKE)
+	cd doc; $(MAKE)
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+#	if test -f patched; then cat $(PROXY_CONNECT) | patch -p1 -R; fi
+	rm -rf build-stamp config.cache stunnel.rnd src/stunnel.exe 	\
+	  doc/stunnel4.8 config.log config.status src/stunnel src/.libs	\
+	  src/*.o src/*.lo src/*.la src/Makefile doc/Makefile 		\
+	  tools/Makefile tools/stunnel.conf-sample tools/stunnel.init	\
+	  Makefile libtool patched src/.deps src/stunnel3 
+	-$(MAKE) clean
+	-$(MAKE) distclean
+	dh_clean
+
+install:
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	cd src; $(MAKE) install prefix=$(CURDIR)/debian/stunnel4/usr
+	cd doc; $(MAKE) install prefix=$(CURDIR)/debian/stunnel4/usr
+	install -p -m 0644 tools/stunnel.conf-sample 			\
+	  $(CURDIR)/debian/stunnel4/etc/stunnel/stunnel.conf
+	rm -rf $(CURDIR)/debian/stunnel4/man
+	rm -rf $(CURDIR)/debian/stunnel4/usr/man
+	cp doc/stunnel.8 doc/stunnel4.8
+	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel 			\
+	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
+	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel3			\
+	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel
+	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel/*		\
+	  $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel4
+	rm -rf $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel
+	install -p -m 0644 $(CURDIR)/debian/lintian.overrides		\
+        $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
+
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installexamples tools/ca.html tools/ca.pl tools/importCA.html\
+	  tools/importCA.sh tools/stunnel.cnf tools/stunnel.conf-sample	\
+	  tools/stunnel.init
+	dh_installman doc/stunnel4.8 debian/stunnel.8
+	dh_installchangelogs
+	dh_installinit -- defaults
+	dh_installppp --name=0stunnel4
+	dh_installlogrotate
+	dh_link /usr/lib/libstunnel.so /usr/lib/libstunnel.so.4
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs -l debian/stunnel4/usr/lib
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

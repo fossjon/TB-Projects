@@ -1,0 +1,2 @@
+stunnel4: no-shlibs-control-file usr/lib/libstunnel.so
+stunnel4: package-name-doesnt-match-sonames libstunnel

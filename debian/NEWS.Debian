@@ -1,0 +1,1 @@
+WARNING: Since stunnel >= 4.140-6, stunnel/stunnel4 binaries are located in /usr/bin instead of /usr/sbin in order to be FHS compliant (they can be used by normal user). You need to update your script to refer to this new location

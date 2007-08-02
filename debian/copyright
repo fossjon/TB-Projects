@@ -1,0 +1,22 @@
+This package was dowloaded from http://www.stunnel.org/
+and debianized by Paolo Molaro <lupus@debian.org>.
+
+It was downloaded from http://www.stunnel.org/download/source.html
+
+Upstream author: Michal Trojnara  <Michal.Trojnara@mirt.net>
+
+Copyright:
+You are free to distribute this software under the terms of
+the GNU General Public License.
+On Debian systems, the complete text of the GNU General Public
+License can be found in /usr/share/common-licenses/GPL file.
+
+In addition, as a special exception, Michal Trojnara gives
+permission to link the code of this program with the OpenSSL
+library (or with modified versions of OpenSSL that use the same
+license as OpenSSL), and distribute linked combinations including
+the two.  You must obey the GNU General Public License in all
+respects for all of the code used other than OpenSSL.  If you modify
+this file, you may extend this exception to your version of the
+file, but you are not obligated to do so.  If you do not wish to
+do so, delete this exception statement from your version.

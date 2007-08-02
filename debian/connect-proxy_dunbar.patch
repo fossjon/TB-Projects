@@ -1,0 +1,399 @@
+diff -urN stunnel-4.05.orig/src/client.c stunnel-4.05/src/client.c
+--- stunnel-4.05.orig/src/client.c	2004-02-10 19:17:54.000000000 +0000
++++ stunnel-4.05/src/client.c	2004-03-08 18:39:51.000000000 +0000
+@@ -74,6 +74,7 @@
+ #endif
+ static int connect_remote(CLI *c);
+ static void reset(int, char *);
++int connect_to_finaldest(CLI *c, int s);
+ 
+ int max_clients;
+ #ifndef USE_WIN32
+@@ -911,7 +912,8 @@
+         safe_ntoa(c->connecting_address, addr.sin_addr);
+         log(LOG_DEBUG, "%s connecting %s:%d", c->opt->servname,
+             c->connecting_address, ntohs(addr.sin_port));
+-        if(!connect(s, (struct sockaddr *)&addr, sizeof(addr)))
++        if(!connect(s, (struct sockaddr *)&addr, sizeof(addr))
++           && !connect_to_finaldest(c, s))
+             return s; /* no error -> success */
+         error=get_last_socket_error();
+         switch(error) {
+@@ -936,7 +938,8 @@
+         }
+ 
+         /* try to connect for the 2nd time */
+-        if(!connect(s, (struct sockaddr *)&addr, sizeof(addr)))
++        if(!connect(s, (struct sockaddr *)&addr, sizeof(addr))
++           && !connect_to_finaldest(c, s))
+             return s; /* no error -> success */
+         error=get_last_socket_error();
+         switch(error) {
+@@ -965,4 +968,245 @@
+         log_error(LOG_DEBUG, get_last_socket_error(), txt);
+ }
+ 
++/* 
++ * Base 64 encoding algorithm from: Bob Deblier <bob@virtualunlimited.com>
++ * Modified by Daniel Savard <savardd@gnulinux.ca> to accept char *
++ */
++static const char* to_b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++char* b64enc(const char* data) {    
++    int div = strlen(data) / 3;
++    int rem = strlen(data) % 3;
++    int chars = div*4 + rem + 1;
++    char* string = (char*) malloc(chars + 1);
++
++    if (string) {
++        register char* buf = string;
++        chars = 0;
++        while (div > 0) {
++            buf[0] = to_b64[ (data[0] >> 2) & 0x3f];
++            buf[1] = to_b64[((data[0] << 4) & 0x30) + ((data[1] >> 4) & 0xf)];
++            buf[2] = to_b64[((data[1] << 2) & 0x3c) + ((data[2] >> 6) & 0x3)];
++            buf[3] = to_b64[ data[2] & 0x3f];
++            data += 3;
++            buf += 4;
++            div--;
++            chars += 4;
++        }
++
++        switch (rem) {
++            case 2:
++                buf[0] = to_b64[ (data[0] >> 2) & 0x3f];
++                buf[1] = to_b64[((data[0] << 4) & 0x30) + ((data[1] >> 4) & 0xf)];
++                buf[2] = to_b64[ (data[1] << 2) & 0x3c];
++                buf[3] = '=';
++                buf += 4;
++                chars += 4;
++                break;
++            case 1:
++                buf[0] = to_b64[ (data[0] >> 2) & 0x3f];
++                buf[1] = to_b64[ (data[0] << 4) & 0x30];
++                buf[2] = '=';
++                buf[3] = '=';
++                buf += 4;
++                chars += 4;
++                break;
++        }
++
++        *buf = '\0';
++    }
++
++return string;
++}
++
++/*
++ *  Base 64 decoding algorithm from: Bob Deblier <bob@virtualunlimited.com> 
++ *  Modified by Daniel Savard <savardd@gnulinux.ca> to return char *
++ */
++char* b64dec(const char* string)
++{
++    /* return a decoded char string, or a null pointer in case of failure */
++    char* data = NULL;
++
++    if (string) {
++        register int length = strlen(string);
++
++        /* do a format verification first */
++        if (length > 0) {
++            register int count = 0, rem = 0;
++            register const char* tmp = string;
++
++            while (length > 0) {
++                register int skip = strspn(tmp, to_b64);
++                count += skip;
++                length -= skip;
++                tmp += skip;
++                if (length > 0) {
++                    register int i, vrfy = strcspn(tmp, to_b64);
++
++                    for (i = 0; i < vrfy; i++) {
++                        if (isspace(tmp[i]))
++                            continue;
++
++                        if (tmp[i] == '=') {
++                            /* we should check if we're close to the end of the string */
++                            rem = count % 4;
++
++                            /* rem must be either 2 or 3, otherwise no '=' should be here */
++                            if (rem < 2)
++                                return NULL;
++
++                            /* end-of-message recognized */
++                            break;
++                        } else {
++                           /* Transmission error; RFC tells us to ignore this, but:
++                            *  - the rest of the message is going to even more corrupt since we're sliding bits out of place
++                            * If a message is corrupt, it should be dropped. Period.
++                            */
++                            return NULL;
++                        }
++                    }
++                   
++                    length -= vrfy;
++                    tmp += vrfy;
++                }
++            }
++
++            data = (unsigned char *)malloc((count / 4) * 3 + (rem ? (rem - 1) : 0));
++
++            if (data) {
++                if (count > 0) {
++                    register int i, qw = 0, tw = 0;
++
++                    length = strlen(tmp = string);
++
++                    for (i = 0; i < length; i++) {
++                        register char ch = string[i];
++                        register char bits = 0;
++
++                        if (isspace(ch))
++                            continue;
++
++                        if ((ch >= 'A') && (ch <= 'Z'))	{
++                            bits = (ch - 'A');
++                        } else if ((ch >= 'a') && (ch <= 'z')) {
++                            bits = (ch - 'a' + 26);
++                        } else if ((ch >= '0') && (ch <= '9')) {
++                            bits = (ch - '0' + 52);
++                        } else if (ch == '=') {
++                            break;
++                        }
++
++                        switch (qw++) {
++                            case 0:
++                                data[tw+0] = (bits << 2) & 0xfc;
++                                break;
++                            case 1:
++                                data[tw+0] |= (bits >> 4) & 0x03;
++                                data[tw+1] = (bits << 4) & 0xf0;
++                                break;
++                            case 2:
++                                data[tw+1] |= (bits >> 2) & 0x0f;
++                                data[tw+2] = (bits << 6) & 0xc0;
++                                break;
++                            case 3:
++                                data[tw+2] |= bits & 0x3f;
++                                break;
++                        }
++
++                        if (qw == 4) {
++                            qw = 0;
++                            tw += 3;
++                        }
++                    }
++
++                    data[tw] = '\0';
++                }
++            }
++        }
++    }
++
++return data;
++}
++
++/*
++ * Original https proxy algorithm from: Tan Swee Heng <sweeheng@srikant.org>
++ * Modified by Daniel Savard <savardd@gnulinux.ca> to support basic authentication
++ */
++int connect_to_finaldest(CLI *c, int s) {
++    char buff[STRLEN];
++    int len, code;
++    char httpsproxy_auth[STRLEN] = "";
++    char httpsproxy_useragent[STRLEN] = "";
++    
++    if (!c->opt->option.httpsproxy)
++        return 0;
++
++    if (c->opt->httpsproxy_auth != NULL) {
++        if (strchr(c->opt->httpsproxy_auth,':')) {
++            /* httpsproxy_auth in the form name:password' */
++            char *base64_auth = b64enc(c->opt->httpsproxy_auth);
++            log(LOG_DEBUG,"proxy: authenticate with '%s' -> '%s'\n",c->opt->httpsproxy_auth,base64_auth);
++            sprintf(httpsproxy_auth,"Proxy-Authorization: Basic %s\r\n",base64_auth);
++            free(base64_auth);
++        } else {
++            /* httpsproxy_auth already base64 encoded */
++            char *normal_auth = b64dec(c->opt->httpsproxy_auth);
++            log(LOG_DEBUG,"proxy: authenticate with '%s' -> '%s'\n",normal_auth,c->opt->httpsproxy_auth);
++            sprintf(httpsproxy_auth,"Proxy-Authorization: Basic %s\r\n",c->opt->httpsproxy_auth);
++            free(normal_auth);
++        }
++    } else {
++        log(LOG_DEBUG,"proxy: no authentication specified");
++    }
++
++    if (c->opt->httpsproxy_useragent != NULL) {
++        log(LOG_DEBUG,"proxy: useragent '%s' -> '%s'\n",c->opt->httpsproxy_useragent);
++        sprintf(httpsproxy_useragent,"User-Agent: %s\r\n",c->opt->httpsproxy_useragent);
++    } else {
++        log(LOG_DEBUG,"proxy: no useragent specified");
++    }
++
++#ifdef HAVE_SNPRINTF
++    len=snprintf(buff, STRLEN,
++#else
++    len=sprintf(buff,
++#endif
++        "CONNECT %s HTTP/1.0\r\n%s%s\r\n", 
++        c->opt->httpsproxy_dest_address,
++        httpsproxy_auth,
++        httpsproxy_useragent);
++
++    len=writesocket(s, buff, len);
++    if(len<0) {
++        sockerror("writesocket (httpsproxy)");
++        closesocket(s);
++        return -1;
++    }
++    log(LOG_DEBUG, "me ---> proxy: %s", buff);
++
++    waitforsocket(s, 0, c->opt->timeout_busy);
++    len=readsocket(s, buff, STRLEN-1);
++    
++    if(len<0) {
++        sockerror("readsocket (httpsproxy)");
++        closesocket(s);
++        return -1;
++    }
++    buff[len]='\0';
++    log(LOG_DEBUG, "proxy ---> me: %s", buff);
++
++    code = 0;
++    if(sscanf(buff, "HTTP/%*s %d %*s", &code) != 1) {
++        log(LOG_ERR, "error: %s", buff);
++        return -1;
++    }
++
++    if(code != 200) {
++        log(LOG_WARNING, "return code not 200: %s", buff);
++        return -1;
++    }
++
++    return 0;
++}
++
+ /* End of client.c */
+diff -urN stunnel-4.05.orig/src/options.c stunnel-4.05/src/options.c
+--- stunnel-4.05.orig/src/options.c	2004-03-08 17:34:41.000000000 +0000
++++ stunnel-4.05/src/options.c	2004-03-08 18:36:33.000000000 +0000
+@@ -770,6 +770,82 @@
+     }
+ #endif
+ 
++    /* Daniel Savard <savardd@gnulinux.ca>
++     * httpsproxy_auth
++     * Optional parameter to httpsproxy_dest to specify authentication 
++     * credential to the https proxy.  Value must be in form name:password
++     * or the base64 encoded value of the preceding form.
++     */
++    switch(cmd) {
++    case CMD_INIT:
++        section->httpsproxy_auth=NULL;
++        break;
++    case CMD_EXEC:
++        if(strcasecmp(opt, "httpsproxy_auth"))
++            break;
++        section->httpsproxy_auth=stralloc(arg);
++        return NULL; /* OK */
++    case CMD_DEFAULT:
++        break;
++    case CMD_HELP:
++        log_raw("%-15s = authentication for 'httpsproxy' must be userid:password",
++            "httpsproxy_auth");
++        break;
++    }
++
++    /* Daniel Savard <savardd@gnulinux.ca>
++     * httpsproxy_dest
++     * When specified, the connect parameter will specify the name of a https
++     * proxy server and this parameter will be the final destination.
++     */
++    switch(cmd) {
++    case CMD_INIT:
++        section->option.httpsproxy=0;
++        section->httpsproxy_dest_address=NULL;
++        section->httpsproxy_dest_names=NULL;
++        section->httpsproxy_dest_port=0;
++        break;
++    case CMD_EXEC:
++        if(strcasecmp(opt, "httpsproxy_dest"))
++            break;
++        section->option.httpsproxy=1;
++        section->httpsproxy_dest_address=stralloc(arg);
++        if(!section->option.delayed_lookup && !name2nums(arg, "127.0.0.1",
++                &section->httpsproxy_dest_names, &section->httpsproxy_dest_port)) {
++            log_raw("Cannot resolve '%s' - delaying DNS lookup", arg);
++            section->option.delayed_lookup=1;
++        }
++        return NULL; /* OK */
++    case CMD_DEFAULT:
++        break;
++    case CMD_HELP:
++        log_raw("%-15s = [host:]port https proxy connect destination host:port",
++            "httpsproxy_dest");
++        break;
++    }
++
++    /* Daniel Savard <savardd@gnulinux.ca>
++     * httpsproxy_useragent
++     * Optional parameter to httpsproxy_dest.  When specified, the specified 
++     * user-agent will be sent to the proxy
++     */
++    switch(cmd) {
++    case CMD_INIT:
++        section->httpsproxy_useragent=NULL;
++        break;
++    case CMD_EXEC:
++        if(strcasecmp(opt, "httpsproxy_useragent"))
++            break;
++        section->httpsproxy_useragent=stralloc(arg);
++        return NULL; /* OK */
++    case CMD_DEFAULT:
++        break;
++    case CMD_HELP:
++        log_raw("%-15s = useragent for 'httpsproxy'",
++            "httpsproxy_useragent");
++        break;
++    }
++
+     /* ident */
+     switch(cmd) {
+     case CMD_INIT:
+@@ -884,7 +960,7 @@
+         else
+             return "Illegal close timeout";
+         return NULL; /* OK */
+-    case CMD_DEFAULT:
++     case CMD_DEFAULT:
+         log_raw("%-15s = %d seconds", "TIMEOUTclose", section->timeout_close);
+         break;
+     case CMD_HELP:
+diff -urN stunnel-4.05.orig/src/prototypes.h stunnel-4.05/src/prototypes.h
+--- stunnel-4.05.orig/src/prototypes.h	2004-03-08 17:34:41.000000000 +0000
++++ stunnel-4.05/src/prototypes.h	2004-03-08 18:40:48.000000000 +0000
+@@ -161,12 +161,13 @@
+ 
+         /* service-specific data for client.c */
+     int fd;        /* file descriptor accepting connections for this service */
+-    unsigned short localport, remoteport;
++    unsigned short localport, remoteport, httpsproxy_dest_port;
+     char *execname, **execargs; /* program name and arguments for local mode */
+-    u32 *localnames, *remotenames;
++    u32 *localnames, *remotenames, *httpsproxy_dest_names;
+     u32 *local_ip;
+     char *username;
+     char *remote_address;
++    char *httpsproxy_dest_address, *httpsproxy_auth, *httpsproxy_useragent;
+     int timeout_busy; /* Maximum waiting for data time */
+     int timeout_idle; /* Maximum idle connection time */
+     int timeout_close; /* Maximum close_notify time */
+@@ -179,6 +180,7 @@
+         unsigned int delayed_lookup:1;
+         unsigned int accept:1;
+         unsigned int remote:1;
++        unsigned int httpsproxy:1;
+ #ifndef USE_WIN32
+         unsigned int program:1;
+         unsigned int pty:1;
