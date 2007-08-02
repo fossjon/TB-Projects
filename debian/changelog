@@ -1,7 +1,8 @@
 stunnel4 (3:4.20-3) unstable; urgency=low
 
-  * Adpot package (closes: #416955).
+  * Adopt package (closes: #416955).
   * Manage patches to upstream source with quilt.
+  * Add stunnel dummy upgrade package.
   * Use less cmd line args to debhelper commands in debian/rules.
   * Ship upstream Changelog (Closes: #419842).
   * Do not compress StunnelConf-0.1.pl (Closes: #432304).
@@ -9,7 +10,7 @@ stunnel4 (3:4.20-3) unstable; urgency=low
   * Suggests: logcheck-database (Closes: #382099).
   * Move libstunnel.so into /usr/lib/stunnel, as it is a private DSO.
 
- --
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Wed, 01 Aug 2007 18:06:59 -0500
 
 stunnel4 (3:4.20-2) unstable; urgency=low
 
