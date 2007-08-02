@@ -9,8 +9,9 @@ stunnel4 (3:4.20-3) unstable; urgency=low
   * Add watch file.
   * Suggests: logcheck-database (Closes: #382099).
   * Move libstunnel.so into /usr/lib/stunnel, as it is a private DSO.
+  * Use debhelper compat mode 5.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Wed, 01 Aug 2007 18:06:59 -0500
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Thu, 02 Aug 2007 14:49:45 -0500
 
 stunnel4 (3:4.20-2) unstable; urgency=low
 
