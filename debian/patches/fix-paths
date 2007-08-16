@@ -1,9 +1,9 @@
 ## Do several path fixups, removing unneeded @prefix@s and changing
 ## binaries install location from sbin to bin, to comply with the FHS
-Index: stunnel4-4.20/src/stunnel3.in
+Index: stunnel/src/stunnel3.in
 ===================================================================
---- stunnel4-4.20.orig/src/stunnel3.in	2007-07-31 16:03:35.000000000 -0500
-+++ stunnel4-4.20/src/stunnel3.in	2007-07-31 21:43:08.000000000 -0500
+--- stunnel.orig/src/stunnel3.in	2007-08-16 16:17:57.000000000 -0500
++++ stunnel/src/stunnel3.in	2007-08-16 16:19:55.000000000 -0500
 @@ -27,7 +27,7 @@
  use Getopt::Std;
  
@@ -13,10 +13,10 @@ Index: stunnel4-4.20/src/stunnel3.in
  
  # stunnel3 script body begins here
  ($read_fd, $write_fd)=POSIX::pipe();
-Index: stunnel4-4.20/src/Makefile.in
+Index: stunnel/src/Makefile.in
 ===================================================================
---- stunnel4-4.20.orig/src/Makefile.in	2007-07-31 21:37:51.000000000 -0500
-+++ stunnel4-4.20/src/Makefile.in	2007-07-31 21:43:08.000000000 -0500
+--- stunnel.orig/src/Makefile.in	2007-08-16 16:19:55.000000000 -0500
++++ stunnel/src/Makefile.in	2007-08-16 16:19:55.000000000 -0500
 @@ -225,7 +225,7 @@
  INCLUDES = -I/usr/kerberos/include
  
@@ -26,10 +26,10 @@ Index: stunnel4-4.20/src/Makefile.in
  
  # Win32 executable
  EXTRA_DIST = stunnel.exe make.bat mingw.mak makece.bat evc.mak vc.mak nogui.c os2.mak
-Index: stunnel4-4.20/tools/stunnel.conf-sample.in
+Index: stunnel/tools/stunnel.conf-sample.in
 ===================================================================
---- stunnel4-4.20.orig/tools/stunnel.conf-sample.in	2007-07-31 16:03:35.000000000 -0500
-+++ stunnel4-4.20/tools/stunnel.conf-sample.in	2007-07-31 21:43:08.000000000 -0500
+--- stunnel.orig/tools/stunnel.conf-sample.in	2007-08-16 16:17:57.000000000 -0500
++++ stunnel/tools/stunnel.conf-sample.in	2007-08-16 16:19:55.000000000 -0500
 @@ -3,18 +3,18 @@
  ; Please make sure you understand them (especially the effect of chroot jail)
  
@@ -73,10 +73,10 @@ Index: stunnel4-4.20/tools/stunnel.conf-sample.in
  
  ; Use it for client mode
  ;client = yes
-Index: stunnel4-4.20/tools/stunnel.init.in
+Index: stunnel/tools/stunnel.init.in
 ===================================================================
---- stunnel4-4.20.orig/tools/stunnel.init.in	2007-07-31 16:03:35.000000000 -0500
-+++ stunnel4-4.20/tools/stunnel.init.in	2007-07-31 21:43:08.000000000 -0500
+--- stunnel.orig/tools/stunnel.init.in	2007-08-16 16:17:57.000000000 -0500
++++ stunnel/tools/stunnel.init.in	2007-08-16 16:19:55.000000000 -0500
 @@ -4,7 +4,7 @@
  
  PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
@@ -86,3 +86,16 @@ Index: stunnel4-4.20/tools/stunnel.init.in
  PIDFILE=$PREFIX/var/stunnel/stunnel.pid
  
  test -f $DAEMON || exit 0
+Index: stunnel/tools/script.sh
+===================================================================
+--- stunnel.orig/tools/script.sh	2007-08-16 16:19:58.000000000 -0500
++++ stunnel/tools/script.sh	2007-08-16 16:20:07.000000000 -0500
+@@ -2,7 +2,7 @@
+ 
+ REMOTE_HOST="www.mirt.net:443"
+ echo "client script connecting $REMOTE_HOST"
+-/usr/local/sbin/stunnel -fd 10 \
++/usr/local/bin/stunnel -fd 10 \
+     11<&0 <<EOT 10<&0 0<&11 11<&-
+ client=yes
+ connect=$REMOTE_HOST
