@@ -60,6 +60,7 @@ install: build
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
 	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel3			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel3
+	rmdir $(CURDIR)/debian/stunnel4/usr/sbin/
 
 	# Move docs into propper dir
 	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
