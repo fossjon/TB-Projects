@@ -92,6 +92,7 @@ binary-arch: install
 	dh_installinit -a -- defaults
 	dh_installppp -a --name=0stunnel4
 	dh_installlogrotate -a
+	dh_install -a debian/StunnelConf-0.1.pl usr/share/doc/stunnel4/contrib
 	dh_link -a
 	dh_strip -a
 	dh_compress -a --exclude=StunnelConf-0.1.pl

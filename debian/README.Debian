@@ -34,7 +34,7 @@ After installation, you should :
 Sergio Rua <srua@debian.org> made a perl front-end for the stunnel 
 configuration. It is very simple and only includes a couple of configuration
 options. This script is located in 
- /usr/share/doc/stunnel4/StunnelConf-0.1.pl
+ /usr/share/doc/stunnel4/contrib/StunnelConf-0.1.pl
 
 It requires libgnome2-perl and libgtk2-perl.
 
@@ -79,4 +79,4 @@ Read the manual page for openssl for more info on the various options.
 
  - Julien LEMOINE <speedblue@debian.org>, Sun, 19 Feb 2006 17:31:24 +0100
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>, Thu, 16 Aug 2007 16:42:55 z
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>, Sat, 18 Aug 2007 14:50:54 z
