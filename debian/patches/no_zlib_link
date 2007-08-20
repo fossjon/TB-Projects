@@ -1,0 +1,14 @@
+Avoid linking with zlib, which is a dependency of opensll, not ours.
+Index: stunnel/configure
+===================================================================
+--- stunnel.orig/configure	2007-08-20 15:02:30.000000000 -0500
++++ stunnel/configure	2007-08-20 15:06:28.000000000 -0500
+@@ -22072,7 +22072,7 @@
+ #define HAVE_LIBZ 1
+ _ACEOF
+ 
+-  LIBS="-lz $LIBS"
++#  LIBS="-lz $LIBS"
+ 
+ fi
+ 

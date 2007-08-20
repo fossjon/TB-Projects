@@ -37,7 +37,7 @@ clean-patched:
 
 	dh_clean build-stamp doc/stunnel4.8
 
-install: build-stamp
+install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
