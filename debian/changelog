@@ -1,18 +1,41 @@
 stunnel4 (3:4.20-3) unstable; urgency=low
 
-  * Adopt package (closes: #416955).
+  * New Maintainer (Closes: #416955).
   * Manage patches to upstream source with quilt.
+   - fix-paths changes references to /usr/sbin. 
+    We install binaries in /usr/bin. It also removes bogus @PREFIX@ uses
+    from several paths. 
+   - rename-binary changes the name of the executable to stunnel4.
+   - runas-user sets the default config to run as the stunnel4 user and group. 
+   - connect-proxy-dunbar *unapplied* patch from upstream's
+    site. (It does not apply to 4.07 onwards)
+   - openssl0.9.8-initialization *unapplied* patch. Originaly meant to
+    close #334180, was disabled by previous maintainer without
+    explanation.
   * Add stunnel dummy upgrade package.
-  * Use less cmd line args to debhelper commands in debian/rules.
+   - debian/control: Add package stanza.
+   - debian/rules: Modify to build the arch-indep package.
+   - debian/stunnel.NEWS: Add upgrade notice for stunnel 3 users.
+  * Shorten dh_* invocations in debian/rules.
+   - new files: stunnel4.examples, stunnel4.links, stunnel4.manpages.
   * Ship upstream Changelog (Closes: #419842).
+   - Add ChangeLog to dh_installchangelogs call in debian/rules.
   * Do not compress StunnelConf-0.1.pl (Closes: #432304).
+   - Add exclude entry to dh_compress call in debian/rules.
   * Add watch file.
   * Suggests: logcheck-database (Closes: #382099).
   * Move libstunnel.so into /usr/lib/stunnel, as it is a private DSO.
+   - Remove lintian overrides.
+   - Added debian/patches/libstunnel_is_private_lib
+   - Remove ldconfig calls from post{inst,rm}
+   - Remove /usr/lib/libstunnel.so.4 link
   * Use debhelper compat mode 5.
-  * Remove /var/lib/stunnel4 when purged, if empty.
+   - Bump debhelper build-depends to >= 5. No other changes.
+  * Remove /var/lib/stunnel4 when purged, if empty (in debian/postinst).
+  * Remove manual call to invoke-rc.d from postinst. debhelper inserts it
+    automatically.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Thu, 02 Aug 2007 14:49:45 -0500
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Mon, 20 Aug 2007 23:09:35 -0500
 
 stunnel4 (3:4.20-2) unstable; urgency=low
 
