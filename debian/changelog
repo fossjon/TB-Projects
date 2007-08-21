@@ -34,8 +34,20 @@ stunnel4 (3:4.20-3) unstable; urgency=low
   * Remove /var/lib/stunnel4 when purged, if empty (in debian/postinst).
   * Remove manual call to invoke-rc.d from postinst. debhelper inserts it
     automatically.
+  * Add missing names and dates of copyright attributions to
+    debian/copyright. Update licencing blurb to mention the new FSF's
+    postal address.
+  * Restructure README.Debian into sections.
+  * Remove /usr/share/lintian/overrides and /usr/sbin from
+    debian/dirs. Explicitely create the first if needed to install an
+    override file, and explicitely remove the later after moving the
+    binaries, in debian/rules.
+  * Move StunnelConf-0.1.pl into /usr/share/doc/stunnel4/contrib. Remove
+    it from debian/docs and explicitely install it in dh_install call.
+  * Patch configure (debian/patches/no_zlib_link) to avoid linking to
+    zlib. This library is a dependency of openssl, but not of ours.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Mon, 20 Aug 2007 23:09:35 -0500
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Mon, 20 Aug 2007 23:18:31 -0500
 
 stunnel4 (3:4.20-2) unstable; urgency=low
 
