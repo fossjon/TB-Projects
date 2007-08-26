@@ -24,8 +24,8 @@ build-stamp:
 	  --localstatedir=/var --enable-ssllib-cs 			\
 	  --with-cert-dir=/etc/ssl/certs --with-pem-dir=/etc/ssl/certs	\
 	  --enable-ipv6 --with-threads=pthread
-	cd src; $(MAKE)
-	cd doc; $(MAKE)
+	$(MAKE) -C src
+	$(MAKE) -C doc
 	touch build-stamp
 
 clean: clean-patched unpatch
@@ -43,8 +43,8 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	cd src; $(MAKE) install prefix=$(CURDIR)/debian/stunnel4/usr
-	cd doc; $(MAKE) install prefix=$(CURDIR)/debian/stunnel4/usr
+	$(MAKE) -C src install prefix=$(CURDIR)/debian/stunnel4/usr
+	$(MAKE) -C doc install prefix=$(CURDIR)/debian/stunnel4/usr
 
 	ln doc/stunnel.8 doc/stunnel4.8
 
