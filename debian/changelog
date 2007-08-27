@@ -1,3 +1,9 @@
+stunnel4 (3:4.20-4~2) unstable; urgency=low
+
+  * Use make -C dir instead of cd dir; make constructs in debian/rules.
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Mon, 27 Aug 2007 18:11:40 -0500
+
 stunnel4 (3:4.20-4~1) unstable; urgency=low
 
   * Add missing names and dates of copyright attributions to
