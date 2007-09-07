@@ -157,9 +157,6 @@ This product includes cryptographic software written by Eric Young
 .IP "\fB\-h\fR" 4
 .IX Item "-h"
 Print stunnel help menu
-.IP "\fB\-V\fR" 4
-.IX Item "-V"
-Print stunnel version and compile time defaults
 .IP "\fB\-D\fR level" 4
 .IX Item "-D level"
 Debugging level
@@ -197,8 +194,24 @@ receive data stream for remote sockets
 \&\fB\-O a:SO_BINDTODEVICE=lo\fR \- only accept connections on loopback
 interface
 .Sp
-See 'stunnel \-V' for options supported on your system and their
-default values.
+The available options and their defaults are:
+    Option          Accept    Local     Remote    OS default
+    SO_DEBUG            --        --        --             0
+    SO_DONTROUTE        --        --        --             0
+    SO_KEEPALIVE        --        --        --             0
+    SO_LINGER           --        --        --    0:0       
+    SO_OOBINLINE        --        --        --             0
+    SO_RCVBUF           --        --        --         87380
+    SO_SNDBUF           --        --        --         16384
+    SO_RCVLOWAT         --        --        --             1
+    SO_SNDLOWAT         --        --        --             1
+    SO_RCVTIMEO         --        --        --         0:0  
+    SO_SNDTIMEO         --        --        --         0:0  
+    SO_REUSEADDR             1    --        --             0
+    SO_BINDTODEVICE     --        --        --        --    
+    IP_TOS              --        --        --             0
+    IP_TTL              --        --        --            64
+    TCP_NODELAY         --        --        --             0
 .IP "\fB\-o\fR file" 4
 .IX Item "-o file"
 Append log messages to a file.
@@ -227,12 +240,12 @@ through the host running stunnel, which cannot be localhost.
 .IX Item "-p pemfile"
 private key and certificate chain \s-1PEM\s0 file name
 .Sp
-A \s-1PEM\s0 is always needed in server mode (see \fIstunnel \-V\fR output for
-default). Specifying this flag in client mode will use this key and
-certificate chain as a client side certificate chain.  Using client
-side certs is optional. The certificates must be in \s-1PEM\s0 format and
-must be sorted starting with the certificate to the highest level
-(root \s-1CA\s0).
+A \s-1PEM\s0 is always needed in server mode (by default located in
+\fI/etc/stunnel/stunnel.pem\fR). Specifying this flag in client mode
+will use this key and certificate chain as a client side certificate
+chain.  Using client side certs is optional. The certificates must be
+in \s-1PEM\s0 format and must be sorted starting with the certificate
+to the highest level (root \s-1CA\s0).
 .IP "\fB\-v\fR level" 4
 .IX Item "-v level"
 verify peer certificate
@@ -255,43 +268,13 @@ client certificate directory
 This is the directory in which stunnel will look for certificates when
 using the \fI\-v\fR options. Note that the certificates in this directory
 should be named \s-1XXXXXXXX\s0.0 where \s-1XXXXXXXX\s0 is the hash value of the
-cert. This directory will override the stunnel compile-time default,
-if any.
-.Sp
-See \fIstunnel \-V\fR output for default.
+cert.
 .IP "\fB\-A\fR certfile" 4
 .IX Item "-A certfile"
 Certificate Authority file
 .Sp
 This file contains multiple \s-1CA\s0 certificates, used with the \fI\-v\fR
-options. This file will override the stunnel compile-time default, if
-any.
-.Sp
-See \fIstunnel \-V\fR output for default.
-.IP "\fB\-S\fR sources" 4
-.IX Item "-S sources"
-Certificate source defaults
-.Sp
-Both stunnel and the \s-1SSL\s0 library used to compile stunnel have default
-locations to look for your certificate file (\fI\-A\fR option) and
-certificate directories (\fI\-a\fR option).  The \fB\-S\fR flag allows you to
-control which of these default sources, if any, should be used.
-.Sp
-.Vb 4
-\&    0 = ignore all default sources
-\&    1 = use ssl library defaults
-\&    2 = use stunnel defaults
-\&    3 = use both ssl library and stunnel defaults
-.Ve
-.Sp
-(See \fIstunnel \-V\fR output for the default.)
-.Sp
-Note that the \fI\-A\fR and \fB\-a\fR flags overwrite, not supplement, the
-stunnel defaults, whereas the ssl library defaults, if enabled, are
-used in addition to the other sources.
-.Sp
-In general, to avoid hurting one's brain, use \fI\-S 0\fR and explicitly
-set \fI\-A\fR and/or \fB\-a\fR as desired.
+options.
 .IP "\fB\-t\fR timeout" 4
 .IX Item "-t timeout"
 session cache timeout
