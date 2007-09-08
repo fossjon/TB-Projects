@@ -135,7 +135,7 @@ stunnel \- universal SSL tunnel
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 \&\fBstunnel\fR [\-c\ |\ \-T] [\-D\ [facility.]level] [\-O\ a|l|r:option=value[:value]] [\-o\ file] [\-C\ cipherlist] [\-p\ pemfile] [\-v\ level] [\-A\ certfile] [\-S\ sources] [\-a\ directory] [\-t\ timeout] [\-u\ ident_username] [\-s\ setuid_user]
-[\-g\ setgid_group] [\-n\ protocol] [\-P\ {\ dir/\ |\ filename\ |\ none\ }\ ] [\-B\ bytes] [\-R\ randfile] [\-W] [\-E\ socket] [\-I\ host]
+[\-g\ setgid_group] [\-n\ protocol] [\-P\ {\ filename\ |\ ''\ }\ ] [\-B\ bytes] [\-R\ randfile] [\-W] [\-E\ socket] [\-I\ host]
 [\-d\ [host:]port\ [\-f]\ ] [\ \-r\ [host:]port\ |\ {\ \-l\ |\ \-L\ }\ program\ [\-\-\ progname\ args]\ ]
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -343,15 +343,13 @@ open local pty and execute program.
 .IP "\fB\-g\fR groupname" 4
 .IX Item "-g groupname"
 \&\fIsetgid()\fR to groupname in daemon mode. Clears all other groups.
-.IP "\fB\-P\fR { dir/ | file | none }" 4
-.IX Item "-P { dir/ | file | none }"
+.IP "\fB\-P\fR { file | '' }" 4
+.IX Item "-P { file | '' }"
 Pid file location
 .Sp
-If the argument is a pathname ending in a slash, then a pid file named
-"\fIstunnel.\fRservicename\fB.pid\fR" will be created in the specified
-directory.  If the argument is a filename (no trailing slash), then
-that filename will be used for the pid. If the argument is 'none',
-then no pid file will be created.
+If the argument is a filename, then that filename will be used for the
+pid. If the argument is empty ('', not missing), then no pid file will
+be created.
 .IP "\fB\-r\fR [host:]port" 4
 .IX Item "-r [host:]port"
 connect to remote service

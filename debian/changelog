@@ -1,8 +1,10 @@
-stunnel4 (3:4.20-5) unstable; urgency=low
+stunnel4 (3:4.20-5~1) unstable; urgency=low
 
   * debian/stunnel3.8: Remove references to unsupported -S and -V options
     in manpage, and include an explicit list of tunable parameters for -O
     and their default values (Closes: #440718).
+  * debian/stunnel3.8: Rewrite -P argument description. It must be a file
+    to be created, or empty (Closes: #398012). 
 
  -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Fri, 07 Sep 2007 18:14:14 -0500
 
