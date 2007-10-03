@@ -1,4 +1,4 @@
-stunnel4 (3:4.20-5~2) unstable; urgency=low
+stunnel4 (3:4.20-5) unstable; urgency=low
 
   * debian/stunnel3.8:
     - Remove references to unsupported -S and -V options in manpage, and
