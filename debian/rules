@@ -55,12 +55,9 @@ install: build
 	install -p -m 0644 tools/stunnel.conf-sample 			\
 	  $(CURDIR)/debian/stunnel4/etc/stunnel/stunnel.conf
 
-	# mv executables into /usr/bin, with propper names
-	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel 			\
+	# Rename binary
+	mv $(CURDIR)/debian/stunnel4/usr/bin/stunnel 			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
-	mv $(CURDIR)/debian/stunnel4/usr/sbin/stunnel3			\
-	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel3
-	rmdir $(CURDIR)/debian/stunnel4/usr/sbin/
 
 	# Move docs into propper dir
 	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
