@@ -1,5 +1,4 @@
 no_zlib_link
-libstunnel_is_private_lib
 fix-paths
 rename-binary
 runas-user
