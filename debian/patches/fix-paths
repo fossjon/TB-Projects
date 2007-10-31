@@ -1,23 +1,10 @@
 ## Do several path fixups, removing unneeded @prefix@s and changing
 ## binaries install location from sbin to bin, to comply with the FHS
-Index: stunnel/src/stunnel3.in
-===================================================================
---- stunnel.orig/src/stunnel3.in	2007-08-16 16:17:57.000000000 -0500
-+++ stunnel/src/stunnel3.in	2007-08-16 16:19:55.000000000 -0500
-@@ -27,7 +27,7 @@
- use Getopt::Std;
- 
- # Configuration - path to stunnel (version >=4.05)
--$stunnel_bin='@prefix@/sbin/stunnel';
-+$stunnel_bin='/usr/bin/stunnel';
- 
- # stunnel3 script body begins here
- ($read_fd, $write_fd)=POSIX::pipe();
 Index: stunnel/src/Makefile.in
 ===================================================================
---- stunnel.orig/src/Makefile.in	2007-08-16 16:19:55.000000000 -0500
-+++ stunnel/src/Makefile.in	2007-08-16 16:19:55.000000000 -0500
-@@ -225,7 +225,7 @@
+--- stunnel.orig/src/Makefile.in	2007-10-30 20:04:19.000000000 -0600
++++ stunnel/src/Makefile.in	2007-10-30 20:14:47.000000000 -0600
+@@ -224,7 +224,7 @@
  INCLUDES = -I/usr/kerberos/include
  
  # Additional compiler flags
@@ -28,8 +15,8 @@ Index: stunnel/src/Makefile.in
  EXTRA_DIST = stunnel.exe make.bat mingw.mak makece.bat evc.mak vc.mak nogui.c os2.mak
 Index: stunnel/tools/stunnel.conf-sample.in
 ===================================================================
---- stunnel.orig/tools/stunnel.conf-sample.in	2007-08-16 16:17:57.000000000 -0500
-+++ stunnel/tools/stunnel.conf-sample.in	2007-08-16 16:19:55.000000000 -0500
+--- stunnel.orig/tools/stunnel.conf-sample.in	2006-08-31 14:02:30.000000000 -0500
++++ stunnel/tools/stunnel.conf-sample.in	2007-10-30 20:14:47.000000000 -0600
 @@ -3,18 +3,18 @@
  ; Please make sure you understand them (especially the effect of chroot jail)
  
@@ -73,29 +60,16 @@ Index: stunnel/tools/stunnel.conf-sample.in
  
  ; Use it for client mode
  ;client = yes
-Index: stunnel/tools/stunnel.init.in
-===================================================================
---- stunnel.orig/tools/stunnel.init.in	2007-08-16 16:17:57.000000000 -0500
-+++ stunnel/tools/stunnel.init.in	2007-08-16 16:19:55.000000000 -0500
-@@ -4,7 +4,7 @@
- 
- PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- PREFIX=@prefix@
--DAEMON=$PREFIX/sbin/stunnel
-+DAEMON=$PREFIX/bin/stunnel
- PIDFILE=$PREFIX/var/stunnel/stunnel.pid
- 
- test -f $DAEMON || exit 0
 Index: stunnel/tools/script.sh
 ===================================================================
---- stunnel.orig/tools/script.sh	2007-08-16 16:19:58.000000000 -0500
-+++ stunnel/tools/script.sh	2007-08-16 16:20:07.000000000 -0500
+--- stunnel.orig/tools/script.sh	2007-10-30 20:04:19.000000000 -0600
++++ stunnel/tools/script.sh	2007-10-30 20:18:00.000000000 -0600
 @@ -2,7 +2,7 @@
  
  REMOTE_HOST="www.mirt.net:443"
  echo "client script connecting $REMOTE_HOST"
--/usr/local/sbin/stunnel -fd 10 \
-+/usr/local/bin/stunnel -fd 10 \
+-/usr/local/bin/stunnel -fd 10 \
++/usr/bin/stunnel -fd 10 \
      11<&0 <<EOT 10<&0 0<&11 11<&-
  client=yes
  connect=$REMOTE_HOST
