@@ -14,11 +14,15 @@ used for certificate sources).
 To simplify migration, /usr/bin/stunnel is a symlink to the wrapper
 script. A future version will make the link point to stunnel4.
 
-* Changes from upstream defaults
+* Changes from previous versions
 
-The stunnel4 binaries are located in /usr/bin instead of /usr/sbin in
-order to be FHS compliant (they can be used by normal user). You need
-to update your scripts to refer to this location.
+Upstream versions 4.20 and earlier used to ship binaries in /usr/sbin
+by default. If you are upgrading from a hand compiled version or from an
+ancient Debian package you will need to update your scripts to refer
+to /usr/bin.
+
+This change was made in order to be FHS compliant (stunnel can be used by 
+normal users, and not only by admins).
 
 * Basic configuration
 
