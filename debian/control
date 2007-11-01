@@ -4,8 +4,9 @@ Priority: optional
 Build-Depends: debhelper(>=5), quilt, libssl-dev (>= 0.9.8-1), openssl (>= 0.9.8-1), libwrap0-dev, sdf
 Maintainer: Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>
 Standards-Version: 3.7.2
-XS-Vcs-Browser: http://git.debian.org/?p=collab-maint/stunnel.git
-XS-Vcs-Git: git://git.debian.org/git/collab-maint/stunnel.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/stunnel.git
+Vcs-Git: git://git.debian.org/git/collab-maint/stunnel.git
+Homepage: http://www.stunnel.org/
 
 Package: stunnel4
 Architecture: any
@@ -35,4 +36,4 @@ Description: dummy upgrade package
  stunnel version 3 has been removed from Debian. This is a dummy package
  to ease upgrading to stunnel4.
  .
- You may safely remove this pacage after the upgrade.
+ You may safely remove this package after the upgrade.
