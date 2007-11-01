@@ -1,3 +1,37 @@
+stunnel4 (3:4.21-1~1) unstable; urgency=low
+
+  * New upstream release.
+   - Binaries moved from /usr/sbin to /usr/bin. Thus, Debian no longer
+    diverges in that from upstream.
+   - libstunnel.so migrated inside /usr/lib/stunnel.
+   - Preliminary FIPS 140-2 support, but this package does not include it,
+    as it requires static compilation.
+   - Miscelaneous bugfixing.
+  * debian/patches/no_zlib_link:
+   - Rebased. Only line numbering changed.
+  * debian/patches/libstunnel_is_private_lib:
+   - Removed. Included upstream.
+  * debian/patches/fix-paths:
+   - Remove hunks related to moving binaries to /usr/bin. Refresh line numbers
+    in the rest.
+  * debian/patches/rename-binary:
+   - Rebased. Minor changes due to changed dates in the manpage and the use of
+    @prefix@ in src/stunnel3.in.
+  * debian/readme:
+   - Add explanation about not turning FIPS mode on.
+   - Reword warning about binaries changing place.
+  * debian/rules, debian/stunnel4.manpages:
+   - No longer need to move the binaries.
+   - Upstream location for manpages changed. We still install them by hand,
+    anyways.
+   - Ship fr and pl manpages.
+  * debian/control:
+   - Remove XS- prefix from Vcs-* fields.
+   - Add Homepage: field.
+   - Correct minor typo in dummy package's description.
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Wed, 31 Oct 2007 19:22:03 -0600
+
 stunnel4 (3:4.20-5) unstable; urgency=low
 
   * debian/stunnel3.8:
