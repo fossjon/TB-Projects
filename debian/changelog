@@ -3,8 +3,9 @@ stunnel4 (3:4.21-1~2) unstable; urgency=low
   * debian/patches/setuid.patch: Patch from upstream to allow using
     setuid/setgid with /etc/passwd and /etc/group not within chrooted
     directory.
+  * debian/rules: Do not pass --host to configure if not cross compiling.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Sat, 10 Nov 2007 19:21:30 -0600
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Sat, 10 Nov 2007 19:47:52 -0600
 
 stunnel4 (3:4.21-1~1) unstable; urgency=low
 
