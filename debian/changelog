@@ -28,7 +28,7 @@ stunnel4 (3:4.21-1~1) unstable; urgency=low
   * debian/patches/rename-binary:
    - Rebased. Minor changes due to changed dates in the manpage and the use of
     @prefix@ in src/stunnel3.in.
-  * debian/readme:
+  * debian/README.Debian:
    - Add explanation about not turning FIPS mode on.
    - Reword warning about binaries changing place.
   * debian/rules, debian/stunnel4.manpages:

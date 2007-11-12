@@ -1,4 +1,4 @@
-Avoid linking with zlib, which is a dependency of opensll, not ours.
+Avoid linking with zlib, which is a dependency of openssl, not ours.
 Index: stunnel/configure
 ===================================================================
 --- stunnel.orig/configure	2007-10-30 20:04:19.000000000 -0600
