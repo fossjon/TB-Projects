@@ -31,6 +31,8 @@ stunnel4 (3:4.21-1) unstable; urgency=low
    - Do not pass --host to configure if not cross compiling.
    - Reorder target dependencies. This should avoid problems when doing
     paralell builds.
+   - Pass -Wl,--as-needed to linker flags, to avoid unecesary shared deps.
+    Does not help with the extra deps in libstunnel.so, because of #347650.
   * debian/control:
    - Remove XS- prefix from Vcs-* fields.
    - Add Homepage: field.
@@ -39,7 +41,7 @@ stunnel4 (3:4.21-1) unstable; urgency=low
     /usr/share/quilt/quilt.make (Closes: #447751).
    - Change my maintainer address. 
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Wed, 05 Dec 2007 08:09:44 -0600
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Wed, 05 Dec 2007 09:00:04 -0600
 
 stunnel4 (3:4.20-5) unstable; urgency=low
 

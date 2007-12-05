@@ -20,12 +20,14 @@ else
   CFLAGS += -O2
 endif
 
+LDFLAGS += -Wl,--as-needed
 
 build: build-stamp
 build-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 
-	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM)          \
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --prefix=/usr \
+	  $(SYSTEM)          \
 	  --localstatedir=/var --enable-ssllib-cs 			\
 	  --with-cert-dir=/etc/ssl/certs --with-pem-dir=/etc/ssl/certs	\
 	  --enable-ipv6 --with-threads=pthread
