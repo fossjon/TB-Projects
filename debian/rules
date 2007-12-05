@@ -21,8 +21,8 @@ else
 endif
 
 
-build: patch build-stamp
-build-stamp:
+build: build-stamp
+build-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM)          \
@@ -33,14 +33,14 @@ build-stamp:
 	$(MAKE) -C doc
 	touch build-stamp
 
-clean: clean-patched unpatch
-clean-patched:
+clean:
 	dh_testdir
 	dh_testroot
 
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 	dh_clean build-stamp doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
+	$(MAKE) -f debian/rules unpatch
 
 install: build
 	dh_testdir
