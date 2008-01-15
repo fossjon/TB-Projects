@@ -79,7 +79,7 @@ void context_init(LOCAL_OPTIONS *section) { /* init SSL context */
     if(section->option.cert) {
         if(stat(section->key, &st)) {
             ioerror(section->key);
-            exit(1);
+            die(1);
         }
 #if !defined(USE_WIN32) && !defined(USE_OS2)
         if(st.st_mode & 7)
@@ -108,7 +108,7 @@ void context_init(LOCAL_OPTIONS *section) { /* init SSL context */
     if(section->cipher_list) {
         if (!SSL_CTX_set_cipher_list(section->ctx, section->cipher_list)) {
             sslerror("SSL_CTX_set_cipher_list");
-            exit(1);
+            die(1);
         }
     }
 #if SSLEAY_VERSION_NUMBER >= 0x00906000L
@@ -256,7 +256,7 @@ static void load_certificate(LOCAL_OPTIONS *section) {
     if(!SSL_CTX_use_certificate_chain_file(section->ctx, section->cert)) {
         s_log(LOG_ERR, "Error reading certificate file: %s", section->cert);
         sslerror("SSL_CTX_use_certificate_chain_file");
-        exit(1);
+        die(1);
     }
     s_log(LOG_DEBUG, "Certificate loaded");
 
@@ -283,12 +283,12 @@ static void load_certificate(LOCAL_OPTIONS *section) {
                     continue;
                 }
                 sslerror("ENGINE_load_private_key");
-                exit(1);
+                die(1);
             }
             if(SSL_CTX_use_PrivateKey(section->ctx, pkey))
                 break; /* success */
             sslerror("SSL_CTX_use_PrivateKey");
-            exit(1);
+            die(1);
         }
     else
 #endif
@@ -316,11 +316,11 @@ static void load_certificate(LOCAL_OPTIONS *section) {
 #else /* NO_RSA */
             sslerror("SSL_CTX_use_RSAPrivateKey_file");
 #endif /* NO_RSA */
-            exit(1);
+            die(1);
         }
     if(!SSL_CTX_check_private_key(section->ctx)) {
         sslerror("Private key does not match the certificate");
-        exit(1);
+        die(1);
     }
     s_log(LOG_DEBUG, "Private key loaded");
 }

@@ -116,12 +116,11 @@ static CONTEXT *new_context(void) {
     return ctx;
 }
 
-/* s_log is not initialized here, but we can use log_raw */
 void sthreads_init(void) {
     /* create the first (listening) context and put it in the running queue */
     if(!new_context()) {
-        log_raw("Unable create the listening context");
-        exit(1);
+        s_log(LOG_RAW, "Unable create the listening context");
+        die(1);
     }
 }
 
@@ -170,7 +169,7 @@ int create_client(int ls, int s, void *arg, void *(*cli)(void *)) {
             closesocket(ls);
         signal(SIGCHLD, null_handler);
         cli(arg);
-        exit(0);
+        _exit(0);
     default:    /* parent */
         if(arg)
             free(arg);

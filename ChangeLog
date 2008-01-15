@@ -1,5 +1,16 @@
 stunnel         Universal SSL tunnel
 
+Version 4.22, 2006.12.xx, urgency: MEDIUM:
+* New features
+  - Makefile was updated to use standard autoconf variables:
+    sysconfdir, localstatedir and pkglibdir.
+  - A new global option to control logging to syslog:
+    syslog = yes|no
+	Simultaneous logging to multiple destinations is now possible.
+* Bugfixes
+  - Restored chroot() to be executed after decoding numerical
+    userid and groupid values in drop_privileges().
+
 Version 4.21, 2007.10.27, urgency: LOW/EXPERIMENTAL:
 * New features sponsored by Open-Source Software Institute
   - Initial FIPS 140-2 support (see INSTALL.FIPS for details).

@@ -115,7 +115,9 @@ typedef int socklen_t;
 /* General headers */
 #include <stdio.h>
 /* Must be included before sys/stat.h for Ultrix */
+#ifndef _WIN32_WCE
 #include <errno.h>
+#endif
 #include <stdlib.h>
 #include <stdarg.h>      /* va_ */
 #include <string.h>
@@ -147,8 +149,6 @@ typedef unsigned long u32;
 #define strcasecmp _stricmp
 #define strncasecmp _strnicmp
 #define sleep(c) Sleep(1000*(c))
-
-#define exit(c) exit_stunnel(c)
 
 #define get_last_socket_error() WSAGetLastError()
 #define get_last_error()        GetLastError()
@@ -392,6 +392,7 @@ extern char *sys_errlist[];
 #define LOG_INFO        6
 #define LOG_DEBUG       7
 #endif /* defined (USE_WIN32) || defined (__vms) */
+#define LOG_RAW         -1
 
 #endif /* defined COMMON_H */
 

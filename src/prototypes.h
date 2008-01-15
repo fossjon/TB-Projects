@@ -57,21 +57,16 @@ extern volatile int num_clients;
 void main_initialize(char *, char *);
 void main_execute(void);
 void stunnel_info(int);
-void drop_privileges(void);
+void die(int);
 
 /**************************************** Prototypes for log.c */
 
 void log_open(void);
 void log_close(void);
+void log_flush(void);
 void s_log(int, const char *, ...)
 #ifdef __GNUC__
     __attribute__ ((format (printf, 2, 3)));
-#else
-    ;
-#endif
-void log_raw(const char *, ...)
-#ifdef __GNUC__
-    __attribute__ ((format (printf, 1, 2)));
 #else
     ;
 #endif
@@ -132,7 +127,7 @@ typedef struct {
 #endif
 
         /* logging-support data for log.c */
-    int debug_level;                               /* debug level for syslog */
+    int debug_level;                              /* debug level for logging */
 #ifndef USE_WIN32
     int facility;                               /* debug facility for syslog */
 #endif
@@ -140,11 +135,12 @@ typedef struct {
 
         /* on/off switches */
     struct {
-        unsigned int foreground:1;
-        unsigned int syslog:1;                              /* log to syslog */
         unsigned int rand_write:1;                    /* overwrite rand_file */
 #ifdef USE_WIN32
         unsigned int taskbar:1;                   /* enable the taskbar icon */
+#else /* !USE_WIN32 */
+        unsigned int foreground:1;
+        unsigned int syslog:1;
 #endif
 #ifdef USE_FIPS
         unsigned int fips:1;                       /* enable FIPS 140-2 mode */
@@ -398,7 +394,7 @@ typedef struct {
 
 #ifdef USE_WIN32
 void win_log(char *);
-void exit_stunnel(int);
+void exit_win32(int);
 int passwd_cb(char *, int, int, void *);
 #ifdef HAVE_OSSL_ENGINE_H
 int pin_cb(UI *, UI_STRING *);

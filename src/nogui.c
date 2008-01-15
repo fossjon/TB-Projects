@@ -30,7 +30,6 @@
 
 #include "common.h"
 #include "prototypes.h"
-#undef exit
 
 int main(int argc, char *argv[]) {
     static struct WSAData wsa_state;
@@ -50,7 +49,7 @@ void win_log(LPSTR line) { /* Also used in log.c */
     free(tstr);
 }
 
-void exit_stunnel(int code) {
+void exit_win32(int code) {
     exit(code);
 }
 

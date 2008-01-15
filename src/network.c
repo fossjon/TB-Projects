@@ -125,7 +125,7 @@ static void scan_waiting_queue(void) {
         ufds=realloc(ufds, nfds*sizeof(struct pollfd));
         if(!ufds) {
             s_log(LOG_CRIT, "Memory allocation failed");
-            exit(1);
+            die(1);
         }
         max_nfds=nfds;
     }
@@ -383,12 +383,12 @@ int signal_pipe_init(void) {
         closesocket(pipe_in);
     } else {
         sockerror("select");
-        exit(1);
+        die(1);
     }
 #else /* __INNOTEK_LIBC__ */
     if(pipe(signal_pipe)) {
         ioerror("pipe");
-        exit(1);
+        die(1);
     }
     alloc_fd(signal_pipe[0]);
     alloc_fd(signal_pipe[1]);

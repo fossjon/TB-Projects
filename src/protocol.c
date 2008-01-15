@@ -544,8 +544,8 @@ static char *base64(int encode, char *in, int len) {
     len=BIO_pending(bio);
     out=calloc(len+1, 1);
     if(!out) {
-        log_raw("Fatal memory allocation error");
-        exit(2);
+        s_log(LOG_RAW, "Fatal memory allocation error");
+        die(2);
     }
     BIO_read(bio, out, len);
     BIO_free_all(bio);

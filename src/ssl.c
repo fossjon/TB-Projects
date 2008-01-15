@@ -79,15 +79,15 @@ static void init_compression(void) {
         break;
     default:
         s_log(LOG_ERR, "INTERNAL ERROR: Bad compression method");
-        exit(1);
+        die(1);
     }
     if(!cm || cm->type==NID_undef) {
         s_log(LOG_ERR, "Failed to initialize %s compression method", name);
-        exit(1);
+        die(1);
     }
     if(SSL_COMP_add_compression_method(id, cm)) {
         s_log(LOG_ERR, "Failed to add %s compression method", name);
-        exit(1);
+        die(1);
     }
     s_log(LOG_INFO, "Compression enabled using %s method", name);
 }
@@ -235,7 +235,7 @@ void open_engine(const char *name) {
     engine_initialized=0;
     if(!engines[current_engine]) {
         sslerror("ENGINE_by_id");
-        exit(1);
+        die(1);
     }
 }
 
@@ -250,7 +250,7 @@ void ctrl_engine(const char *cmd, const char *arg) {
         s_log(LOG_DEBUG, "Executing engine control command %s", cmd);
     if(!ENGINE_ctrl_cmd_string(engines[current_engine], cmd, arg, 0)) {
         sslerror("ENGINE_ctrl_cmd_string");
-        exit(1);
+        die(1);
     }
 }
 
@@ -277,11 +277,11 @@ static void init_engine() {
             sslerror("ENGINE_init");
         else
             s_log(LOG_ERR, "Engine %d not initialized", current_engine+1);
-        exit(1);
+        die(1);
     }
     if(!ENGINE_set_default(engines[current_engine], ENGINE_METHOD_ALL)) {
         sslerror("ENGINE_set_default");
-        exit(1);
+        die(1);
     }
     s_log(LOG_DEBUG, "Engine %d initialized", current_engine+1);
 }

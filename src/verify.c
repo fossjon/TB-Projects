@@ -52,13 +52,13 @@ void verify_init(LOCAL_OPTIONS *section) {
     if(section->verify_level>1 && !section->ca_file && !section->ca_dir) {
         s_log(LOG_ERR, "Either CApath or CAfile "
             "has to be used for authentication");
-        exit(1);
+        die(1);
     }
 
     section->revocation_store=X509_STORE_new();
     if(!section->revocation_store) {
         sslerror("X509_STORE_new");
-        exit(1);
+        die(1);
     }
 
     if(section->ca_file) {
@@ -67,7 +67,7 @@ void verify_init(LOCAL_OPTIONS *section) {
             s_log(LOG_ERR, "Error loading verify certificates from %s",
                 section->ca_file);
             sslerror("SSL_CTX_load_verify_locations");
-            exit(1);
+            die(1);
         }
         /* list of trusted CAs for the client to choose the right cert */
         SSL_CTX_set_client_CA_list(section->ctx,
@@ -83,7 +83,7 @@ void verify_init(LOCAL_OPTIONS *section) {
             s_log(LOG_ERR, "Error setting verify directory to %s",
                 section->ca_dir);
             sslerror("SSL_CTX_load_verify_locations");
-            exit(1);
+            die(1);
         }
         s_log(LOG_DEBUG, "Verify directory set to %s", section->ca_dir);
         add_dir_lookup(section->revocation_store, section->ca_dir);
@@ -110,12 +110,12 @@ static void load_file_lookup(X509_STORE *store, char *name) {
     lookup=X509_STORE_add_lookup(store, X509_LOOKUP_file());
     if(!lookup) {
         sslerror("X509_STORE_add_lookup");
-        exit(1);
+        die(1);
     }
     if(!X509_LOOKUP_load_file(lookup, name, X509_FILETYPE_PEM)) {
         s_log(LOG_ERR, "Failed to load %s revocation lookup file", name);
         sslerror("X509_LOOKUP_load_file");
-        exit(1);
+        die(1);
     }
     s_log(LOG_DEBUG, "Loaded %s revocation lookup file", name);
 }
@@ -126,12 +126,12 @@ static void add_dir_lookup(X509_STORE *store, char *name) {
     lookup=X509_STORE_add_lookup(store, X509_LOOKUP_hash_dir());
     if(!lookup) {
         sslerror("X509_STORE_add_lookup");
-        exit(1);
+        die(1);
     }
     if(!X509_LOOKUP_add_dir(lookup, name, X509_FILETYPE_PEM)) {
         s_log(LOG_ERR, "Failed to add %s revocation lookup directory", name);
         sslerror("X509_LOOKUP_add_dir");
-        exit(1);
+        die(1);
     }
     s_log(LOG_DEBUG, "Added %s revocation lookup directory", name);
 }

@@ -62,17 +62,17 @@ void libwrap_init(int num) {
     busy=calloc(nproc, sizeof(int));
     if(!ipc_socket || !busy) {
         s_log(LOG_ERR, "Memory allocation failed");
-        exit(1);
+        die(1);
     }
     for(i=0; i<nproc; ++i) { /* spawn a child */
         if(socketpair(AF_UNIX, SOCK_STREAM, 0, ipc_socket+2*i)) {
             sockerror("socketpair");
-            exit(1);
+            die(1);
         }
         switch(fork()) {
         case -1:    /* error */
             ioerror("fork");
-            exit(1);
+            die(1);
         case  0:    /* child */
             close(ipc_socket[2*i]); /* server side */
             while(1) { /* main libwrap client loop */

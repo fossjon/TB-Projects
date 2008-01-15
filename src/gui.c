@@ -701,7 +701,7 @@ static void set_visible(int i) {
         ShowWindow(hwnd, SW_HIDE); /* hide window */
 }
 
-void exit_stunnel(int code) { /* used instead of exit() on Win32 */
+void exit_win32(int code) { /* used instead of exit() on Win32 */
     win_log("");
     s_log(LOG_ERR, "Server is down");
     MessageBox(hwnd, TEXT("Stunnel server is down due to an error.\n")
