@@ -1,4 +1,3 @@
-setuid.patch
 no_zlib_link
 fix-paths
 rename-binary
