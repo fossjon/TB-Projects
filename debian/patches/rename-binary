@@ -1,9 +1,7 @@
 # Change references to the binary from stunnel to stunnel4
-Index: stunnel/src/stunnel3.in
-===================================================================
---- stunnel.orig/src/stunnel3.in	2007-10-30 20:24:07.000000000 -0600
-+++ stunnel/src/stunnel3.in	2007-10-30 20:25:21.000000000 -0600
-@@ -27,7 +27,7 @@
+--- src/stunnel3.in.orig
++++ src/stunnel3.in
+@@ -22,7 +22,7 @@
  use Getopt::Std;
  
  # Configuration - path to stunnel (version >=4.05)
@@ -12,18 +10,63 @@ Index: stunnel/src/stunnel3.in
  
  # stunnel3 script body begins here
  ($read_fd, $write_fd)=POSIX::pipe();
-Index: stunnel/doc/stunnel.8
-===================================================================
---- stunnel.orig/doc/stunnel.8	2007-10-30 20:24:07.000000000 -0600
-+++ stunnel/doc/stunnel.8	2007-10-30 20:25:37.000000000 -0600
+--- doc/stunnel.8.orig
++++ doc/stunnel.8
 @@ -128,8 +128,8 @@
  .rm #[ #] #H #V #F C
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL 8"
--.TH STUNNEL 8 "2007.09.23" "4.08" "stunnel"
+-.TH STUNNEL 8 "2008.03.27" "4.08" "stunnel"
 +.IX Title "STUNNEL4 8"
-+.TH STUNNEL4 8 "2007.09.23" "4.08" "stunnel4"
++.TH STUNNEL 8 "2008.03.27" "4.08" "stunnel4"
  .SH "NAME"
  stunnel \- universal SSL tunnel
  .SH "SYNOPSIS"
+--- tools/stunnel.conf-sample.in.orig
++++ tools/stunnel.conf-sample.in
+@@ -10,11 +10,11 @@
+ sslVersion = SSLv3
+ 
+ ; Some security enhancements for UNIX systems - comment them out on Win32
+-chroot = @localstatedir@/lib/stunnel/
++chroot = @localstatedir@/lib/stunnel4/
+ setuid = nobody
+ setgid = @DEFAULT_GROUP@
+ ; PID is created inside chroot jail
+-pid = /stunnel.pid
++pid = /stunnel4.pid
+ 
+ ; Some performance tunings
+ socket = l:TCP_NODELAY=1
+@@ -39,7 +39,7 @@
+ 
+ ; Some debugging stuff useful for troubleshooting
+ ;debug = 7
+-;output = @localstatedir@/log/stunnel/stunnel.log
++;output = @localstatedir@/log/stunnel4/stunnel.log
+ 
+ ; Use it for client mode
+ ;client = yes
+--- src/Makefile.am.orig
++++ src/Makefile.am
+@@ -27,7 +27,7 @@
+ 
+ # Additional compiler flags
+ 
+-AM_CPPFLAGS = -DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' -DPIDFILE='"$(localstatedir)/run/stunnel/stunnel.pid"'
++AM_CPPFLAGS = -DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' -DPIDFILE='"$(localstatedir)/run/stunnel4.pid"'
+ 
+ # Win32 executable
+ 
+--- src/Makefile.in.orig
++++ src/Makefile.in
+@@ -224,7 +224,7 @@
+ INCLUDES = -I/usr/kerberos/include
+ 
+ # Additional compiler flags
+-AM_CPPFLAGS = -DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' -DPIDFILE='"$(localstatedir)/run/stunnel/stunnel.pid"'
++AM_CPPFLAGS = -DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' -DPIDFILE='"$(localstatedir)/run/stunnel4.pid"'
+ 
+ # Win32 executable
+ EXTRA_DIST = stunnel.exe make.bat mingw.mak makece.bat evc.mak vc.mak nogui.c os2.mak
