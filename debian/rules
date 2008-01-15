@@ -26,7 +26,7 @@ build-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM)          \
-	  --localstatedir=/var --enable-ssllib-cs 			\
+	  --localstatedir=/var --enable-ssllib-cs --sysconfdir=/etc	\
 	  --with-cert-dir=/etc/ssl/certs --with-pem-dir=/etc/ssl/certs	\
 	  --enable-ipv6 --with-threads=pthread
 	$(MAKE) -C src
