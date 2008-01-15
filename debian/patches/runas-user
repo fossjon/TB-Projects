@@ -1,12 +1,12 @@
 # Change the default user the binary will run as to stunnel4
-Index: stunnel4-4.20/tools/stunnel.conf-sample.in
+Index: stunnel/tools/stunnel.conf-sample.in
 ===================================================================
---- stunnel4-4.20.orig/tools/stunnel.conf-sample.in	2007-07-31 15:58:16.000000000 -0500
-+++ stunnel4-4.20/tools/stunnel.conf-sample.in	2007-07-31 16:01:02.000000000 -0500
+--- stunnel.orig/tools/stunnel.conf-sample.in	2008-01-14 23:13:11.000000000 -0600
++++ stunnel/tools/stunnel.conf-sample.in	2008-01-14 23:15:06.000000000 -0600
 @@ -11,8 +11,8 @@
  
  ; Some security enhancements for UNIX systems - comment them out on Win32
- chroot = /var/lib/stunnel4/
+ chroot = @localstatedir@/lib/stunnel4/
 -setuid = nobody
 -setgid = @DEFAULT_GROUP@
 +setuid = stunnel4
