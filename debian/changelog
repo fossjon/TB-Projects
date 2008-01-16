@@ -1,3 +1,20 @@
+stunnel4 (3:4.22-1) unstable; urgency=low
+
+  * New upstream release.
+   - Build system now uses standard automake dirs.
+   - Reworked logging system avoids outputing before log file is configured 
+    (Closes: #460019).
+   - Simultaneous logging to a file and the syslog is now possible.
+   - A new service level option to control stack size:
+     stack = <number of bytes>
+   - Bugfixes in libwrap support code.
+  * debian/patches/setuid.patch: Removed, it's included upstream.
+  * debian/patches/fix-paths: Reworked to use automake's standard dirs.
+  * Rebase the rest of the patches.
+  * Update standards-version to 3.7.3. No changes needed.
+  
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Tue, 01 Apr 2008 10:52:04 -0600
+
 stunnel4 (3:4.21-1) unstable; urgency=low
 
   * New upstream release.
