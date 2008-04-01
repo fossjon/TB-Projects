@@ -3,7 +3,7 @@ Title: Stunnel documentation
 Author: Michal Trojnara
 Abstract: This manual documents stunnel, a SSL-enhanced client and
  server wrapper.
-Section: Apps/Net
+Section: System/Security
 
 Format: HTML
 Index: /usr/share/doc/stunnel4/stunnel.html
