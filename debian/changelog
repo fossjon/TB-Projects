@@ -12,8 +12,9 @@ stunnel4 (3:4.22-1) unstable; urgency=low
   * debian/patches/fix-paths: Reworked to use automake's standard dirs.
   * Rebase the rest of the patches.
   * Update standards-version to 3.7.3. No changes needed.
+  * Fix build-dependencies on -1 revisions of libssl-dev, openssl and quilt.
   
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Tue, 01 Apr 2008 10:52:04 -0600
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Tue, 01 Apr 2008 11:03:06 -0600
 
 stunnel4 (3:4.21-1) unstable; urgency=low
 
