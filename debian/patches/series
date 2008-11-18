@@ -2,3 +2,4 @@ no_zlib_link
 fix-paths
 rename-binary -p0
 runas-user
+security-check_certificate -p1

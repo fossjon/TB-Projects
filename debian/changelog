@@ -1,3 +1,12 @@
+stunnel4 (3:4.22-1.1) unstable; urgency=high
+
+  * Non-maintainer upload by the security team
+  * Fix security bug in the OCSP functionality that allowed revoked
+    certificates to authenticate (Closes: #482644)
+    Fixes: CVE-2008-2420
+
+ -- Steffen Joeris <white@debian.org>  Tue, 27 May 2008 18:28:56 +0200
+
 stunnel4 (3:4.22-1) unstable; urgency=low
 
   * New upstream release.
