@@ -18,6 +18,20 @@ FILES="/etc/stunnel/*.conf"
 OPTIONS=""
 ENABLED=0
 
+get_pids() {
+   local file=$1
+   if test -f $file; then
+     CHROOT=`grep "^chroot" $file|sed "s;.*= *;;"`
+     PIDFILE=`grep "^pid" $file|sed "s;.*= *;;"`
+     if [ "$PIDFILE" = "" ]; then
+       PIDFILE=$DEFAULTPIDFILE
+     fi
+     if test -f $CHROOT/$PIDFILE; then
+       cat $CHROOT/$PIDFILE
+     fi
+   fi
+}
+
 startdaemons() {
   if ! [ -d /var/run/stunnel4 ]; then
     rm -rf /var/run/stunnel4
@@ -26,7 +40,10 @@ startdaemons() {
   for file in $FILES; do 
     if test -f $file; then
       ARGS="$file $OPTIONS"
-      if $DAEMON $ARGS; then
+      PROCLIST=`get_pids $file`
+      if [ "$PROCLIST" ] && kill -0 $PROCLIST 2>/dev/null; then
+        echo -n "[Already running: $file] "
+      elif $DAEMON $ARGS; then
 	echo -n "[Started: $file] "
       else
 	echo "[Failed: $file]"
@@ -40,21 +57,12 @@ startdaemons() {
 killdaemons()
 {
   for file in $FILES; do
-   if test -f $file; then
-     CHROOT=`grep "^chroot" $file|sed "s;.*= *;;"`
-     PIDFILE=`grep "^pid" $file|sed "s;.*= *;;"`
-     if [ "$PIDFILE" = "" ]; then
-       PIDFILE=$DEFAULTPIDFILE
-     fi
-     if test -f $CHROOT/$PIDFILE; then
-       PROCLIST=`cat $CHROOT/$PIDFILE`
-       if [ "$PROCLIST" ] && kill -0 $PROCLIST 2>/dev/null; then
-         kill $PROCLIST
-         echo -n "[stopped: $file] "
-       fi
-     fi
-   fi
- done
+    PROCLIST=`get_pids $file`
+    if [ "$PROCLIST" ] && kill -0 $PROCLIST 2>/dev/null; then
+       kill $PROCLIST
+       echo -n "[stopped: $file] "
+    fi
+  done
 }
 
 if [ "x$OPTIONS" != "x" ]; then

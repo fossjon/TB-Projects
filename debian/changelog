@@ -1,3 +1,11 @@
+stunnel4 (3:4.22-2) unstable; urgency=low
+
+  * Check if a daemon is already running before trying to start it with the
+    same configuration file. Thanks Peter Palfrader <weasel@debian.org> for
+    the report (Closes: #506091).
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Tue, 18 Nov 2008 13:52:42 +0100
+
 stunnel4 (3:4.22-1.1) unstable; urgency=high
 
   * Non-maintainer upload by the security team
