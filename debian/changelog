@@ -1,4 +1,4 @@
-stunnel4 (3:4.24-1) UNRELEASED; urgency=low
+stunnel4 (3:4.26-1) UNRELEASED; urgency=low
 
   * New upstream release.
    - Remove debian/patches/security-check_certificate, now included upstream.
