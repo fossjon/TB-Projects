@@ -1,5 +1,5 @@
 no_zlib_link
 fix-paths
-rename-binary -p0
+rename-binary
 runas-user
-security-check_certificate -p1
+security-check_certificate

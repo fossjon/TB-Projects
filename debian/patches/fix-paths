@@ -1,9 +1,9 @@
 ## Do several path fixups, removing unneeded @prefix@s and changing
 ## binaries install location from sbin to bin, to comply with the FHS
-Index: stunnel/tools/stunnel.conf-sample.in
+Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
---- stunnel.orig/tools/stunnel.conf-sample.in	2008-01-14 23:12:28.000000000 -0600
-+++ stunnel/tools/stunnel.conf-sample.in	2008-01-14 23:16:20.000000000 -0600
+--- stunnel4.orig/tools/stunnel.conf-sample.in
++++ stunnel4/tools/stunnel.conf-sample.in
 @@ -3,14 +3,14 @@
  ; Please make sure you understand them (especially the effect of chroot jail)
  
@@ -42,10 +42,10 @@ Index: stunnel/tools/stunnel.conf-sample.in
  
  ; Use it for client mode
  ;client = yes
-Index: stunnel/tools/script.sh
+Index: stunnel4/tools/script.sh
 ===================================================================
---- stunnel.orig/tools/script.sh	2008-01-14 23:12:28.000000000 -0600
-+++ stunnel/tools/script.sh	2008-01-14 23:13:11.000000000 -0600
+--- stunnel4.orig/tools/script.sh
++++ stunnel4/tools/script.sh
 @@ -2,7 +2,7 @@
  
  REMOTE_HOST="www.mirt.net:443"

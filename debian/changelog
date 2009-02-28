@@ -1,3 +1,9 @@
+stunnel4 (3:4.22-3) UNRELEASED; urgency=low
+
+  * Rebase quilt patches to not require -p0. (Closes: #484966)
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 28 Feb 2009 08:02:45 -0800
+
 stunnel4 (3:4.22-2) unstable; urgency=low
 
   * Check if a daemon is already running before trying to start it with the

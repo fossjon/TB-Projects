@@ -1,8 +1,8 @@
 Avoid linking with zlib, which is a dependency of openssl, not ours.
-Index: stunnel/configure
+Index: stunnel4/configure
 ===================================================================
---- stunnel.orig/configure	2007-10-30 20:04:19.000000000 -0600
-+++ stunnel/configure	2007-10-30 20:06:47.000000000 -0600
+--- stunnel4.orig/configure
++++ stunnel4/configure
 @@ -22116,7 +22116,7 @@
  #define HAVE_LIBZ 1
  _ACEOF

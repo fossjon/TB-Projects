@@ -1,6 +1,8 @@
 # Change references to the binary from stunnel to stunnel4
---- src/stunnel3.in.orig
-+++ src/stunnel3.in
+Index: stunnel4/src/stunnel3.in
+===================================================================
+--- stunnel4.orig/src/stunnel3.in
++++ stunnel4/src/stunnel3.in
 @@ -22,7 +22,7 @@
  use Getopt::Std;
  
@@ -10,8 +12,10 @@
  
  # stunnel3 script body begins here
  ($read_fd, $write_fd)=POSIX::pipe();
---- doc/stunnel.8.orig
-+++ doc/stunnel.8
+Index: stunnel4/doc/stunnel.8
+===================================================================
+--- stunnel4.orig/doc/stunnel.8
++++ stunnel4/doc/stunnel.8
 @@ -128,8 +128,8 @@
  .rm #[ #] #H #V #F C
  .\" ========================================================================
@@ -23,8 +27,10 @@
  .SH "NAME"
  stunnel \- universal SSL tunnel
  .SH "SYNOPSIS"
---- tools/stunnel.conf-sample.in.orig
-+++ tools/stunnel.conf-sample.in
+Index: stunnel4/tools/stunnel.conf-sample.in
+===================================================================
+--- stunnel4.orig/tools/stunnel.conf-sample.in
++++ stunnel4/tools/stunnel.conf-sample.in
 @@ -10,11 +10,11 @@
  sslVersion = SSLv3
  
@@ -48,8 +54,10 @@
  
  ; Use it for client mode
  ;client = yes
---- src/Makefile.am.orig
-+++ src/Makefile.am
+Index: stunnel4/src/Makefile.am
+===================================================================
+--- stunnel4.orig/src/Makefile.am
++++ stunnel4/src/Makefile.am
 @@ -27,7 +27,7 @@
  
  # Additional compiler flags
@@ -59,8 +67,10 @@
  
  # Win32 executable
  
---- src/Makefile.in.orig
-+++ src/Makefile.in
+Index: stunnel4/src/Makefile.in
+===================================================================
+--- stunnel4.orig/src/Makefile.in
++++ stunnel4/src/Makefile.in
 @@ -224,7 +224,7 @@
  INCLUDES = -I/usr/kerberos/include
  

@@ -1,5 +1,7 @@
---- stunnel-4.23/src/verify.c	2008-03-26 19:17:01.000000000 +0000
-+++ stunnel4-4.22/src/verify.c	2008-05-18 10:56:24.000000000 +0000
+Index: stunnel4/src/verify.c
+===================================================================
+--- stunnel4.orig/src/verify.c
++++ stunnel4/src/verify.c
 @@ -50,6 +50,9 @@
  static int crl_check(CLI *c, X509_STORE_CTX *, char *);
  static int ocsp_check(CLI *c, X509_STORE_CTX *, char *);
