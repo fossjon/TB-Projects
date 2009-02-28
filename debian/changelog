@@ -1,5 +1,8 @@
-stunnel4 (3:4.22-3) UNRELEASED; urgency=low
+stunnel4 (3:4.24-1) UNRELEASED; urgency=low
 
+  * New upstream release.
+   - Remove debian/patches/security-check_certificate, now included upstream.
+     Fixes: CVE-2008-2420
   * Rebase quilt patches to not require -p0. (Closes: #484966)
 
  -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 28 Feb 2009 08:02:45 -0800
