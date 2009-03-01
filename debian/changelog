@@ -6,6 +6,8 @@ stunnel4 (3:4.26-1) UNRELEASED; urgency=low
   * Rebase quilt patches to not require -p0. (Closes: #484966)
   * Fix sample configuration file to use ssl cert from /etc/ssl/certs
     (Closes: #460953).
+  * Warn if automatic startup is disabled in /etc/default/stunnel4
+    (Closes: #475599).
 
  -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 28 Feb 2009 08:02:45 -0800
 
