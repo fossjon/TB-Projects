@@ -10,8 +10,8 @@ Index: stunnel4/tools/stunnel.conf-sample.in
  ; Certificate/key is needed in server mode and optional in client mode
 -cert = @prefix@/etc/stunnel/mail.pem
 -;key = @prefix@/etc/stunnel/mail.pem
-+cert = @sysconfdir@/stunnel/mail.pem
-+;key = @sysconfdir@/stunnel/mail.pem
++cert = /etc/ssl/certs/stunnel.pem
++;key = /etc/ssl/certs/stunnel.pem
  
  ; Protocol version (all, SSLv2, SSLv3, TLSv1)
  sslVersion = SSLv3
