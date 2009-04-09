@@ -823,6 +823,29 @@ static char *service_options(CMD cmd, LOCAL_OPTIONS *section,
     }
 #endif
 
+    /* failover */
+    switch(cmd) {
+    case CMD_INIT:
+        section->failover=FAILOVER_RR;
+        break;
+    case CMD_EXEC:
+        if(strcasecmp(opt, "failover"))
+            break;
+        if(!strcasecmp(arg, "rr"))
+            section->failover=FAILOVER_RR;
+        else if(!strcasecmp(arg, "prio"))
+            section->failover=FAILOVER_PRIO;
+        else
+            return "Argument should be either 'rr' or 'prio'";
+        return NULL; /* OK */
+    case CMD_DEFAULT:
+        break;
+    case CMD_HELP:
+        s_log(LOG_RAW, "%-15s = rr|prio chose failover strategy",
+            "failover");
+        break;
+    }
+
     /* ident */
     switch(cmd) {
     case CMD_INIT:

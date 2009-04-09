@@ -80,8 +80,9 @@ void libwrap_init(int num) {
             die(1);
         case  0:    /* child */
             drop_privileges(); /* libwrap processes are not chrooted */
-            /* FIXME: other file descriptors are not closed */
-            close(ipc_socket[2*i]); /* server-side socket */
+            for(j=0; j<=2; ++j) /* close standard input/output/error */
+                close(j);
+            close(ipc_socket[2*i]); /* close server-side socket */
             for(j=0; j<i; ++j) /* previously created client-side sockets */
                 close(ipc_socket[2*j+1]);
             while(1) { /* main libwrap client loop */
