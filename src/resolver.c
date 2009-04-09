@@ -48,6 +48,9 @@
 #ifndef EAI_NONAME
 #define EAI_NONAME 2
 #endif
+#ifndef EAI_SERVICE
+#define EAI_SERVICE 8
+#endif
 
 #if defined(USE_WIN32) && defined(USE_IPv6)
 /* rename some locally shadowed declarations */

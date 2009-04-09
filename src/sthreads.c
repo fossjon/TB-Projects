@@ -427,9 +427,9 @@ unsigned long stunnel_thread_id(void) {
     return (unsigned long)ppib->pib_ulpid;
 }
 
-int create_client(int ls, int s, void *arg, void *(*cli)(void *)) {
+int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
     s_log(LOG_DEBUG, "Creating a new thread");
-    if(_beginthread((void(*)(void *))cli, NULL, STACK_SIZE, arg)==-1) {
+    if(_beginthread((void(*)(void *))cli, NULL, arg->opt->stack_size, arg)==-1) {
         ioerror("_beginthread");
         return -1;
     }
