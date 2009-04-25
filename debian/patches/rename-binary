@@ -16,17 +16,17 @@ Index: stunnel4/doc/stunnel.8
 ===================================================================
 --- stunnel4.orig/doc/stunnel.8
 +++ stunnel4/doc/stunnel.8
-@@ -128,8 +128,8 @@
+@@ -123,8 +123,8 @@
  .rm #[ #] #H #V #F C
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL 8"
--.TH STUNNEL 8 "2008.03.27" "4.08" "stunnel"
+-.TH STUNNEL 8 "2009.04.16" "4.08" "stunnel"
 +.IX Title "STUNNEL4 8"
-+.TH STUNNEL 8 "2008.03.27" "4.08" "stunnel4"
- .SH "NAME"
- stunnel \- universal SSL tunnel
- .SH "SYNOPSIS"
++.TH STUNNEL 8 "2009.04.16" "4.08" "stunnel4"
+ .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
+ .\" way too many mistakes in technical documents.
+ .if n .ad l
 Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
@@ -39,7 +39,7 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 +chroot = @localstatedir@/lib/stunnel4/
  setuid = nobody
  setgid = @DEFAULT_GROUP@
- ; PID is created inside chroot jail
+ ; PID is created inside the chroot jail
 -pid = /stunnel.pid
 +pid = /stunnel4.pid
  
@@ -71,7 +71,7 @@ Index: stunnel4/src/Makefile.in
 ===================================================================
 --- stunnel4.orig/src/Makefile.in
 +++ stunnel4/src/Makefile.in
-@@ -224,7 +224,7 @@
+@@ -227,7 +227,7 @@
  INCLUDES = -I/usr/kerberos/include
  
  # Additional compiler flags

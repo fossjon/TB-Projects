@@ -11,6 +11,6 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 -setgid = @DEFAULT_GROUP@
 +setuid = stunnel4
 +setgid = stunnel4
- ; PID is created inside chroot jail
+ ; PID is created inside the chroot jail
  pid = /stunnel4.pid
  

@@ -3,7 +3,7 @@ Index: stunnel4/configure
 ===================================================================
 --- stunnel4.orig/configure
 +++ stunnel4/configure
-@@ -22116,7 +22116,7 @@
+@@ -23001,7 +23001,7 @@
  #define HAVE_LIBZ 1
  _ACEOF
  
