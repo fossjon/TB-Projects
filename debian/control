@@ -32,6 +32,7 @@ Description: Universal SSL tunnel for network daemons
 
 Package: stunnel
 Architecture: all
+Priority: extra
 Depends: stunnel4 (>= 3:4.20-3)
 Description: dummy upgrade package
  stunnel version 3 has been removed from Debian. This is a dummy package
