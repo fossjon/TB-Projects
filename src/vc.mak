@@ -1,4 +1,4 @@
-# vc.mak by Michal Trojnara 1998-2008
+# vc.mak by Michal Trojnara 1998-2009
 # with help of David Gillingham <dgillingham@gmail.com>
 
 # Modify this to point to your actual openssl compile directory

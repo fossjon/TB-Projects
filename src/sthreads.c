@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2008 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2009 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -400,7 +400,7 @@ int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
     return 0;
 }
 
-#endif
+#endif /* USE_WIN32 */
 
 #ifdef USE_OS2
 
@@ -437,6 +437,8 @@ int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
     return 0;
 }
 
+#endif /* USE_OS2 */
+
 #ifdef _WIN32_WCE
 
 int _beginthread(void (*start_address)(void *),
@@ -456,9 +458,7 @@ void _endthread(void) {
     ExitThread(0);
 }
 
-#endif /* !defined(_WIN32_WCE) */
-
-#endif /* USE_WIN32 */
+#endif /* _WIN32_WCE */
 
 #ifdef DEBUG_STACK_SIZE
 

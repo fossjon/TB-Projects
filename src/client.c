@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2008 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2009 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -703,7 +703,7 @@ static void print_cipher(CLI *c) { /* print negotiated cipher */
     SSL_CIPHER *cipher;
     char buf[STRLEN], *i, *j;
 
-    cipher=SSL_get_current_cipher(c->ssl);
+    cipher=(SSL_CIPHER *)SSL_get_current_cipher(c->ssl);
     SSL_CIPHER_description(cipher, buf, STRLEN);
     i=j=buf;
     do {
@@ -914,7 +914,7 @@ static int connect_remote(CLI *c) { /* connect to remote host */
     if(c->opt->option.delayed_lookup) {
         resolved_list.num=0;
         if(!name2addrlist(&resolved_list,
-                c->opt->remote_address, DEFAULT_LOOPBACK)){
+                c->opt->remote_address, DEFAULT_LOOPBACK)) {
             s_log(LOG_ERR, "No host resolved");
             longjmp(c->err, 1);
         }

@@ -1,15 +1,18 @@
 stunnel         Universal SSL tunnel
 
-Version 4.27, 2009.03.xx, urgency: MEDIUM:
+Version 4.27, 2009.04.16, urgency: MEDIUM:
 * New features
   - Win32 DLLs for OpenSSL 0.9.8k.
-  - FIPS support updated for openssl-fips 1.2.
+  - FIPS support was updated for openssl-fips 1.2.
   - New priority failover strategy for multiple "connect" targets,
     controlled with "failover=rr" (default) or "failover=prio".
+  - pgsql protocol negotiation by Marko Kreen <markokr@gmail.com>.
+  - Building instructions were updated in INSTALL.W32 file.
 * Bugfixes
   - Libwrap helper processes fixed to close standard
     input/output/error file descriptors.
-  - Some OS2 compilation fixes added.
+  - OS2 compilation fixes.
+  - WCE fixes by Pierre Delaage <delaage.pierre@free.fr>.
 
 Version 4.26, 2008.09.20, urgency: MEDIUM:
 * New features

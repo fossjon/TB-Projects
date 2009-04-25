@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2008 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2009 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -200,7 +200,7 @@ typedef struct local_options {
     char *ocsp_path;
     unsigned long ocsp_flags;
 #endif /* OpenSSL-0.9.7 */
-    SSL_METHOD *(*client_method)(void), *(*server_method)(void);
+    SSL_METHOD *client_method, *server_method;
 
         /* service-specific data for client.c */
     int fd;        /* file descriptor accepting connections for this service */
