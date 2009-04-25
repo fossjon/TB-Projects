@@ -1,21 +1,25 @@
-stunnel4 (3:4.27-1) UNRELEASED; urgency=low
-
-  * New upstream version.
-
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Fri, 24 Apr 2009 17:26:13 -0700
-
-stunnel4 (3:4.26-1) UNRELEASED; urgency=low
+stunnel4 (3:4.27-1) unstable; urgency=low
 
   * New upstream release.
    - Remove debian/patches/security-check_certificate, now included upstream.
      Fixes: CVE-2008-2420
+   - Libwrap helper processes fixed to close standard
+     input/output/error file descriptors. (Closes: #482379)
   * Rebase quilt patches to not require -p0. (Closes: #484966)
   * Fix sample configuration file to use ssl cert from /etc/ssl/certs
     (Closes: #460953).
   * Warn if automatic startup is disabled in /etc/default/stunnel4
     (Closes: #475599).
-
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 28 Feb 2009 08:02:45 -0800
+  * Use invoke-rc.d in ppp start/stop scripts.
+  * Standards-Version: 3.8.1.
+    - Add README.source documenting use of quilt.
+  * Bump to debhelper 7
+    - Remove unused old option from dh_mkshlibs call
+  * Declare the polish pod's encoding and use unicode when converting it
+    to a manpage.
+  * Dummy upgrade package is priority: extra
+  
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Fri, 24 Apr 2009 19:56:05 -0700
 
 stunnel4 (3:4.22-2) unstable; urgency=low
 
