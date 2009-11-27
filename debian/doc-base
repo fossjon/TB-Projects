@@ -8,6 +8,3 @@ Section: System/Security
 Format: HTML
 Index: /usr/share/doc/stunnel4/stunnel.html
 Files: /usr/share/doc/stunnel4/stunnel*.html
-
-Format: text
-Files: /usr/share/doc/stunnel4/transproxy.txt
