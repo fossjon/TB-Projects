@@ -43,7 +43,7 @@ if ! test -d /var/run/stunnel4; then
   rm -rf /var/run/stunnel4;
   mkdir /var/run/stunnel4
 fi
-$CHOWN $USER:$USER /var/run/stunnel4 || /bin/true
+$CHOWN $USER:$USER /var/run/stunnel4 || true
 
 # /var/log/stunnel4 is not a directory, create it...
 if ! test -d /var/log/stunnel4; then
