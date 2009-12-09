@@ -1,8 +1,8 @@
-stunnel4 (3:4.28-1~1) UNRELEASED; urgency=low
+stunnel4 (3:4.29-1~1) UNRELEASED; urgency=low
 
   * UNRELEASED build from git checkout.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Fri, 27 Nov 2009 11:56:59 -0800
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Tue, 08 Dec 2009 18:14:27 -0800
 
 stunnel4 (3:4.27-1) unstable; urgency=low
 
