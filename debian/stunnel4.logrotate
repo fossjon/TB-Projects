@@ -7,12 +7,7 @@
          notifempty
          create 640 stunnel4 stunnel4
          sharedscripts
-	 copytruncate
-# Replace the above copytruncate with the following 3 lines if NEVER loosing
-# log data is more important to you than keeping stunnel4 running non stop.
-# See Debian bugs #535915, #535924 and #323171 for more info.
-#
-#         postrotate
-#           /etc/init.d/stunnel4 restart > /dev/null
-#         endscript
+         postrotate
+           /etc/init.d/stunnel4 reload > /dev/null
+         endscript
 }

@@ -41,7 +41,7 @@ startdaemons() {
     if test -f $file; then
       ARGS="$file $OPTIONS"
       PROCLIST=`get_pids $file`
-      if [ "$PROCLIST" ] && kill -0 $PROCLIST 2>/dev/null; then
+      if [ "$PROCLIST" ] && kill -s 0 $PROCLIST 2>/dev/null; then
         echo -n "[Already running: $file] "
       elif $DAEMON $ARGS; then
 	echo -n "[Started: $file] "
@@ -56,10 +56,11 @@ startdaemons() {
 
 killdaemons()
 {
+  SIGNAL=${$1:-TERM}
   for file in $FILES; do
     PROCLIST=`get_pids $file`
-    if [ "$PROCLIST" ] && kill -0 $PROCLIST 2>/dev/null; then
-       kill $PROCLIST
+    if [ "$PROCLIST" ] && kill -s 0 $PROCLIST 2>/dev/null; then
+       kill -s $SIGNAL $PROCLIST
        echo -n "[stopped: $file] "
     fi
   done
@@ -90,9 +91,12 @@ case "$1" in
         killdaemons
         echo "$NAME."
         ;;
-#force-reload does not send a SIGHUP, since SIGHUP is interpreted as a 
-#quit signal by stunnel. I reported this problem to upstream authors.
-  force-reload|restart)
+  force-reload|reload)
+        echo -n "Reloading configuration $DESC: "
+        killdaemons HUP
+        echo "$NAME."
+        ;;  
+  restart)
         echo -n "Restarting $DESC: "
         killdaemons
         sleep 5
@@ -101,7 +105,7 @@ case "$1" in
         ;;
   *)
         N=/etc/init.d/$NAME
-        echo "Usage: $N {start|stop|force-reload|restart}" >&2
+        echo "Usage: $N {start|stop|reload|restart}" >&2
         exit 1
         ;;
 esac
