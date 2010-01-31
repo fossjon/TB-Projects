@@ -21,9 +21,9 @@ Index: stunnel4/doc/stunnel.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL 8"
--.TH STUNNEL 8 "2009.11.20" "4.29" "stunnel"
+-.TH STUNNEL 8 "2010.01.21" "4.30" "stunnel"
 +.IX Title "STUNNEL4 8"
-+.TH STUNNEL 8 "2009.11.20" "4.29" "stunnel4"
++.TH STUNNEL 8 "2010.01.21" "4.30" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -31,10 +31,10 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
 +++ stunnel4/tools/stunnel.conf-sample.in
-@@ -10,11 +10,11 @@
- sslVersion = SSLv3
+@@ -12,11 +12,11 @@
  
- ; Some security enhancements for UNIX systems - comment them out on Win32
+ ; security enhancements for UNIX systems - comment them out on Win32
+ ; for chroot a copy of some devices and files is needed within the jail
 -chroot = @localstatedir@/lib/stunnel/
 +chroot = @localstatedir@/lib/stunnel4/
  setuid = nobody
@@ -43,16 +43,16 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 -pid = /stunnel.pid
 +pid = /stunnel4.pid
  
- ; Some performance tunings
+ ; performance tunings
  socket = l:TCP_NODELAY=1
-@@ -39,7 +39,7 @@
+@@ -42,7 +42,7 @@
  
- ; Some debugging stuff useful for troubleshooting
+ ; debugging stuff (may useful for troubleshooting)
  ;debug = 7
 -;output = @localstatedir@/log/stunnel/stunnel.log
 +;output = @localstatedir@/log/stunnel4/stunnel.log
  
- ; Use it for client mode
+ ; SSL client mode
  ;client = yes
 Index: stunnel4/src/Makefile.am
 ===================================================================
@@ -88,8 +88,8 @@ Index: stunnel4/doc/stunnel.pl.8
  .\" ========================================================================
  .\"
  .IX Title "STUNNEL.PL 8"
--.TH STUNNEL.PL 8 "2009.11.20" "4.29" "stunnel"
-+.TH STUNNEL.PL 8 "2009.11.20" "4.29" "stunnel4"
+-.TH STUNNEL.PL 8 "2010.01.21" "4.30" "stunnel"
++.TH STUNNEL.PL 8 "2010.01.21" "4.30" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
