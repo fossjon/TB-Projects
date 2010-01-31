@@ -1,7 +1,7 @@
 This package was dowloaded from http://www.stunnel.org/download/source.html
 and debianized by Paolo Molaro <lupus@debian.org>.
 
-Copyright (C) 1998-2006 Michal Trojnara <Michal.Trojnara@mirt.net>
+Copyright (C) 1998-2010 Michal Trojnara <Michal.Trojnara@mirt.net>
 
 src/pty.c is based on a Public Domain code by Tatu Ylonen <ylo@cs.hut.fi>
 
@@ -16,7 +16,7 @@ StunnelConf-0.1.pl is copyright (C) 2004 Sergio Rua <srua@debian.org>
 The Debian packaging itself is 
 Copyright (C) 1998-2001 Paolo Molaro <lupus@debian.org>
 Copyright (C) 2003-2007 Julien Lemoine <speedblue@debian.org>
-Copyright (C) 2007 Rodrigo Gallardo <rodrigo@nul-unu.com>
+Copyright (C) 2007-2010 Rodrigo Gallardo <rodrigo@debian.org>
 
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
