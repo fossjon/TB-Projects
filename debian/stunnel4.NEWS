@@ -1,11 +1,12 @@
-stunnel (3:4.30-1) experimental; urgency=low
+stunnel (3:4.31-1) experimental; urgency=low
 
-  * This version introduces support for configuration file reload. The
-    init script has been updated to provide a reload option, and the
-    default logrotate configuration has been updated to take advantage of
-    this.
+  This version introduces support for reloading the configuration file
+  and for closing/reopening log files. The init script has been
+  updated to provide these options, and the default logrotate
+  configuration has been updated to take advantage of them.
+  
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 31 Jan 2010 13:44:18 -0800
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Thu, 04 Feb 2010 19:52:23 -0800
 
 stunnel (3:4.28-1) unstable; urgency=low
 
