@@ -44,6 +44,8 @@
 
 #define MAX_HOSTS 16
 
+typedef enum {LOG_MODE_NONE, LOG_MODE_ERROR, LOG_MODE_FULL} LOG_MODE;
+
 typedef union sockaddr_union {
     struct sockaddr sa;
     struct sockaddr_in in;
@@ -247,9 +249,13 @@ void die(int);
 
 /**************************************** prototypes for log.c */
 
+#if !defined(USE_WIN32) && !defined(__vms)
+void syslog_open(void);
+void syslog_close(void);
+#endif
 void log_open(void);
 void log_close(void);
-void log_flush(void);
+void log_flush(LOG_MODE);
 void s_log(int, const char *, ...)
 #ifdef __GNUC__
     __attribute__ ((format (printf, 2, 3)));

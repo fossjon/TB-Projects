@@ -109,7 +109,11 @@ void main_initialize(char *arg1, char *arg2) {
      * but as early as possible to avoid leaking file descriptors */
     libwrap_init(service_options.next ? LIBWRAP_CLIENTS : 0);
 #endif /* USE_LIBWRAP */
-
+#if !defined(USE_WIN32) && !defined(__vms)
+    /* syslog_open() must be called before change_root()
+     * to be able to access /dev/log socket */
+    syslog_open();
+#endif /* !defined(USE_WIN32) && !defined(__vms) */
 #if !defined(USE_WIN32) && !defined(USE_OS2)
     signal_fd=signal_pipe_init();
 #endif
@@ -490,7 +494,7 @@ void stunnel_info(void) {
 }
 
 void die(int status) { /* some cleanup and exit */
-    log_flush();
+    log_flush(LOG_MODE_ERROR);
 #ifdef USE_WIN32
     exit_win32(status);
 #else

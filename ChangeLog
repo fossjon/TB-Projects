@@ -1,5 +1,9 @@
 stunnel         Universal SSL tunnel
 
+Version 4.32, 2010.xx.xx, urgency: MEDIUM:
+* Bugfixes
+  - Logging subsystem bugfixes and cleanup
+
 Version 4.31, 2010.02.03, urgency: MEDIUM:
 * New features
   - Log file reopen on USR1 signal was added.
