@@ -25,6 +25,13 @@ build: build-stamp
 build-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
+
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM)          \
 	  --localstatedir=/var --enable-ssllib-cs --sysconfdir=/etc	\
 	  --with-cert-dir=/etc/ssl/certs --with-pem-dir=/etc/ssl/certs	\
