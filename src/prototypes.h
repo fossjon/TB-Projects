@@ -44,6 +44,8 @@
 
 #define MAX_HOSTS 16
 
+typedef enum {LOG_MODE_NONE, LOG_MODE_ERROR, LOG_MODE_FULL} LOG_MODE;
+
 typedef union sockaddr_union {
     struct sockaddr sa;
     struct sockaddr_in in;
@@ -144,7 +146,12 @@ typedef struct service_options_struct {
 
         /* service-specific data for client.c */
     int fd;        /* file descriptor accepting connections for this service */
-    char *execname, **execargs; /* program name and arguments for local mode */
+    char *execname; /* program name for local mode */
+#ifdef USE_WIN32
+    char *execargs; /* program arguments for local mode */
+#else
+    char **execargs; /* program arguments for local mode */
+#endif
     SOCKADDR_LIST local_addr, remote_addr, source_addr;
     char *username;
     char *remote_address;
@@ -170,13 +177,16 @@ typedef struct service_options_struct {
         unsigned int remote:1;
         unsigned int retry:1; /* loop remote+program */
         unsigned int sessiond:1;
-#ifndef USE_WIN32
         unsigned int program:1;
+#ifndef USE_WIN32
         unsigned int pty:1;
         unsigned int transparent:1;
 #endif
 #if SSLEAY_VERSION_NUMBER >= 0x00907000L
         unsigned int ocsp:1;
+#endif
+#ifdef USE_LIBWRAP
+        unsigned int libwrap:1;
 #endif
     } option;
 } SERVICE_OPTIONS;
@@ -247,9 +257,13 @@ void die(int);
 
 /**************************************** prototypes for log.c */
 
+#if !defined(USE_WIN32) && !defined(__vms)
+void syslog_open(void);
+void syslog_close(void);
+#endif
 void log_open(void);
 void log_close(void);
-void log_flush(void);
+void log_flush(LOG_MODE);
 void s_log(int, const char *, ...)
 #ifdef __GNUC__
     __attribute__ ((format (printf, 2, 3)));
@@ -454,7 +468,7 @@ LPSTR tstr2str(const LPTSTR);
 /**************************************** prototypes for libwrap.c */
 
 void libwrap_init(int);
-void auth_libwrap(CLI *);
+void libwrap_auth(CLI *);
 
 #endif /* defined PROTOTYPES_H */
 

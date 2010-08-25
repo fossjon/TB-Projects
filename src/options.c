@@ -793,7 +793,6 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
 #endif
 
     /* exec */
-#ifndef USE_WIN32
     switch(cmd) {
     case CMD_INIT:
         section->option.program=0;
@@ -804,11 +803,15 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
             break;
         section->option.program=1;
         section->execname=stralloc(arg);
+#ifdef USE_WIN32
+        section->execargs=stralloc(arg);
+#else
         if(!section->execargs) {
             section->execargs=calloc(2, sizeof(char *));
             section->execargs[0]=section->execname;
             section->execargs[1]=NULL; /* to show that it's null-terminated */
         }
+#endif
         return NULL; /* OK */
     case CMD_DEFAULT:
         break;
@@ -817,10 +820,8 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
             "exec");
         break;
     }
-#endif
 
     /* execargs */
-#ifndef USE_WIN32
     switch(cmd) {
     case CMD_INIT:
         section->execargs=NULL;
@@ -828,7 +829,11 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
     case CMD_EXEC:
         if(strcasecmp(opt, "execargs"))
             break;
+#ifdef USE_WIN32
+        section->execargs=stralloc(arg);
+#else
         section->execargs=argalloc(arg);
+#endif
         return NULL; /* OK */
     case CMD_DEFAULT:
         break;
@@ -837,7 +842,6 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
             "execargs");
         break;
     }
-#endif
 
     /* failover */
     switch(cmd) {
@@ -895,6 +899,30 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
         s_log(LOG_NOTICE, "%-15s = certificate private key", "key");
         break;
     }
+
+#ifdef USE_LIBWRAP
+    switch(cmd) {
+    case CMD_INIT:
+        section->option.libwrap=1; /* enable libwrap by default */
+        break;
+    case CMD_EXEC:
+        if(strcasecmp(opt, "libwrap"))
+            break;
+        if(!strcasecmp(arg, "yes"))
+            section->option.libwrap=1;
+        else if(!strcasecmp(arg, "no"))
+            section->option.libwrap=0;
+        else
+            return "Argument should be either 'yes' or 'no'";
+        return NULL; /* OK */
+    case CMD_DEFAULT:
+        break;
+    case CMD_HELP:
+        s_log(LOG_NOTICE, "%-15s = yes|no use /etc/hosts.allow and /etc/hosts.deny",
+            "libwrap");
+        break;
+    }
+#endif /* USE_LIBWRAP */
 
     /* local */
     switch(cmd) {
@@ -1095,7 +1123,6 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
 #endif
 
     /* retry */
-#ifndef USE_WIN32
     switch(cmd) {
     case CMD_INIT:
         section->option.retry=0;
@@ -1117,7 +1144,6 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
             "retry");
         break;
     }
-#endif
 
     /* session */
     switch(cmd) {
@@ -1553,8 +1579,7 @@ int parse_conf(char *name, CONF_TYPE type) {
 
 /**************************************** validate and initialize section */
 
-static int section_init(int line_number,
-        SERVICE_OPTIONS *section, int final) {
+static int section_init(int line_number, SERVICE_OPTIONS *section, int final) {
     if(section==&new_service_options) { /* global options just configured */
         memcpy(&global_options, &new_global_options, sizeof(GLOBAL_OPTIONS));
 #ifdef HAVE_OSSL_ENGINE_H
@@ -1571,7 +1596,7 @@ static int section_init(int line_number,
     if(!context_init(section)) /* initialize SSL context */
         return 0;
 
-    if(section==&new_service_options) { /* inetd mode */
+    if(section==&new_service_options) { /* inetd mode checks */
         if(section->option.accept) {
             config_error(line_number, "accept is not allowed in inetd mode");
             return 0;
@@ -1583,20 +1608,14 @@ static int section_init(int line_number,
             config_error(line_number,
                 "Single endpoint is required in inetd mode");
 #endif
-    }
-
-    /* standalone mode */
-#ifdef USE_WIN32
-    if(!section->option.accept || !section->option.remote)
-#else
-    if((unsigned int)section->option.accept +
-            (unsigned int)section->option.program +
-            (unsigned int)section->option.remote != 2)
-#endif
-    {
-        config_error(line_number,
-            "Each service section must define two endpoints");
-        return 0;
+    } else { /* standalone mode checks */
+        if((unsigned int)section->option.accept +
+                (unsigned int)section->option.program +
+                (unsigned int)section->option.remote != 2) {
+            config_error(line_number,
+                "Each service section must define two endpoints");
+            return 0;
+        }
     }
     return 1; /* all tests passed -- continue program execution */
 }
@@ -2028,6 +2047,7 @@ static char *stralloc(char *str) { /* allocate static string */
 }
 
 #ifndef USE_WIN32
+
 static char **argalloc(char *str) { /* allocate 'exec' argumets */
     int max_arg, i;
     char *ptr, **retval;
