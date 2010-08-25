@@ -1,14 +1,14 @@
 stunnel (3:4.20-3) unstable; urgency=low
 
-  * Stunnel 3 is deprecated. The new stunnel4 has a different command line
-    syntax and configuration. You will need to update your scripts.
+  Stunnel 3 is deprecated. The new stunnel4 has a different command line
+  syntax and configuration. You will need to update your scripts.
 
-    The wrapper script /usr/bin/stunnel3 understands stunnel3 command
-    line syntax and calls stunnel4 with appropriate options. It appears to
-    support every stunnel3 option *except* -S (which controls the defaults
-    used for certificate sources).
+  The wrapper script /usr/bin/stunnel3 understands stunnel3 command
+  line syntax and calls stunnel4 with appropriate options. It appears to
+  support every stunnel3 option *except* -S (which controls the defaults
+  used for certificate sources).
 
-    To simplify migration, /usr/bin/stunnel is a symlink to the wrapper
-    script. A future version will make the link point to stunnel4.
+  To simplify migration, /usr/bin/stunnel is a symlink to the wrapper
+  script. A future version will make the link point to stunnel4.
 
  -- Luis Rodrigo Gallardo Cruz <rodrigo@nul-unu.com>  Wed, 25 Jul 2007 11:55:20 -0500
