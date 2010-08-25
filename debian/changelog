@@ -1,9 +1,15 @@
-stunnel4 (3:4.31-1~1) UNRELEASED; urgency=low
+stunnel4 (3:4.31-1~1) experimental; urgency=low
 
-  * New Upstream version.
-   - Experimental release. Reload configuration on HUP.
+  * New Upstream Release 4.31.
+    + A SIGHUP to the server will cause it to reload the configuration file.
+    + A SIGUSR1 to the server causes it to reopen its log files.
+  * Init script now provides reload and reopen-log options (Closes: #323171).
+  * The logrotate config file now takes advantage of reopen-log option.
+  * Update config.{build,sub} on build. Closes: #535719.
+  * Add missing ${misc:Depends} entry to debian/control.
+  * Update copyright years.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Thu, 04 Feb 2010 20:02:20 -0800
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Thu, 04 Feb 2010 20:33:37 -0800
 
 stunnel4 (3:4.29-1) unstable; urgency=low
 
