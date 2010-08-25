@@ -89,18 +89,6 @@ void main_initialize(char *arg1, char *arg2) {
     sthreads_init(); /* initialize critical sections & SSL callbacks */
     parse_commandline(arg1, arg2);
 
-#ifdef USE_FIPS
-    if(global_options.option.fips) {
-        if(!FIPS_mode_set(1)) {
-            ERR_load_crypto_strings();
-            sslerror("FIPS_mode_set");
-            die(1);
-        } else
-            s_log(LOG_NOTICE, "stunnel is in FIPS mode");
-    } else
-        s_log(LOG_DEBUG, "FIPS mode disabled");
-#endif /* USE_FIPS */
-
     max_fds=FD_SETSIZE; /* start with select() limit */
     get_limits();
 #ifdef USE_LIBWRAP

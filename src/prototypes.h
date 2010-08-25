@@ -180,6 +180,9 @@ typedef struct service_options_struct {
 #if SSLEAY_VERSION_NUMBER >= 0x00907000L
         unsigned int ocsp:1;
 #endif
+#ifdef USE_LIBWRAP
+        unsigned int libwrap:1;
+#endif
     } option;
 } SERVICE_OPTIONS;
 
@@ -460,7 +463,7 @@ LPSTR tstr2str(const LPTSTR);
 /**************************************** prototypes for libwrap.c */
 
 void libwrap_init(int);
-void auth_libwrap(CLI *);
+void libwrap_auth(CLI *);
 
 #endif /* defined PROTOTYPES_H */
 
