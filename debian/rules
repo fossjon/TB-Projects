@@ -3,8 +3,6 @@
 # debian/rules file for the Debian/GNU Linux stunnel package
 # Copyright 2003 by Julien LEMOINE <speedblue@debian.org>
 
-include /usr/share/quilt/quilt.make
-
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
@@ -21,8 +19,7 @@ else
 endif
 
 
-build: build-stamp
-build-stamp: $(QUILT_STAMPFN)
+build:
 	dh_testdir
 
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
@@ -47,7 +44,6 @@ clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 	dh_clean build-stamp doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
-	$(MAKE) -f debian/rules unpatch
 
 install: build
 	dh_testdir
