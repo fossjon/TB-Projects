@@ -29,13 +29,3 @@ Description: Universal SSL tunnel for network daemons
  without any changes in the programs' code.
  .
  This package contains a wrapper script for compatibility with stunnel 3.x
-
-Package: stunnel
-Architecture: all
-Priority: extra
-Depends: stunnel4 (>= 3:4.20-3), ${misc:Depends}
-Description: dummy upgrade package
- stunnel version 3 has been removed from Debian. This is a dummy package
- to ease upgrading to stunnel4.
- .
- You may safely remove this package after the upgrade.
