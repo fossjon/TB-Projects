@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2010 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2011 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -42,7 +42,6 @@
 
 #ifndef USE_WIN32
 static int signal_pipe[2]={-1, -1};
-static void signal_handler(int);
 #ifdef __INNOTEK_LIBC__
 struct sockaddr_un {
     u_char  sun_len;             /* sockaddr len including null */
@@ -65,7 +64,7 @@ void s_poll_init(s_poll_set *fds) {
 }
 
 void s_poll_add(s_poll_set *fds, int fd, int rd, int wr) {
-    int i;
+    unsigned int i;
 
     for(i=0; i<fds->nfds && fds->ufds[i].fd!=fd; i++)
         ;
@@ -86,20 +85,30 @@ void s_poll_add(s_poll_set *fds, int fd, int rd, int wr) {
 }
 
 int s_poll_canread(s_poll_set *fds, int fd) {
-    int i;
+    unsigned int i;
 
     for(i=0; i<fds->nfds; i++)
         if(fds->ufds[i].fd==fd)
-            return fds->ufds[i].revents&~POLLOUT; /* read or error */
+            return fds->ufds[i].revents&(POLLIN|POLLHUP); /* read or closed */
     return 0;
 }
 
 int s_poll_canwrite(s_poll_set *fds, int fd) {
-    int i;
+    unsigned int i;
 
     for(i=0; i<fds->nfds; i++)
         if(fds->ufds[i].fd==fd)
-            return fds->ufds[i].revents&POLLOUT; /* write */
+            return fds->ufds[i].revents&POLLOUT; /* it is possible to write */
+    return 0;
+}
+
+int s_poll_error(s_poll_set *fds, int fd) {
+    unsigned int i;
+
+    for(i=0; i<fds->nfds; i++)
+        if(fds->ufds[i].fd==fd)
+            return fds->ufds[i].revents&(POLLERR|POLLNVAL) ?
+                get_socket_error(fd) : 0;
     return 0;
 }
 
@@ -169,15 +178,15 @@ static void scan_waiting_queue(void) {
         for(i=0; i<context->fds->nfds; i++) {
             context->fds->ufds[i].revents=ufds[nfds].revents;
 #ifdef DEBUG_UCONTEXT
-            s_log(LOG_DEBUG, "CONTEXT %ld, FD=%d, (%s%s)->(%s%s%s%s%s)",
+            s_log(LOG_DEBUG, "CONTEXT %ld, FD=%d,%s%s ->%s%s%s%s%s",
                 context->id, ufds[nfds].fd,
-                ufds[nfds].events & POLLIN ? "IN" : "",
-                ufds[nfds].events & POLLOUT ? "OUT" : "",
-                ufds[nfds].revents & POLLIN ? "IN" : "",
-                ufds[nfds].revents & POLLOUT ? "OUT" : "",
-                ufds[nfds].revents & POLLERR ? "ERR" : "",
-                ufds[nfds].revents & POLLHUP ? "HUP" : "",
-                ufds[nfds].revents & POLLNVAL ? "NVAL" : "");
+                ufds[nfds].events & POLLIN ? " IN" : "",
+                ufds[nfds].events & POLLOUT ? " OUT" : "",
+                ufds[nfds].revents & POLLIN ? " IN" : "",
+                ufds[nfds].revents & POLLOUT ? " OUT" : "",
+                ufds[nfds].revents & POLLERR ? " ERR" : "",
+                ufds[nfds].revents & POLLHUP ? " HUP" : "",
+                ufds[nfds].revents & POLLNVAL ? " NVAL" : "");
 #endif
             if(ufds[nfds].revents)
                 context->ready++;
@@ -283,16 +292,16 @@ int s_poll_wait(s_poll_set *fds, int sec, int msec) {
 void s_poll_init(s_poll_set *fds) {
     FD_ZERO(&fds->irfds);
     FD_ZERO(&fds->iwfds);
-    fds->max = 0; /* no file descriptors */
+    fds->max=0; /* no file descriptors */
 }
 
 void s_poll_add(s_poll_set *fds, int fd, int rd, int wr) {
     if(rd)
-        FD_SET(fd, &fds->irfds);
+        FD_SET((unsigned int)fd, &fds->irfds);
     if(wr)
-        FD_SET(fd, &fds->iwfds);
-    if(fd > fds->max)
-        fds->max = fd;
+        FD_SET((unsigned int)fd, &fds->iwfds);
+    if(fd>fds->max)
+        fds->max=fd;
 }
 
 int s_poll_canread(s_poll_set *fds, int fd) {
@@ -301,6 +310,12 @@ int s_poll_canread(s_poll_set *fds, int fd) {
 
 int s_poll_canwrite(s_poll_set *fds, int fd) {
     return FD_ISSET(fd, &fds->owfds);
+}
+
+int s_poll_error(s_poll_set *fds, int fd) {
+    if(!FD_ISSET(fd, &fds->orfds)) /* error conditions are signaled as read */
+        return 0;
+    return get_socket_error(fd); /* check if it's really an error */
 }
 
 int s_poll_wait(s_poll_set *fds, int sec, int msec) {
@@ -331,19 +346,18 @@ int s_poll_wait(s_poll_set *fds, int sec, int msec) {
 
 #endif /* USE_POLL */
 
-#ifndef USE_WIN32
+/**************************************** signal pipe handling */
 
-static void signal_handler(int sig) { /* SIGCHLD detected */
-    int save_errno;
+#if !defined(USE_WIN32) && !defined(USE_OS2)
 
-    save_errno=errno;
+void signal_handler(int sig) {
+    int saved_errno;
+
+    saved_errno=errno;
     writesocket(signal_pipe[1], &sig, sizeof sig);
-    signal(SIGCHLD, signal_handler);
-    signal(SIGHUP, signal_handler);
-    errno=save_errno;
+    signal(sig, signal_handler);
+    errno=saved_errno;
 }
-
-/**************************************** signal pipe */
 
 int signal_pipe_init(void) {
 #if defined(__INNOTEK_LIBC__)
@@ -354,16 +368,11 @@ int signal_pipe_init(void) {
     int pipe_in;
 
     FD_ZERO(&set_pipe);
-    signal_pipe[0]=socket(PF_OS2, SOCK_STREAM, 0);
-    pipe_in=signal_pipe[0];
-    signal_pipe[1]=socket(PF_OS2, SOCK_STREAM, 0);
-
-    alloc_fd(signal_pipe[0]);
-    alloc_fd(signal_pipe[1]);
+    signal_pipe[0]=s_socket(PF_OS2, SOCK_STREAM, 0, 0, "socket#1");
+    signal_pipe[1]=s_socket(PF_OS2, SOCK_STREAM, 0, 0, "socket#2");
 
     /* connect the two endpoints */
     memset(&un, 0, sizeof un);
-
     un.sun_len=sizeof un;
     un.sun_family=AF_OS2;
     sprintf(un.sun_path, "\\socket\\stunnel-%u", getpid());
@@ -373,35 +382,36 @@ int signal_pipe_init(void) {
     connect(signal_pipe[1], (struct sockaddr *)&un, sizeof un);
     FD_SET(signal_pipe[0], &set_pipe);
     if(select(signal_pipe[0]+1, &set_pipe, NULL, NULL, NULL)>0) {
-        signal_pipe[0]=accept(signal_pipe[0], NULL, 0);
+        pipe_in=signal_pipe[0];
+        signal_pipe[0]=s_accept(signal_pipe[0], NULL, 0, 0, "accept");
         closesocket(pipe_in);
     } else {
         sockerror("select");
         die(1);
     }
 #else /* __INNOTEK_LIBC__ */
-    if(pipe(signal_pipe)) {
-        ioerror("pipe");
+    if(s_pipe(signal_pipe, 0, "signal_pipe"))
         die(1);
-    }
-    alloc_fd(signal_pipe[0]);
-    alloc_fd(signal_pipe[1]);
-#ifdef FD_CLOEXEC
-    /* close the pipe in child execvp */
-    fcntl(signal_pipe[0], F_SETFD, FD_CLOEXEC);
-    fcntl(signal_pipe[1], F_SETFD, FD_CLOEXEC);
-#endif /* FD_CLOEXEC */
 #endif /* __INNOTEK_LIBC__ */
-    signal(SIGCHLD, signal_handler);
-    signal(SIGHUP, signal_handler);
-    signal(SIGUSR1, signal_handler);
+
+    signal(SIGCHLD, signal_handler); /* a child has died */
+    signal(SIGHUP, signal_handler); /* configuration reload */
+    signal(SIGUSR1, signal_handler); /* log reopen */
+    signal(SIGPIPE, SIG_IGN); /* ignore "broken pipe" */
+    if(signal(SIGTERM, SIG_IGN)!=SIG_IGN)
+        signal(SIGTERM, signal_handler); /* fatal */
+    if(signal(SIGQUIT, SIG_IGN)!=SIG_IGN)
+        signal(SIGQUIT, signal_handler); /* fatal */
+    if(signal(SIGINT, SIG_IGN)!=SIG_IGN)
+        signal(SIGINT, signal_handler); /* fatal */
+    /* signal(SIGSEGV, signal_handler); */
     return signal_pipe[0];
 }
 
 static void signal_pipe_empty(void) {
     int sig;
 
-    s_log(LOG_DEBUG, "Cleaning up the signal pipe");
+    s_log(LOG_DEBUG, "Dispatching signals from the signal pipe");
     while(readsocket(signal_pipe[0], &sig, sizeof sig)==sizeof sig) {
         switch(sig) {
         case SIGCHLD:
@@ -421,6 +431,10 @@ static void signal_pipe_empty(void) {
             log_close();
             log_open();
             break;
+        default:
+            s_log(sig==SIGTERM ? LOG_NOTICE : LOG_ERR,
+                "Received signal %d; terminating", sig);
+            die(3);
         }
     }
     s_log(LOG_DEBUG, "Signal pipe is empty");
@@ -477,45 +491,9 @@ void child_status(void) { /* dead libwrap or 'exec' process detected */
     }
 }
 
-#endif /* !defined USE_WIN32 */
+#endif /* !defined(USE_WIN32) && !defined(USE_OS2) */
 
 /**************************************** fd management */
-
-int alloc_fd(int sock) {
-    if(max_fds && sock>=max_fds) {
-        s_log(LOG_ERR,
-            "File descriptor out of range (%d>=%d)", sock, max_fds);
-        closesocket(sock);
-        return -1;
-    }
-    setnonblock(sock, 1);
-    return 0;
-}
-
-/* try to use non-POSIX O_NDELAY on obsolete BSD systems */
-#if !defined O_NONBLOCK && defined O_NDELAY
-#define O_NONBLOCK O_NDELAY
-#endif
-
-void setnonblock(int sock, unsigned long l) {
-#if defined F_GETFL && defined F_SETFL && defined O_NONBLOCK && !defined __INNOTEK_LIBC__
-    int retval, flags;
-    do {
-        flags=fcntl(sock, F_GETFL, 0);
-    }while(flags<0 && get_last_socket_error()==EINTR);
-    flags=l ? flags|O_NONBLOCK : flags&~O_NONBLOCK;
-    do {
-        retval=fcntl(sock, F_SETFL, flags);
-    }while(retval<0 && get_last_socket_error()==EINTR);
-    if(retval<0)
-#else
-    if(ioctlsocket(sock, FIONBIO, &l)<0)
-#endif
-        sockerror("nonblocking"); /* non-critical */
-    else
-        s_log(LOG_DEBUG, "FD=%d in %sblocking mode", sock,
-            l ? "non-" : "");
-}
 
 int set_socket_options(int s, int type) {
     SOCK_OPT *ptr;
@@ -548,11 +526,19 @@ int set_socket_options(int s, int type) {
     return 0; /* OK */
 }
 
+int get_socket_error(const int fd) {
+    int err;
+    socklen_t optlen=sizeof err;
+
+    if(getsockopt(fd, SOL_SOCKET, SO_ERROR, (void *)&err, &optlen))
+        return get_last_socket_error(); /* failed -> ask why */
+    return err;
+}
+
 /**************************************** simulate blocking I/O */
 
 int connect_blocking(CLI *c, SOCKADDR_UNION *addr, socklen_t addrlen) {
     int error;
-    socklen_t optlen;
     char dst[IPLEN];
 
     s_ntop(dst, addr);
@@ -565,7 +551,7 @@ int connect_blocking(CLI *c, SOCKADDR_UNION *addr, socklen_t addrlen) {
     error=get_last_socket_error();
     if(error!=EINPROGRESS && error!=EWOULDBLOCK) {
         s_log(LOG_ERR, "connect_blocking: connect %s: %s (%d)",
-            dst, my_strerror(error), error);
+            dst, s_strerror(error), error);
         return -1;
     }
 
@@ -577,22 +563,20 @@ int connect_blocking(CLI *c, SOCKADDR_UNION *addr, socklen_t addrlen) {
     case -1:
         error=get_last_socket_error();
         s_log(LOG_ERR, "connect_blocking: s_poll_wait %s: %s (%d)",
-            dst, my_strerror(error), error);
+            dst, s_strerror(error), error);
         return -1;
     case 0:
-        s_log(LOG_ERR, "connect_blocking: s_poll_wait %s: timeout", dst);
+        s_log(LOG_ERR, "connect_blocking: s_poll_wait %s:"
+            " TIMEOUTconnect exceeded", dst);
         return -1;
     default:
-        if(s_poll_canread(&c->fds, c->fd)) {
+        if(s_poll_canread(&c->fds, c->fd) || s_poll_error(&c->fds, c->fd)) {
             /* newly connected socket should not be ready for read */
             /* get the resulting error code, now */
-            optlen=sizeof error;
-            if(getsockopt(c->fd, SOL_SOCKET, SO_ERROR,
-                    (void *)&error, &optlen))
-                error=get_last_socket_error(); /* failed -> ask why */
+            error=get_socket_error(c->fd);
             if(error) { /* really an error? */
                 s_log(LOG_ERR, "connect_blocking: getsockopt %s: %s (%d)",
-                    dst, my_strerror(error), error);
+                    dst, s_strerror(error), error);
                 return -1;
             }
         }
@@ -620,12 +604,13 @@ void write_blocking(CLI *c, int fd, void *ptr, int len) {
             sockerror("write_blocking: s_poll_wait");
             longjmp(c->err, 1); /* error */
         case 0:
-            s_log(LOG_INFO, "write_blocking: s_poll_wait timeout");
+            s_log(LOG_INFO, "write_blocking: s_poll_wait:"
+                " TIMEOUTbusy exceeded: sending reset");
             longjmp(c->err, 1); /* timeout */
         case 1:
             break; /* OK */
         default:
-            s_log(LOG_ERR, "write_blocking: s_poll_wait unknown result");
+            s_log(LOG_ERR, "write_blocking: s_poll_wait: unknown result");
             longjmp(c->err, 1); /* error */
         }
         num=writesocket(fd, ptr, len);
@@ -652,12 +637,13 @@ void read_blocking(CLI *c, int fd, void *ptr, int len) {
             sockerror("read_blocking: s_poll_wait");
             longjmp(c->err, 1); /* error */
         case 0:
-            s_log(LOG_INFO, "read_blocking: s_poll_wait timeout");
+            s_log(LOG_INFO, "read_blocking: s_poll_wait:"
+                " TIMEOUTbusy exceeded: sending reset");
             longjmp(c->err, 1); /* timeout */
         case 1:
             break; /* OK */
         default:
-            s_log(LOG_ERR, "read_blocking: s_poll_wait unknown result");
+            s_log(LOG_ERR, "read_blocking: s_poll_wait: unknown result");
             longjmp(c->err, 1); /* error */
         }
         num=readsocket(fd, ptr, len);
@@ -701,12 +687,13 @@ void fdgetline(CLI *c, int fd, char *line) {
             sockerror("fdgetline: s_poll_wait");
             longjmp(c->err, 1); /* error */
         case 0:
-            s_log(LOG_INFO, "fdgetline: s_poll_wait timeout");
+            s_log(LOG_INFO, "fdgetline: s_poll_wait:"
+                " TIMEOUTbusy exceeded: sending reset");
             longjmp(c->err, 1); /* timeout */
         case 1:
             break; /* OK */
         default:
-            s_log(LOG_ERR, "fdgetline: s_poll_wait unknown result");
+            s_log(LOG_ERR, "fdgetline: s_poll_wait: unknown result");
             longjmp(c->err, 1); /* error */
         }
         switch(readsocket(fd, line+ptr, 1)) {

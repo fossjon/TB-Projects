@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2010 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2011 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -196,10 +196,10 @@ void sockerror(const char *txt) { /* socket error */
 }
 
 void log_error(int level, int error, const char *txt) { /* generic error */
-    s_log(level, "%s: %s (%d)", txt, my_strerror(error), error);
+    s_log(level, "%s: %s (%d)", txt, s_strerror(error), error);
 }
 
-char *my_strerror(int errnum) {
+char *s_strerror(int errnum) {
     switch(errnum) {
 #ifdef USE_WIN32
     case 10004:

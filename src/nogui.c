@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2010 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2011 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -56,8 +56,8 @@ void win_log(LPSTR line) { /* also used in log.c */
     free(tstr);
 }
 
-void exit_win32(int code) {
-    exit(code);
+void exit_win32(int exit_code) {
+    exit(exit_code);
 }
 
 int passwd_cb(char *buf, int size, int rwflag, void *userdata) {
