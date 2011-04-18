@@ -4,4 +4,3 @@ tools/importCA.html
 tools/importCA.sh
 tools/stunnel.cnf
 tools/stunnel.conf-sample
-tools/stunnel.init

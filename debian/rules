@@ -43,7 +43,7 @@ clean:
 
 	[ ! -f Makefile ] || $(MAKE) distclean
 
-	dh_clean build-stamp doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
+	dh_clean build-stamp debian/stunnel4.init doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
 
 install: build
 	dh_testdir
@@ -72,6 +72,9 @@ install: build
 	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
 	  $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel4
 
+	# Copy sample init script into place for dh_installinit
+	cp $(CURDIR)/tools/stunnel.init $(CURDIR)/debian/stunnel4.init
+
 	[ ! -s debian/lintian.overrides ] || \
 	  install -p -m 0644 -D $(CURDIR)/debian/lintian.overrides	\
 	    $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
@@ -96,7 +99,7 @@ binary-arch: install
 	dh_installexamples -a
 	dh_installman -a
 	dh_installchangelogs -a ChangeLog
-	dh_installinit -a -- defaults
+	dh_installinit -a --restart-after-upgrade -- defaults
 	dh_installppp -a --name=0stunnel4
 	dh_installlogrotate -a
 	dh_install -a debian/StunnelConf-0.1.pl usr/share/doc/stunnel4/contrib

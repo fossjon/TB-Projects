@@ -1,3 +1,9 @@
+stunnel4 (3:4.35-1~2) unstable; urgency=low
+
+  * Use upstream's init script.
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 17 Apr 2011 17:11:03 -0700
+
 stunnel4 (3:4.35-1~1) UNRELEASED; urgency=low
 
   * New upstream release
