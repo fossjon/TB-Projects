@@ -61,9 +61,6 @@ install: build
 	# Manpages will be installed by dh_installman
 	rm -rf $(CURDIR)/debian/stunnel4/usr/share/man
 
-	install -p -m 0644 tools/stunnel.conf-sample 			\
-	  $(CURDIR)/debian/stunnel4/etc/stunnel/stunnel.conf
-
 	# Rename binary
 	mv $(CURDIR)/debian/stunnel4/usr/bin/stunnel 			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
@@ -74,6 +71,10 @@ install: build
 
 	# Copy sample init script into place for dh_installinit
 	cp $(CURDIR)/tools/stunnel.init $(CURDIR)/debian/stunnel4.init
+
+	# Basic docs for the user on how to create an initial configuration
+	install -p -m 0644 $(CURDIR)/debian/stunnel4.conf.README \
+	  $(CURDIR)/debian/stunnel4/etc/stunnel/README
 
 	[ ! -s debian/lintian.overrides ] || \
 	  install -p -m 0644 -D $(CURDIR)/debian/lintian.overrides	\
