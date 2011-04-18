@@ -29,9 +29,8 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
 
-	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM)          \
-	  --localstatedir=/var --enable-ssllib-cs --sysconfdir=/etc	\
-	  --with-cert-dir=/etc/ssl/certs --with-pem-dir=/etc/ssl/certs	\
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM) \
+	  --localstatedir=/var --sysconfdir=/etc	           \
 	  --enable-ipv6 --with-threads=pthread
 	$(MAKE) -C src
 	$(MAKE) -C doc
@@ -40,12 +39,11 @@ endif
 clean:
 	dh_testdir
 	dh_testroot
+	dh_clean build-stamp debian/stunnel4.init doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
 
 	[ ! -f Makefile ] || $(MAKE) distclean
 
-	dh_clean build-stamp debian/stunnel4.init doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
-
-install: build
+install: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -81,17 +79,7 @@ install: build
 	    $(CURDIR)/debian/stunnel4/usr/share/lintian/overrides/stunnel4
 
 binary-indep:
-	dh_testdir
-	dh_testroot
-	dh_installdocs -i
-	dh_installchangelogs -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
-
+	# There are no binary independent packages
 
 binary-arch: install
 	dh_testdir
