@@ -1,3 +1,10 @@
+stunnel4 (3:4.35-2) unstable; urgency=low
+
+  * Fix variable substitution in init script (Closes: #623221).
+    Thanks Tomas Kapralek <kapralek@cvut.cz> for report and diagnosis.
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Mon, 18 Apr 2011 20:46:01 -0700
+
 stunnel4 (3:4.35-1) unstable; urgency=low
 
   * New Upstream Releases (Closes: #621987).
