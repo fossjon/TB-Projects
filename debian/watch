@@ -1,4 +1,4 @@
 version=3
 
-ftp://ftp.stunnel.org/stunnel/stunnel-4.([\d]+)+\.tar\.gz debian
+ftp://ftp.stunnel.org/stunnel/stunnel-(4).([\d]+)+\.tar\.gz debian
 
