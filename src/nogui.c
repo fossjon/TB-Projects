@@ -53,10 +53,10 @@ void win_log(LPSTR line) { /* also used in log.c */
 
     tstr=str2tstr(line);
     RETAILMSG(TRUE, (TEXT("%s\r\n"), tstr));
-    free(tstr);
+    str_free(tstr);
 }
 
-void exit_win32(int exit_code) {
+void win_exit(int exit_code) {
     exit(exit_code);
 }
 

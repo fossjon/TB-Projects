@@ -40,7 +40,6 @@
 
 /* #define DEBUG_UCONTEXT */
 
-#ifndef USE_WIN32
 static int signal_pipe[2]={-1, -1};
 #ifdef __INNOTEK_LIBC__
 struct sockaddr_un {
@@ -53,7 +52,6 @@ static void signal_pipe_empty(void);
 #ifdef USE_FORK
 static void client_status(void); /* dead children detected */
 #endif
-#endif /* !defined(USE_WIN32) */
 
 /**************************************** s_poll functions */
 
@@ -119,10 +117,10 @@ static void scan_waiting_queue(void) {
     int retval, retry;
     CONTEXT *context, *prev;
     int min_timeout;
-    int nfds, i;
+    unsigned int nfds, i;
     time_t now;
     short *signal_revents;
-    static int max_nfds=0;
+    static unsigned int max_nfds=0;
     static struct pollfd *ufds=NULL;
 
     time(&now);
@@ -216,51 +214,56 @@ static void scan_waiting_queue(void) {
 }
 
 int s_poll_wait(s_poll_set *fds, int sec, int msec) {
-    /* FIXME: msec parameter is currently ignored with UCONTEXT threads */
     CONTEXT *context; /* current context */
     static CONTEXT *to_free=NULL; /* delayed memory deallocation */
+
+    /* FIXME: msec parameter is currently ignored with UCONTEXT threads */
+    (void)msec; /* skip warning about unused parameter */
 
     /* remove the current context from ready queue */
     context=ready_head;
     ready_head=ready_head->next;
     if(!ready_head) /* the queue is empty */
         ready_tail=NULL;
+    /* it it safe to s_log() after new ready_head is set */
 
+    /* it's illegal to deallocate the stack of the current context */
+    if(to_free) { /* a delayed deallocation is scheduled */
+        s_log(LOG_DEBUG, "Releasing context %ld", to_free->id);
+        free(to_free->stack);
+        free(to_free);
+        to_free=NULL;
+    }
+
+    /* manage the current thread */
     if(fds) { /* something to wait for -> swap the context */
         context->fds=fds; /* set file descriptors to wait for */
         context->finish=sec<0 ? -1 : time(NULL)+sec;
-        /* move (append) the current context to the waiting queue */
+
+        /* append the current context to the waiting queue */
         context->next=NULL;
         if(waiting_tail)
             waiting_tail->next=context;
         waiting_tail=context;
         if(!waiting_head)
             waiting_head=context;
-        while(!ready_head) /* no context ready */
-            scan_waiting_queue();
+    } else { /* nothing to wait for -> drop the context */
+        to_free=context; /* schedule for delayed deallocation */
+    }
+
+    while(!ready_head) /* wait until there is a thread to switch to */
+        scan_waiting_queue();
+
+    /* switch threads */
+    if(fds) { /* swap the current context */
         if(context->id!=ready_head->id) {
             s_log(LOG_DEBUG, "Context swap: %ld -> %ld",
                 context->id, ready_head->id);
             swapcontext(&context->context, &ready_head->context);
             s_log(LOG_DEBUG, "Current context: %ld", ready_head->id);
-            if(to_free) {
-                s_log(LOG_DEBUG, "Releasing context %ld", to_free->id);
-                free(to_free->stack);
-                free(to_free);
-                to_free=NULL;
-            }
         }
         return ready_head->ready;
-    } else { /* nothing to wait for -> drop the context */
-        /* it's illegal to deallocate the stack of the current context */
-        if(to_free) {
-            s_log(LOG_DEBUG, "Releasing context %ld", to_free->id);
-            free(to_free->stack);
-            free(to_free);
-        }
-        to_free=context;
-        while(!ready_head) /* no context ready */
-            scan_waiting_queue();
+    } else { /* drop the current context */
         s_log(LOG_DEBUG, "Context set: %ld (dropped) -> %ld",
             context->id, ready_head->id);
         setcontext(&ready_head->context);
@@ -334,12 +337,10 @@ int s_poll_wait(s_poll_set *fds, int sec, int msec) {
             tv_ptr=&tv;
         }
         retval=select(fds->max+1, &fds->orfds, &fds->owfds, NULL, tv_ptr);
-#if !defined(USE_WIN32) && !defined(USE_OS2)
         if(sec<0 && retval>0 && s_poll_canread(fds, signal_pipe[0])) {
             signal_pipe_empty(); /* no timeout -> main loop */
             retry=1;
         }
-#endif
     } while(retry || (retval<0 && get_last_socket_error()==EINTR));
     return retval;
 }
@@ -348,18 +349,11 @@ int s_poll_wait(s_poll_set *fds, int sec, int msec) {
 
 /**************************************** signal pipe handling */
 
-#if !defined(USE_WIN32) && !defined(USE_OS2)
-
-void signal_handler(int sig) {
-    int saved_errno;
-
-    saved_errno=errno;
-    writesocket(signal_pipe[1], &sig, sizeof sig);
-    signal(sig, signal_handler);
-    errno=saved_errno;
-}
-
 int signal_pipe_init(void) {
+#ifdef USE_WIN32
+    if(make_sockets(signal_pipe))
+        die(1);
+#else
 #if defined(__INNOTEK_LIBC__)
     /* Innotek port of GCC can not use select on a pipe
      * use local socket instead */
@@ -390,7 +384,7 @@ int signal_pipe_init(void) {
         die(1);
     }
 #else /* __INNOTEK_LIBC__ */
-    if(s_pipe(signal_pipe, 0, "signal_pipe"))
+    if(s_pipe(signal_pipe, 1, "signal_pipe"))
         die(1);
 #endif /* __INNOTEK_LIBC__ */
 
@@ -405,15 +399,21 @@ int signal_pipe_init(void) {
     if(signal(SIGINT, SIG_IGN)!=SIG_IGN)
         signal(SIGINT, signal_handler); /* fatal */
     /* signal(SIGSEGV, signal_handler); */
+#endif /* USE_WIN32 */
     return signal_pipe[0];
 }
 
+void signal_post(int sig) {
+    writesocket(signal_pipe[1], (char *)&sig, sizeof sig);
+}
+
 static void signal_pipe_empty(void) {
-    int sig;
+    int sig, err;
 
     s_log(LOG_DEBUG, "Dispatching signals from the signal pipe");
-    while(readsocket(signal_pipe[0], &sig, sizeof sig)==sizeof sig) {
+    while(readsocket(signal_pipe[0], (char *)&sig, sizeof sig)==sizeof sig) {
         switch(sig) {
+#ifndef USE_WIN32
         case SIGCHLD:
 #ifdef USE_FORK
             client_status(); /* report status of client process */
@@ -421,18 +421,28 @@ static void signal_pipe_empty(void) {
             child_status();  /* report status of libwrap or 'exec' process */
 #endif /* defined USE_FORK */
             break;
-        case SIGHUP:
+#endif /* !defind USE_WIN32 */
+        case SIGNAL_RELOAD_CONFIG:
+            unbind_ports();
             log_close();
-            parse_conf(NULL, CONF_RELOAD);
-            log_open();
-            bind_ports();
+            err=parse_conf(NULL, CONF_RELOAD);
+            if(err) {
+                log_flush(LOG_MODE_ERROR);
+            } else {
+                log_open();
+                bind_ports();
+            }
+#ifdef USE_WIN32
+            win_newconfig(err);
+#endif
             break;
-        case SIGUSR1:
+        case SIGNAL_REOPEN_LOG:
             log_close();
             log_open();
+            s_log(LOG_NOTICE, "Log file reopened");
             break;
         default:
-            s_log(sig==SIGTERM ? LOG_NOTICE : LOG_ERR,
+            s_log(sig==SIGNAL_TERMINATE ? LOG_NOTICE : LOG_ERR,
                 "Received signal %d; terminating", sig);
             str_stats();
             die(3);
@@ -469,6 +479,8 @@ static void client_status(void) { /* dead children detected */
 }
 #endif /* defined USE_FORK */
 
+#if !defined(USE_WIN32) && !defined(USE_OS2)
+
 void child_status(void) { /* dead libwrap or 'exec' process detected */
     int pid, status;
 
@@ -492,6 +504,15 @@ void child_status(void) { /* dead libwrap or 'exec' process detected */
     }
 }
 
+void signal_handler(int sig) {
+    int saved_errno;
+
+    saved_errno=errno;
+    signal_post(sig);
+    signal(sig, signal_handler);
+    errno=saved_errno;
+}
+
 #endif /* !defined(USE_WIN32) && !defined(USE_OS2) */
 
 /**************************************** fd management */
@@ -507,18 +528,27 @@ int set_socket_options(int s, int type) {
             continue; /* default */
         switch(ptr->opt_type) {
         case TYPE_LINGER:
-            opt_size=sizeof(struct linger); break;
+            opt_size=sizeof(struct linger);
+            break;
         case TYPE_TIMEVAL:
-            opt_size=sizeof(struct timeval); break;
+            opt_size=sizeof(struct timeval);
+            break;
         case TYPE_STRING:
-            opt_size=strlen(ptr->opt_val[type]->c_val)+1; break;
+            opt_size=strlen(ptr->opt_val[type]->c_val)+1;
+            break;
         default:
-            opt_size=sizeof(int); break;
+            opt_size=sizeof(int);
         }
         if(setsockopt(s, ptr->opt_level, ptr->opt_name,
                 (void *)ptr->opt_val[type], opt_size)) {
-            sockerror(ptr->opt_str);
-            return -1; /* FAILED */
+            if(get_last_socket_error()==EOPNOTSUPP) {
+                s_log(LOG_NOTICE,
+                    "Failed to set option %s set on %s socket (not a socket?)",
+                    ptr->opt_str, type_str[type]);
+            } else {
+                sockerror(ptr->opt_str);
+                return -1; /* FAILED */
+            }
         } else {
             s_log(LOG_DEBUG, "Option %s set on %s socket",
                 ptr->opt_str, type_str[type]);
@@ -701,6 +731,10 @@ char *fdgetline(CLI *c, int fd) {
             longjmp(c->err, 1); /* error */
         }
         line=str_realloc(line, ptr+1);
+        if(!line) {
+            s_log(LOG_CRIT, "Memory allocation failed");
+            longjmp(c->err, 1); /* error */
+        }
         switch(readsocket(fd, line+ptr, 1)) {
         case -1: /* error */
             sockerror("readsocket (fdgetline)");
@@ -741,6 +775,70 @@ int fdprintf(CLI *c, int fd, const char *format, ...) {
     fdputline(c, fd, line);
     str_free(line);
     return strlen(line)+2;
+}
+
+#define INET_SOCKET_PAIR
+
+int make_sockets(int fd[2]) { /* make a pair of connected ipv4 sockets */
+#ifdef INET_SOCKET_PAIR
+    struct sockaddr_in addr;
+    socklen_t addrlen;
+    int s; /* temporary socket awaiting for connection */
+
+    /* create two *blocking* sockets first */
+    s=s_socket(AF_INET, SOCK_STREAM, 0, 0, "make_sockets: s_socket#1");
+    if(s<0) {
+        return 1;
+    }
+    fd[1]=s_socket(AF_INET, SOCK_STREAM, 0, 0, "make_sockets: s_socket#2");
+    if(fd[1]<0) {
+        closesocket(s);
+        return 1;
+    }
+
+    addrlen=sizeof addr;
+    memset(&addr, 0, addrlen);
+    addr.sin_family=AF_INET;
+    addr.sin_addr.s_addr=htonl(INADDR_LOOPBACK);
+    addr.sin_port=htons(0); /* dynamic port allocation */
+    if(bind(s, (struct sockaddr *)&addr, addrlen))
+        log_error(LOG_DEBUG, get_last_socket_error(), "make_sockets: bind#1");
+    if(bind(fd[1], (struct sockaddr *)&addr, addrlen))
+        log_error(LOG_DEBUG, get_last_socket_error(), "make_sockets: bind#2");
+
+    if(listen(s, 1)) {
+        sockerror("make_sockets: listen");
+        closesocket(s);
+        closesocket(fd[1]);
+        return 1;
+    }
+    if(getsockname(s, (struct sockaddr *)&addr, &addrlen)) {
+        sockerror("make_sockets: getsockname");
+        closesocket(s);
+        closesocket(fd[1]);
+        return 1;
+    }
+    if(connect(fd[1], (struct sockaddr *)&addr, addrlen)) {
+        sockerror("make_sockets: connect");
+        closesocket(s);
+        closesocket(fd[1]);
+        return 1;
+    }
+    fd[0]=s_accept(s, (struct sockaddr *)&addr, &addrlen, 1,
+        "make_sockets: s_accept");
+    if(fd[0]<0) {
+        closesocket(s);
+        closesocket(fd[1]);
+        return 1;
+    }
+    closesocket(s); /* don't care about the result */
+    set_nonblock(fd[0], 1);
+    set_nonblock(fd[1], 1);
+#else
+    if(s_socketpair(AF_UNIX, SOCK_STREAM, 0, fd, 1, "make_sockets: socketpair"))
+        return 1;
+#endif
+    return 0;
 }
 
 /* end of network.c */

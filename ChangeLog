@@ -1,6 +1,46 @@
 stunnel change log
 
 
+Version 4.39, 2011.07.06, urgency: LOW:
+* New features
+  - New Win32 installer module to build self-signed stunnel.pem.
+  - Added configuration file editing with Windows GUI.
+  - Added log file reopening file editing with Windows GUI.
+    It might be useful to also implement log file rotation.
+  - Improved configuration file reload with Windows GUI.
+
+Version 4.38, 2011.06.28, urgency: MEDIUM:
+* New features
+  - Server-side SNI implemented (RFC 3546 section 3.1) with a new
+    service-level option "nsi".
+  - "socket" option also accepts "yes" and "no" for flags.
+  - Nagle's algorithm is now disabled by default for improved interactivity.
+* Bugfixes
+  - A compilation fix was added for OpenSSL version < 1.0.0.
+  - Signal pipe set to non-blocking mode.  This bug caused hangs of stunnel
+    features based on signals, e.g. local mode, FORK threading, or
+    configuration file reload on Unix.  Win32 platform was not affected.
+
+Version 4.37, 2011.06.17, urgency: MEDIUM:
+* New features
+  - Client-side SNI implemented (RFC 3546 section 3.1).
+  - Default "ciphers" changed from the OpenSSL default to a more secure
+    and faster "RC4-MD5:HIGH:!aNULL:!SSLv2".
+    A paranoid (and usually slower) setting would be "HIGH:!aNULL:!SSLv2".
+  - Recommended "options = NO_SSLv2" added to the sample stunnel.conf file.
+  - Default client method upgraded from SSLv3 to TLSv1.
+    To connect servers without TLS support use "sslVersion = SSLv3" option.
+  - Improved --enable-fips and --disable-fips ./configure option handling.
+  - On startup stunnel now compares the compiled version of OpenSSL against
+    the running version of OpenSSL. A warning is logged on mismatch.
+* Bugfixes
+  - Non-blocking socket handling in local mode fixed (Debian bug #626856).
+  - UCONTEXT threading mode fixed.
+  - Removed the use of gcc Thread-Local Storage for improved portability.
+  - va_copy macro defined for platforms that do not have it.
+  - Fixed "local" option parsing on IPv4 systems.
+  - Solaris compilation fix (redefinition of "STR").
+
 Version 4.36, 2011.05.03, urgency: LOW:
 * New features
   - Updated Win32 DLLs for OpenSSL 1.0.0d.
@@ -33,7 +73,8 @@ Version 4.35, 2011.02.05, urgency: LOW:
   - Async-signal-unsafe s_log() removed from SIGTERM/SIGQUIT/SIGINT handler.
   - CLOEXEC file descriptor leaks fixed on Linux >= 2.6.28 with glibc >= 2.10.
     Irreparable race condition leaks remain on other Unix platforms.
-    This issue may have security implications on some deployments.
+    This issue may have security implications on some deployments:
+    http://udrepper.livejournal.com/20407.html
   - Directory lib64 included in the OpenSSL library search path.
   - Windows CE compilation fixes (thx to Pierre Delaage).
   - Deprecated RSA_generate_key() replaced with RSA_generate_key_ex().

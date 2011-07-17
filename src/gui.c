@@ -44,20 +44,26 @@
 #define UWM_SYSTRAY (WM_USER + 1) /* sent to us by the taskbar */
 #define LOG_LINES 250
 
+#ifdef _WIN32_WCE
+#define STUNNEL_PLATFORM "WinCE"
+#else
+#define STUNNEL_PLATFORM "Win32"
+#endif
+
 /* prototypes */
 static void parse_cmdline(LPSTR);
 #ifndef _WIN32_WCE
 static int set_cwd(void);
 #endif
 static int initialize_winsock(void);
-static void ThreadFunc(void *);
+static void daemon_thread(void *);
 static LRESULT CALLBACK wndProc(HWND, UINT, WPARAM, LPARAM);
 static int win_main(HINSTANCE, HINSTANCE, LPSTR, int);
 static void save_file(HWND);
 static LRESULT CALLBACK about_proc(HWND, UINT, WPARAM, LPARAM);
 static LRESULT CALLBACK pass_proc(HWND, UINT, WPARAM, LPARAM);
+static void update_logs(void);
 static LPTSTR log_txt(void);
-static void set_visible(int);
 static void error_box(const LPTSTR);
 
 /* NT Service related function */
@@ -81,9 +87,9 @@ static HINSTANCE ghInst;
 static HWND EditControl=NULL;
 static HMENU htraymenu=NULL;
 #ifndef _WIN32_WCE
-static HMENU hmainmenu;
+static HMENU hmainmenu=NULL;
 #endif
-static HMENU hpopup;
+static HMENU hpopup=NULL;
 static HWND hwnd=NULL;
 #ifdef _WIN32_WCE
 static HWND hwndCB; /* command bar handle */
@@ -138,27 +144,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     /* setup the initial window caption before reading the configuration file
      * global_options.win32_service may not be used here */
-#ifdef _WIN32_WCE
-    win32_name=TEXT("stunnel ") TEXT(STUNNEL_VERSION)
-        TEXT(" on Windows CE (not configured)");
-#else
-    win32_name=TEXT("stunnel ") TEXT(STUNNEL_VERSION)
-        TEXT(" on Win32 (not configured)");
-#endif
+    win32_name=TEXT("stunnel ") TEXT(STUNNEL_VERSION) TEXT(" on ")
+        TEXT(STUNNEL_PLATFORM) TEXT(" (not configured)");
 
     if(initialize_winsock())
         return 1;
 
-    if(!setjmp(jump_buf)) { /* TRY */
+    if(!setjmp(jump_buf)) { /* catch any die() calls */
         main_initialize(
             cmdline.config_file[0] ? cmdline.config_file : NULL, NULL);
-#ifdef _WIN32_WCE
-        win32_name=TEXT("stunnel ") TEXT(STUNNEL_VERSION)
-            TEXT(" on Windows CE"));
-#else
-        /* update the information */
-        win32_name=str_printf("stunnel %s on Win32 (%s)",
-            STUNNEL_VERSION, global_options.win32_service);
+#ifndef _WIN32_WCE
         if(!cmdline.service) {
             if(cmdline.install)
                 return service_install(command_line);
@@ -170,10 +165,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 return service_stop();
         }
 #endif
-    } else {
     }
 
-    /* CATCH */
 #ifndef _WIN32_WCE
     if(cmdline.service)
         return service_initialize();
@@ -281,7 +274,7 @@ static int win_main(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     WNDCLASSEX wc;
 #endif
     MSG msg;
-    LPTSTR classname=win32_name;
+    LPTSTR classname=TEXT("stunnel_main_window_class");
 
     (void)hPrevInstance; /* skip warning about unused parameter */
     (void)command_line; /* skip warning about unused parameter */
@@ -310,33 +303,28 @@ static int win_main(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
     /* create main window */
-    if(global_options.option.taskbar) { /* save menu resources */
-        htraymenu=LoadMenu(ghInst, MAKEINTRESOURCE(IDM_TRAYMENU));
-        hpopup=GetSubMenu(htraymenu, 0);
-    }
-
 #ifdef _WIN32_WCE
     hwnd=CreateWindow(classname, win32_name, 0,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
         NULL, NULL, hInstance, NULL);
+    EnableMenuItem(hmainmenu, IDM_EDIT_CONFIG, MF_GRAYED);
+    EnableMenuItem(hpopup, IDM_EDIT_CONFIG, MF_GRAYED);
 #else
     hmainmenu=LoadMenu(ghInst, MAKEINTRESOURCE(IDM_MAINMENU));
     hwnd=CreateWindow(classname, win32_name, WS_TILEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
         NULL, hmainmenu, hInstance, NULL);
 
-    if(cmdline.service) /* do not allow to save file in the service mode */
-        EnableMenuItem(hmainmenu, IDM_SAVEAS, MF_GRAYED);
+    if(cmdline.service) { /* block unsafe operations in the service mode */
+        EnableMenuItem(hmainmenu, IDM_EDIT_CONFIG, MF_GRAYED);
+        EnableMenuItem(hpopup, IDM_EDIT_CONFIG, MF_GRAYED);
+        EnableMenuItem(hmainmenu, IDM_SAVE_LOG, MF_GRAYED);
+    }
 #endif
 
-    if(error_mode) { /* log window is hidden by default */
-        set_visible(1);
-#ifndef _WIN32_WCE
-        EnableMenuItem(hmainmenu, IDM_RELOAD, MF_GRAYED);
-#endif
-        EnableMenuItem(htraymenu, IDM_RELOAD, MF_GRAYED);
-    } else /* create the main thread */
-        _beginthread(ThreadFunc, DEFAULT_STACK_SIZE, NULL);
+    win_newconfig(error_mode);
+
+    _beginthread(daemon_thread, DEFAULT_STACK_SIZE, NULL);
 
     while(GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -369,27 +357,19 @@ static void update_taskbar(void) { /* create the taskbar icon */
     Shell_NotifyIcon(NIM_ADD, &nid); /* this adds the icon */
 }
 
-static void ThreadFunc(void *arg) {
+static void daemon_thread(void *arg) {
     (void)arg; /* skip warning about unused parameter */
 
-    if(!setjmp(jump_buf)) {
-        main_execute();
-    } else {
-        /* FIXME: could be unsafe to call it from another thread */
-        set_visible(1);
-#ifndef _WIN32_WCE
-        EnableMenuItem(hmainmenu, IDM_RELOAD, MF_GRAYED);
-#endif		
-        EnableMenuItem(htraymenu, IDM_RELOAD, MF_GRAYED);
+    if(!setjmp(jump_buf)) { /* catch any die() calls */
+        daemon_loop();
     }
-    _endthread();
+    _endthread(); /* after signal_post(SIGNAL_TERMINATE); */
 }
 
 static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     NOTIFYICONDATA nid;
     POINT pt;
     RECT rect;
-    LPTSTR txt;
 
 #if 0
     if(message!=WM_CTLCOLORSTATIC && message!=WM_TIMER)
@@ -397,9 +377,6 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 #endif
     switch(message) {
     case WM_CREATE:
-        if(global_options.option.taskbar) /* taskbar update enabled? */
-            SetTimer(hwnd, 0x29a, 1000, NULL); /* 1-second timer */
-
 #ifdef _WIN32_WCE
         /* create command bar */
         hwndCB=CommandBar_Create(ghInst, hwnd, 1);
@@ -420,7 +397,6 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
             (WPARAM)GetStockObject(OEM_FIXED_FONT),
         MAKELPARAM(FALSE, 0)); /* no need to redraw right, now */
 #endif
-
         /* NOTE: there's no return statement here -> proceeding with resize */
 
     case WM_SIZE:
@@ -436,9 +412,7 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         return TRUE;
 
     case WM_SETFOCUS:
-        txt=log_txt();
-        SetWindowText(EditControl, txt);
-        str_free(txt);
+        update_logs();
         SetFocus(EditControl);
         return TRUE;
 
@@ -447,7 +421,17 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         return TRUE;
 
     case WM_CLOSE:
-        set_visible(0);
+        ShowWindow(hwnd, SW_HIDE);
+        return TRUE;
+
+    case WM_SHOWWINDOW:
+        visible=wParam; /* setup global variable */
+        if(hpopup)
+            CheckMenuItem(hpopup, IDM_SHOW_LOG,
+                visible ? MF_CHECKED : MF_UNCHECKED);
+        if(visible)
+            update_logs();
+
         return TRUE;
 
     case WM_DESTROY:
@@ -474,23 +458,36 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         case IDM_ABOUT:
             DialogBox(ghInst, TEXT("AboutBox"), hwnd, (DLGPROC)about_proc);
             break;
-        case IDM_LOG:
-            set_visible(!visible);
+        case IDM_SHOW_LOG:
+            if(visible) {
+                ShowWindow(hwnd, SW_HIDE); /* hide window */
+            } else {
+                ShowWindow(hwnd, SW_SHOWNORMAL); /* show window */
+                SetForegroundWindow(hwnd); /* bring on top */
+            }
             break;
         case IDM_CLOSE:
-            set_visible(0);
+            ShowWindow(hwnd, SW_HIDE); /* hide window */
             break;
         case IDM_EXIT:
+            signal_post(SIGNAL_TERMINATE);
             DestroyWindow(hwnd);
             break;
-        case IDM_SAVEAS:
-            save_file(hwnd);
+        case IDM_SAVE_LOG:
+            if(!cmdline.service) /* security */
+                save_file(hwnd);
             break;
-        case IDM_RELOAD:
-            log_close();
-            parse_conf(NULL, CONF_RELOAD);
-            log_open();
-            bind_ports();
+        case IDM_EDIT_CONFIG:
+#ifndef _WIN32_WCE
+            if(!cmdline.service) /* security */
+                _spawnlp(_P_NOWAIT, "notepad.exe", "notepad.exe", "stunnel.conf", NULL);
+#endif
+            break;
+        case IDM_RELOAD_CONFIG:
+            signal_post(SIGNAL_RELOAD_CONFIG);
+            break;
+        case IDM_REOPEN_LOG:
+            signal_post(SIGNAL_REOPEN_LOG);
             break;
         }
         return TRUE;
@@ -512,7 +509,12 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
             break;
 #ifndef _WIN32_WCE
         case WM_LBUTTONDBLCLK: /* switch log window visibility */
-            set_visible(!visible);
+            if(visible) {
+                ShowWindow(hwnd, SW_HIDE); /* hide window */
+            } else {
+                ShowWindow(hwnd, SW_SHOWNORMAL); /* show window */
+                SetForegroundWindow(hwnd); /* bring on top */
+            }
             break;
 #endif
         }
@@ -543,16 +545,19 @@ static LRESULT CALLBACK pass_proc(HWND hDlg, UINT message,
         WPARAM wParam, LPARAM lParam) {
     char *titlebar;
     LPTSTR tstr;
-    WORD cchPassword;
-    TCHAR sPassword[PEM_BUFSIZE];
-    char* cPassword;
+    union {
+        TCHAR txt[PEM_BUFSIZE];
+        WORD len;
+    } pass_dialog;
+    WORD pass_len;
+    char* pass_txt;
 
     switch(message) {
     case WM_INITDIALOG:
         /* set the default push button to "Cancel" */
         SendMessage(hDlg, DM_SETDEFID, (WPARAM) IDCANCEL, (LPARAM) 0);
 
-        titlebar=str_printf("Private key: %s", ui_data->section->key);
+        titlebar=str_printf("Private key: %s", ui_data->opt->key);
         tstr=str2tstr(titlebar);
         str_free(titlebar);
         SetWindowText(hDlg, tstr);
@@ -561,30 +566,30 @@ static LRESULT CALLBACK pass_proc(HWND hDlg, UINT message,
 
     case WM_COMMAND:
         /* set the default push button to "OK" when the user enters text */
-        if(HIWORD (wParam) == EN_CHANGE && LOWORD(wParam) == IDE_PASSEDIT)
-            SendMessage(hDlg, DM_SETDEFID, (WPARAM) IDOK, (LPARAM) 0);
+        if(HIWORD(wParam)==EN_CHANGE && LOWORD(wParam)==IDE_PASSEDIT)
+            SendMessage(hDlg, DM_SETDEFID, (WPARAM)IDOK, (LPARAM)0);
         switch(wParam) {
         case IDOK:
             /* get number of characters */
-            cchPassword=(WORD)SendDlgItemMessage(hDlg,
-                IDE_PASSEDIT, EM_LINELENGTH, (WPARAM) 0, (LPARAM) 0);
-            if(!cchPassword || cchPassword>=PEM_BUFSIZE) {
+            pass_len=(WORD)SendDlgItemMessage(hDlg,
+                IDE_PASSEDIT, EM_LINELENGTH, (WPARAM)0, (LPARAM)0);
+            if(!pass_len || pass_len>=PEM_BUFSIZE) {
                 EndDialog(hDlg, FALSE);
                 return FALSE;
             }
 
             /* put the number of characters into first word of buffer */
-            *((LPWORD) sPassword)=cchPassword;
+            pass_dialog.len=pass_len;
 
             /* get the characters */
             SendDlgItemMessage(hDlg, IDE_PASSEDIT, EM_GETLINE,
-                (WPARAM) 0, /* line 0 */ (LPARAM)sPassword);
-            sPassword[cchPassword]='\0'; /* null-terminate the string */
+                (WPARAM)0 /* line 0 */, (LPARAM)pass_dialog.txt);
+            pass_dialog.txt[pass_len]='\0'; /* null-terminate the string */
 
             /* convert input password to ANSI string (as ui_data->pass) */
-            cPassword=tstr2str(sPassword);
-            strcpy(ui_data->pass, cPassword);
-            str_free(cPassword);
+            pass_txt=tstr2str(pass_dialog.txt);
+            strcpy(ui_data->pass, pass_txt);
+            str_free(pass_txt);
 
             EndDialog(hDlg, TRUE);
             return TRUE;
@@ -634,9 +639,6 @@ static void save_file(HWND hwnd) {
     LPSTR str;
     DWORD nWritten;
 
-    if(cmdline.service) /* do not allow to save file in the service mode */
-        return;
-
     ZeroMemory(&ofn, sizeof ofn);
     szFileName[0]='\0';
 
@@ -661,9 +663,17 @@ static void save_file(HWND hwnd) {
         return;
     }
 
-    txt=log_txt();
+    txt=log_txt(); /* need to convert the result to plain ASCII */
+    if(!txt) {
+        CloseHandle(hFile);
+        error_box(TEXT("Out of memory"));
+    }
     str=tstr2str(txt);
     str_free(txt);
+    if(!str) {
+        CloseHandle(hFile);
+        error_box(TEXT("Out of memory"));
+    }
     bResult=WriteFile(hFile, str, strlen(str), &nWritten, NULL);
     str_free(str);
     if(!bResult)
@@ -702,8 +712,15 @@ void win_log(LPSTR line) { /* also used in log.c */
     }
     leave_critical_section(CRIT_WIN_LOG);
 
-    if(visible) {
-        txt=log_txt();
+    if(visible)
+        update_logs();
+}
+
+static void update_logs(void) {
+    LPTSTR txt;
+
+    txt=log_txt();
+    if(txt) {
         SetWindowText(EditControl, txt);
         str_free(txt);
     }
@@ -718,6 +735,10 @@ static LPTSTR log_txt(void) {
     for(curr=head; curr; curr=curr->next)
         len+=curr->len+2; /* +2 for trailing '\r\n' */
     buff=str_alloc((len+1)*sizeof(TCHAR)); /* +1 for trailing '\0' */
+    if(!buff) {
+        leave_critical_section(CRIT_WIN_LOG);
+        return NULL;
+    }
     for(curr=head; curr; curr=curr->next) {
         memcpy(buff+ptr, curr->txt, curr->len*sizeof(TCHAR));
         ptr+=curr->len;
@@ -732,32 +753,60 @@ static LPTSTR log_txt(void) {
     return buff;
 }
 
-static void set_visible(int i) {
-    LPTSTR txt;
+/* called from win_main() on first load, and from network.c on reload */
+void win_newconfig(int err) { /* 0 - successs, 1 - error */
+    error_mode=err; /* only really used on reload */
+    if(error_mode) {
+        win32_name=TEXT("stunnel ") TEXT(STUNNEL_VERSION) TEXT(" on ")
+            TEXT(STUNNEL_PLATFORM) TEXT(" (invalid stunnel.conf)");
+    } else {
+#ifdef _WIN32_WCE
+        win32_name=TEXT("stunnel ") TEXT(STUNNEL_VERSION)
+            TEXT(" on WinCE (configured)");
+#else
+        win32_name=str_printf("stunnel %s on Win32 (%s)",
+            STUNNEL_VERSION, global_options.win32_service);
+#endif
+    }
+    if(hwnd) {
+        SetWindowText(hwnd, win32_name);
+        if(error_mode) { /* log window is hidden by default */
+            ShowWindow(hwnd, SW_SHOWNORMAL); /* show window */
+            SetForegroundWindow(hwnd); /* bring on top */
+        }
+    }
 
-    visible=i; /* setup global variable */
-    CheckMenuItem(hpopup, IDM_LOG,
-        visible?MF_CHECKED:MF_UNCHECKED); /* check or uncheck menu item */
-    if(visible) {
-        txt=log_txt();
-        SetWindowText(EditControl, txt); /* setup window content */
-        str_free(txt);
-        ShowWindow(hwnd, SW_SHOWNORMAL); /* show window */
-        SetForegroundWindow(hwnd); /* bring on top */
-    } else
-        ShowWindow(hwnd, SW_HIDE); /* hide window */
+    if(global_options.option.taskbar) { /* save menu resources */
+        if(!htraymenu)
+            htraymenu=LoadMenu(ghInst, MAKEINTRESOURCE(IDM_TRAYMENU));
+        if(!hpopup)
+            hpopup=GetSubMenu(htraymenu, 0);
+        SetTimer(hwnd, 0x29a, 1000, NULL); /* 1-second timer */
+        update_taskbar();
+    }
+    if(hmainmenu)
+        EnableMenuItem(hmainmenu, IDM_REOPEN_LOG,
+            global_options.output_file ? MF_ENABLED : MF_GRAYED);
+    if(hpopup)
+        EnableMenuItem(hpopup, IDM_REOPEN_LOG,
+            global_options.output_file ? MF_ENABLED : MF_GRAYED);
+    if(error_mode) {
+        win_log("");
+        s_log(LOG_ERR, "Server is down");
+        MessageBox(hwnd, TEXT("Stunnel server is down due to an error.\n")
+            TEXT("You need to exit and correct the problem.\n")
+            TEXT("Click OK to see the error log window."),
+            win32_name, MB_ICONERROR);
+    }
 }
 
-void exit_win32(int exit_code) { /* used instead of exit() on Win32 */
+void win_exit(int exit_code) { /* used instead of exit() on Win32 */
     (void)exit_code; /* skip warning about unused parameter */
 
-    win_log("");
-    s_log(LOG_ERR, "Server is down");
-    MessageBox(hwnd, TEXT("Stunnel server is down due to an error.\n")
-        TEXT("You need to exit and correct the problem.\n")
-        TEXT("Click OK to see the error log window."),
-        win32_name, MB_ICONERROR);
+    if(cmdline.quiet) /* e.g. uninstallation with broken config */
+        exit(exit_code); /* just quit */
     error_mode=1;
+    unbind_ports();
     longjmp(jump_buf, 1);
 }
 
