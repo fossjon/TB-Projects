@@ -2,4 +2,3 @@ no_zlib_link
 fix-paths
 rename-binary
 runas-user
-bad-substitution-fix
