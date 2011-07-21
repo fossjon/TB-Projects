@@ -3,8 +3,8 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
 +++ stunnel4/tools/stunnel.conf-sample.in
-@@ -13,8 +13,8 @@
- ; security enhancements for UNIX systems - comment them out on Win32
+@@ -11,8 +11,8 @@
+ ; Security enhancements for UNIX systems - comment them out on Win32
  ; for chroot a copy of some devices and files is needed within the jail
  chroot = @localstatedir@/lib/stunnel4/
 -setuid = nobody

@@ -21,9 +21,9 @@ Index: stunnel4/doc/stunnel.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL 8"
--.TH STUNNEL 8 "2011.04.27" "4.36" "stunnel"
+-.TH STUNNEL 8 "2011.06.28" "4.39" "stunnel"
 +.IX Title "STUNNEL4 8"
-+.TH STUNNEL 8 "2011.04.27" "4.36" "stunnel4"
++.TH STUNNEL 8 "2011.06.28" "4.39" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -31,9 +31,9 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
 +++ stunnel4/tools/stunnel.conf-sample.in
-@@ -12,11 +12,11 @@
+@@ -10,11 +10,11 @@
  
- ; security enhancements for UNIX systems - comment them out on Win32
+ ; Security enhancements for UNIX systems - comment them out on Win32
  ; for chroot a copy of some devices and files is needed within the jail
 -chroot = @localstatedir@/lib/stunnel/
 +chroot = @localstatedir@/lib/stunnel4/
@@ -43,11 +43,11 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 -pid = /stunnel.pid
 +pid = /stunnel4.pid
  
- ; performance tunings
- socket = l:TCP_NODELAY=1
-@@ -42,7 +42,7 @@
+ ; Disable support for insecure SSLv2 protocol
+ options = NO_SSLv2
+@@ -38,7 +38,7 @@
  
- ; debugging stuff (may useful for troubleshooting)
+ ; Debugging stuff (may useful for troubleshooting)
  ;debug = 7
 -;output = @localstatedir@/log/stunnel/stunnel.log
 +;output = @localstatedir@/log/stunnel4/stunnel.log
@@ -89,9 +89,9 @@ Index: stunnel4/doc/stunnel.pl.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.PL 8"
--.TH STUNNEL.PL 8 "2011.04.27" "4.36" "stunnel"
+-.TH STUNNEL.PL 8 "2011.06.28" "4.39" "stunnel"
 +.IX Title "STUNNEL4.PL 8"
-+.TH STUNNEL.PL 8 "2011.04.27" "4.36" "stunnel4"
++.TH STUNNEL.PL 8 "2011.06.28" "4.39" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -104,9 +104,9 @@ Index: stunnel4/doc/stunnel.fr.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.FR 8"
--.TH STUNNEL.FR 8 "2011.02.09" "4.36" "stunnel"
+-.TH STUNNEL.FR 8 "2011.06.28" "4.39" "stunnel"
 +.IX Title "STUNNEL4.FR 8"
-+.TH STUNNEL.FR 8 "2011.02.09" "4.36" "stunnel4"
++.TH STUNNEL.FR 8 "2011.06.28" "4.39" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
