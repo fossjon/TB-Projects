@@ -1,6 +1,32 @@
 stunnel4 (3:4.39-1~1) UNRELEASED; urgency=low
 
-  * New Upstream Release.
+  * New Upstream Releases. Highlights:
+   + 4.38:
+     - Server-side SNI implemented (RFC 3546 section 3.1) with a new
+       service-level option "nsi".
+     - "socket" option also accepts "yes" and "no" for flags.
+     - Nagle's algorithm is now disabled by default for improved interactivity.
+     - Bugfix: Signal pipe set to non-blocking mode.  This bug caused
+       hangs of stunnel features based on signals, e.g. local mode, FORK
+       threading, or configuration file reload on Unix.  Win32 platform was
+       not affected.
+   + 4.37:
+     - Client-side SNI implemented (RFC 3546 section 3.1).
+     - Default "ciphers" changed from the OpenSSL default to a more secure
+       and faster "RC4-MD5:HIGH:!aNULL:!SSLv2".
+       A paranoid (and usually slower) setting would be "HIGH:!aNULL:!SSLv2".
+     - Recommended "options = NO_SSLv2" added to the sample stunnel.conf file.
+     - Default client method upgraded from SSLv3 to TLSv1.
+       To connect servers without TLS support use "sslVersion = SSLv3" option.
+     - Bugfix: Non-blocking socket handling in local mode fixed (Closes: #626856).
+   + 4.36:
+     - Dynamic memory management for strings manipulation:
+       no more static STRLEN limit, lower stack footprint. (Closes: #594876).
+     - Strict public key comparison added for "verify = 3" certificate
+       checking mode (thx to Philipp Hartwig).
+   For more details see upstream ChangeLog.
+
+  * Removed /usr/lib/stunnel/libstunnel.la file.
 
  -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 17 Jul 2011 12:25:05 -0700
 
