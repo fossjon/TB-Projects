@@ -18,7 +18,8 @@ stunnel4 (3:4.39-1) UNRELEASED; urgency=low
      - Recommended "options = NO_SSLv2" added to the sample stunnel.conf file.
      - Default client method upgraded from SSLv3 to TLSv1.
        To connect servers without TLS support use "sslVersion = SSLv3" option.
-     - Bugfix: Non-blocking socket handling in local mode fixed (Closes: #626856).
+     - Bugfix: Non-blocking socket handling in local mode fixed
+       (Closes: #626856).
    + 4.36:
      - Dynamic memory management for strings manipulation:
        no more static STRLEN limit, lower stack footprint. (Closes: #594876).
