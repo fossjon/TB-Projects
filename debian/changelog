@@ -1,4 +1,4 @@
-stunnel4 (3:4.39-1~1) UNRELEASED; urgency=low
+stunnel4 (3:4.39-1) UNRELEASED; urgency=low
 
   * New Upstream Releases. Highlights:
    + 4.38:
@@ -27,8 +27,10 @@ stunnel4 (3:4.39-1~1) UNRELEASED; urgency=low
    For more details see upstream ChangeLog.
 
   * Removed /usr/lib/stunnel/libstunnel.la file.
+  * Support restarting selected stunnel instances. Thanks Peter Palfrader.
+    (Closes: #627765).
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 17 Jul 2011 12:25:05 -0700
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Thu, 21 Jul 2011 15:15:55 -0700
 
 stunnel4 (3:4.35-2) unstable; urgency=low
 
