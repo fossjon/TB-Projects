@@ -1,8 +1,14 @@
-stunnel4 (3:4.40-1~1) UNRELEASED; urgency=low
+stunnel4 (3:4.40-1) unstable; urgency=low
 
-  * New Upstream Release
+  * New Upstream Release:
+   - Hardcoded 2048-bit DH parameters are used as a fallback if DH parameters
+     are not provided in stunnel.pem.
+   - Default "ciphers" value updated to prefer ECDH:
+     "ALL:!SSLv2:!aNULL:!EXP:!LOW:-MEDIUM:RC4:+HIGH".
+   - Default ECDH curve updated to "prime256v1".
+   - Removed support for temporary RSA keys (used in obsolete export ciphers).
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 23 Jul 2011 09:44:58 -0700
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 24 Jul 2011 11:06:57 -0700
 
 stunnel4 (3:4.39-1) unstable; urgency=low
 
