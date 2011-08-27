@@ -1,4 +1,4 @@
-stunnel4 (3:4.42-1~1) UNRELEASED; urgency=low
+stunnel4 (3:4.42-1) unstable; urgency=low
 
   * New Upstream Release.
    - Fixed a heap corruption vulnerability in versions 4.40 and 4.41.  It may
@@ -6,7 +6,7 @@ stunnel4 (3:4.42-1~1) UNRELEASED; urgency=low
      (Closes: #638758)
    - New verify level 0 to request and ignore peer certificate.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 27 Aug 2011 07:47:22 -0700
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sat, 27 Aug 2011 08:34:43 -0700
 
 stunnel4 (3:4.40-1) unstable; urgency=low
 
