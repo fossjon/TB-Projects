@@ -90,8 +90,10 @@ static char *parse_global_option(CMD cmd, char *opt, char *arg) {
     struct passwd *pw;
 #endif
 
-    if(cmd==CMD_DEFAULT || cmd==CMD_HELP)
-        s_log(LOG_NOTICE, "Global option defaults");
+    if(cmd==CMD_DEFAULT || cmd==CMD_HELP) {
+        s_log(LOG_NOTICE, " ");
+        s_log(LOG_NOTICE, "Global options:");
+    }
 
     /* chroot */
 #ifdef HAVE_CHROOT
@@ -530,7 +532,7 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
 
     if(cmd==CMD_DEFAULT || cmd==CMD_HELP) {
         s_log(LOG_NOTICE, " ");
-        s_log(LOG_NOTICE, "Service-level option defaults");
+        s_log(LOG_NOTICE, "Service-level options:");
     }
 
     /* accept */
@@ -681,7 +683,6 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
         section->option.remote=0;
         section->remote_address=NULL;
         section->remote_addr.num=0;
-        section->host_name=NULL;
         break;
     case CMD_EXEC:
         if(strcasecmp(opt, "connect"))
@@ -692,13 +693,6 @@ static char *parse_service_option(CMD cmd, SERVICE_OPTIONS *section,
                 !name2addrlist(&section->remote_addr, arg, DEFAULT_LOOPBACK)) {
             s_log(LOG_INFO, "Cannot resolve '%s' - delaying DNS lookup", arg);
             section->option.delayed_lookup=1;
-        }
-        tmpstr=strrchr(arg, ':');
-        if(tmpstr) {
-            *tmpstr='\0';
-            section->host_name=str_dup_err(arg);
-        } else {
-            section->host_name=str_dup_err("localhost");
         }
         return NULL; /* OK */
     case CMD_DEFAULT:
@@ -1532,19 +1526,20 @@ void parse_commandline(char *name, char *parameter) {
     if(!strcasecmp(name, "-help")) {
         parse_global_option(CMD_HELP, NULL, NULL);
         parse_service_option(CMD_HELP, NULL, NULL, NULL);
+        log_flush(LOG_MODE_INFO);
         die(1);
     }
 
     if(!strcasecmp(name, "-version")) {
-        stunnel_info(LOG_NOTICE);
-        s_log(LOG_NOTICE, " ");
         parse_global_option(CMD_DEFAULT, NULL, NULL);
         parse_service_option(CMD_DEFAULT, NULL, NULL, NULL);
+        log_flush(LOG_MODE_INFO);
         die(1);
     }
 
     if(!strcasecmp(name, "-sockets")) {
         print_socket_options();
+        log_flush(LOG_MODE_INFO);
         die(1);
     }
 
@@ -1705,6 +1700,25 @@ int parse_conf(char *name, CONF_TYPE type) {
 /**************************************** validate and initialize section */
 
 static int section_init(int last_line, SERVICE_OPTIONS *section, int final) {
+    char *tmpstr;
+
+    /* setup host_name for SNI, prefer protocolHost if specified */
+    if(section->protocol_host) /* 'protocolHost' option */
+        section->host_name=str_dup_err(section->protocol_host);
+    else if(section->remote_address) /* 'connect' option */
+        section->host_name=str_dup_err(section->remote_address);
+    else
+        section->host_name=NULL;
+    if(section->host_name) { /* either 'protocolHost' or 'connect' specified */
+        tmpstr=strrchr(section->host_name, ':');
+        if(tmpstr) { /* 'host:port' -> drop ':port' */
+            *tmpstr='\0';
+        } else { /* 'port' -> default to 'localhost' */
+            str_free(section->host_name);
+            section->host_name=str_dup_err("localhost");
+        }
+    }
+
     if(section==&new_service_options) { /* global options just configured */
         memcpy(&global_options, &new_global_options, sizeof(GLOBAL_OPTIONS));
 #ifdef HAVE_OSSL_ENGINE_H
@@ -1961,6 +1975,7 @@ static int print_socket_options(void) {
 
     fd=socket(AF_INET, SOCK_STREAM, 0);
 
+    s_log(LOG_NOTICE, " ");
     s_log(LOG_NOTICE, "Socket option defaults:");
     s_log(LOG_NOTICE,
         "    Option Name     |  Accept  |   Local  |  Remote  |OS default");
