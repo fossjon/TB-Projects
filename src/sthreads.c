@@ -93,10 +93,6 @@ static CONTEXT *new_context(void) {
 
     /* allocate and fill the CONTEXT structure */
     context=str_alloc(sizeof(CONTEXT));
-    if(!context) {
-        s_log(LOG_ERR, "Unable to allocate CONTEXT structure");
-        return NULL;
-    }
     str_detach(context);
     context->id=next_id++;
     context->fds=NULL;
@@ -113,14 +109,15 @@ static CONTEXT *new_context(void) {
     return context;
 }
 
-void sthreads_init(void) {
+int sthreads_init(void) {
     /* create the first (listening) context and put it in the running queue */
     if(!new_context()) {
         s_log(LOG_ERR, "Unable create the listening context");
-        die(1);
+        return 1;
     }
     /* no need to initialize ucontext_t structure here
        it will be initialied with swapcontext() call */
+    return 0;
 }
 
 int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
@@ -152,15 +149,6 @@ int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
 
     /* create stack */
     context->stack=str_alloc(arg->opt->stack_size);
-    if(!context->stack) {
-        str_free(context);
-        if(arg)
-            str_free(arg);
-        if(s>=0)
-            closesocket(s);
-        s_log(LOG_ERR, "Unable to allocate stack");
-        return -1;
-    }
     str_detach(context->stack);
 #if defined(__sgi) || ARGC==2 /* obsolete ss_sp semantics */
     context->context.uc_stack.ss_sp=context->stack+arg->opt->stack_size-8;
@@ -170,8 +158,8 @@ int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
     context->context.uc_stack.ss_size=arg->opt->stack_size;
     context->context.uc_stack.ss_flags=0;
 
-    s_log(LOG_DEBUG, "Context %ld created", context->id);
     makecontext(&context->context, (void(*)(void))cli, ARGC, arg);
+    s_log(LOG_DEBUG, "New context created");
     return 0;
 }
 
@@ -179,8 +167,8 @@ int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
 
 #ifdef USE_FORK
 
-void sthreads_init(void) {
-    /* empty */
+int sthreads_init(void) {
+    return 0;
 }
 
 unsigned long stunnel_process_id(void) {
@@ -192,6 +180,7 @@ unsigned long stunnel_thread_id(void) {
 }
 
 static void null_handler(int sig) {
+    (void)sig; /* skip warning about unused parameter */
     signal(SIGCHLD, null_handler);
 }
 
@@ -233,11 +222,7 @@ void leave_critical_section(SECTION_CODE i) {
     pthread_mutex_unlock(stunnel_cs+i);
 }
 
-static void locking_callback(int mode, int type,
-#ifdef HAVE_OPENSSL
-    const /* callback definition has been changed in openssl 0.9.3 */
-#endif
-    char *file, int line) {
+static void locking_callback(int mode, int type, const char *file, int line) {
     (void)file; /* skip warning about unused parameter */
     (void)line; /* skip warning about unused parameter */
     if(mode&CRYPTO_LOCK)
@@ -257,8 +242,6 @@ static struct CRYPTO_dynlock_value *dyn_create_function(const char *file,
     (void)file; /* skip warning about unused parameter */
     (void)line; /* skip warning about unused parameter */
     value=str_alloc(sizeof(struct CRYPTO_dynlock_value));
-    if(!value)
-        return NULL;
     str_detach(value);
     pthread_mutex_init(&value->mutex, NULL);
     return value;
@@ -290,7 +273,7 @@ unsigned long stunnel_thread_id(void) {
     return (unsigned long)pthread_self();
 }
 
-void sthreads_init(void) {
+int sthreads_init(void) {
     int i;
 
     /* initialize stunnel critical sections */
@@ -307,6 +290,8 @@ void sthreads_init(void) {
     CRYPTO_set_dynlock_create_callback(dyn_create_function);
     CRYPTO_set_dynlock_lock_callback(dyn_lock_function);
     CRYPTO_set_dynlock_destroy_callback(dyn_destroy_function);
+
+    return 0;
 }
 
 int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
@@ -364,11 +349,7 @@ void leave_critical_section(SECTION_CODE i) {
     LeaveCriticalSection(stunnel_cs+i);
 }
 
-static void locking_callback(int mode, int type,
-#ifdef HAVE_OPENSSL
-    const /* callback definition has been changed in openssl 0.9.3 */
-#endif
-    char *file, int line) {
+static void locking_callback(int mode, int type, const char *file, int line) {
     (void)file; /* skip warning about unused parameter */
     (void)line; /* skip warning about unused parameter */
     if(mode&CRYPTO_LOCK)
@@ -388,8 +369,6 @@ static struct CRYPTO_dynlock_value *dyn_create_function(const char *file,
     (void)file; /* skip warning about unused parameter */
     (void)line; /* skip warning about unused parameter */
     value=str_alloc(sizeof(struct CRYPTO_dynlock_value));
-    if(!value)
-        return NULL;
     str_detach(value);
     InitializeCriticalSection(&value->mutex);
     return value;
@@ -421,7 +400,7 @@ unsigned long stunnel_thread_id(void) {
     return GetCurrentThreadId() & 0x00ffffff;
 }
 
-void sthreads_init(void) {
+int sthreads_init(void) {
     int i;
 
     /* initialize stunnel critical sections */
@@ -437,6 +416,8 @@ void sthreads_init(void) {
     CRYPTO_set_dynlock_create_callback(dyn_create_function);
     CRYPTO_set_dynlock_lock_callback(dyn_lock_function);
     CRYPTO_set_dynlock_destroy_callback(dyn_destroy_function);
+
+    return 0;
 }
 
 int create_client(int ls, int s, CLI *arg, void *(*cli)(void *)) {
@@ -466,7 +447,8 @@ void leave_critical_section(SECTION_CODE i) {
     DosExitCritSec();
 }
 
-void sthreads_init(void) {
+int sthreads_init(void) {
+    return 0;
 }
 
 unsigned long stunnel_process_id(void) {

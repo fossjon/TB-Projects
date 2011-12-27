@@ -21,9 +21,9 @@ Index: stunnel4/doc/stunnel.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL 8"
--.TH STUNNEL 8 "2011.09.07" "4.44" "stunnel"
+-.TH STUNNEL 8 "2011.11.28" "4.50" "stunnel"
 +.IX Title "STUNNEL4 8"
-+.TH STUNNEL 8 "2011.09.07" "4.44" "stunnel4"
++.TH STUNNEL 8 "2011.11.28" "4.50" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -31,7 +31,7 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
 +++ stunnel4/tools/stunnel.conf-sample.in
-@@ -8,17 +8,17 @@
+@@ -9,17 +9,17 @@
  
  ; A copy of some devices and system files is needed within the chroot jail
  ; Chroot conflicts with configuration file reload and many other features
@@ -50,8 +50,8 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 -;output = @localstatedir@/log/stunnel/stunnel.log
 +;output = @localstatedir@/log/stunnel4/stunnel.log
  
- ; *****************************************************************************
- ; * Service Defaults (may also be specified in individual service sections)   *
+ ; **************************************************************************
+ ; * Service defaults may also be specified in individual service sections  *
 Index: stunnel4/src/Makefile.am
 ===================================================================
 --- stunnel4.orig/src/Makefile.am
@@ -77,7 +77,7 @@ Index: stunnel4/src/Makefile.in
 +	-DPIDFILE='"$(localstatedir)/run/stunnel4.pid"'
  
  # Win32 executable
- EXTRA_DIST = stunnel.exe nogui.c make.bat makece.bat makew32.bat \
+ EXTRA_DIST = nogui.c make.bat makece.bat makew32.bat mingw.mak evc.mak \
 Index: stunnel4/doc/stunnel.pl.8
 ===================================================================
 --- stunnel4.orig/doc/stunnel.pl.8
@@ -87,9 +87,9 @@ Index: stunnel4/doc/stunnel.pl.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.PL 8"
--.TH STUNNEL.PL 8 "2011.09.07" "4.44" "stunnel"
+-.TH STUNNEL.PL 8 "2011.11.28" "4.50" "stunnel"
 +.IX Title "STUNNEL4.PL 8"
-+.TH STUNNEL.PL 8 "2011.09.07" "4.44" "stunnel4"
++.TH STUNNEL.PL 8 "2011.11.28" "4.50" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -102,9 +102,9 @@ Index: stunnel4/doc/stunnel.fr.8
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.FR 8"
--.TH STUNNEL.FR 8 "2011.09.07" "4.44" "stunnel"
+-.TH STUNNEL.FR 8 "2011.11.28" "4.50" "stunnel"
 +.IX Title "STUNNEL4.FR 8"
-+.TH STUNNEL.FR 8 "2011.09.07" "4.44" "stunnel4"
++.TH STUNNEL.FR 8 "2011.11.28" "4.50" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l

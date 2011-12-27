@@ -1,10 +1,10 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([stunnel],[4.44])
+AC_INIT([stunnel],[4.50])
 AC_MSG_NOTICE([**************************************** initialization])
 AC_CONFIG_AUX_DIR(auto)
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE(stunnel, 4.44)
+AM_INIT_AUTOMAKE(stunnel, 4.50)
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_SRCDIR([src/stunnel.c])
 AC_DEFINE([_GNU_SOURCE], [1], [Use GNU source])
@@ -97,6 +97,8 @@ AC_EGREP_HEADER(socklen_t, sys/socket.h,
     AC_MSG_RESULT([no (defined as int)])
     AC_DEFINE([socklen_t], [int], [Type of socklen_t]))
 
+AC_CHECK_TYPES([struct sockaddr_un], [], [], [#include <sys/un.h>])
+
 AC_MSG_NOTICE([**************************************** PTY device files])
 if test "$cross_compiling" = "no"; then
     AC_CHECK_FILE("/dev/ptmx", AC_DEFINE([HAVE_DEV_PTMX], [1], [Define to 1 if you have '/dev/ptmx' device.]))
@@ -148,11 +150,8 @@ AC_MSG_NOTICE([**************************************** header files])
 # AC_HEADER_DIRENT
 # AC_HEADER_STDC
 # AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(ucontext.h pthread.h)
-AC_CHECK_HEADERS(sys/select.h poll.h sys/poll.h tcpd.h)
-AC_CHECK_HEADERS(sys/ioctl.h sys/filio.h stropts.h)
-AC_CHECK_HEADERS(grp.h unistd.h util.h libutil.h sys/resource.h pty.h)
-AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([ucontext.h pthread.h poll.h tcpd.h stropts.h grp.h unistd.h util.h libutil.h pty.h])
+AC_CHECK_HEADERS([sys/select.h sys/poll.h sys/socket.h sys/un.h sys/ioctl.h sys/filio.h sys/resource.h])
 AC_CHECK_MEMBERS([struct msghdr.msg_control],
   [AC_DEFINE([HAVE_MSGHDR_MSG_CONTROL], [1], [Define to 1 if you have 'msghdr.msg_control' structure.])],
   [], [@%:@include <sys/socket.h>])
@@ -166,14 +165,14 @@ AC_CHECK_HEADERS([linux/netfilter_ipv4.h], , ,
 
 AC_MSG_NOTICE([**************************************** libraries])
 # Checks for standard libraries
-AC_SEARCH_LIBS(gethostbyname, nsl)
-AC_SEARCH_LIBS(yp_get_default_domain, nsl)
-AC_CHECK_LIB(socket, socket)
-AC_CHECK_LIB(util, openpty)
+AC_SEARCH_LIBS([gethostbyname], [nsl])
+AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
+AC_SEARCH_LIBS([socket], [socket])
+AC_SEARCH_LIBS([openpty], [util])
 # Checks for dynamic loader and zlib needed by OpenSSL
-AC_CHECK_LIB(dl, dlopen)
-AC_CHECK_LIB(dld, shl_load)
-AC_CHECK_LIB(z, inflateEnd)
+AC_SEARCH_LIBS([dlopen], [dl])
+AC_SEARCH_LIBS([shl_load], [dld])
+AC_SEARCH_LIBS([inflateEnd], [z])
 
 # Add BeOS libraries
 if test "$host_os" = "beos"; then
@@ -183,8 +182,8 @@ fi
 AC_MSG_NOTICE([**************************************** thread model])
 
 checkpthreadlib() { :
-    # BSD hack -> use alternative libc implementation
-    AC_CHECK_LIB(c_r, pthread_create,
+    # 1. BSD hack: attempt to use alternative libc implementation if available
+    AC_CHECK_LIB([c_r], [pthread_create],
         [
             LIBS="$LIBS -pthread"
             HAVE_LIBPTHREAD="yes"
@@ -192,7 +191,15 @@ checkpthreadlib() { :
         ]
     )
 
-    # OSF hack instead of simple AC_CHECK_LIB here
+    # 2. try to use from standard libc (required by Android and possibly other platforms)
+    AC_CHECK_LIB([c], [pthread_create],
+        [
+            HAVE_LIBPTHREAD="yes"
+            AC_DEFINE([HAVE_LIBPTHREAD], [1], [Define to 1 if you have 'libpthread' library.])
+        ]
+    )
+
+    # 3. try libpthread: OSF hack instead of simple AC_CHECK_LIB here
     AC_MSG_CHECKING([for pthread_create in -lpthread])
     valid_LIBS="$LIBS"
     LIBS="$valid_LIBS -lpthread"
@@ -375,10 +382,6 @@ AC_MSG_NOTICE([**************************************** SSL])
 check_ssl_dir() { :
     SSLDIR="$1"
     if test -f "$1/include/openssl/ssl.h"; then
-        AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if you have OpenSSL library.])
-        return 0
-    fi
-    if test -f "$1/include/ssl.h"; then
         return 0
     fi
     return 1
@@ -416,6 +419,10 @@ valid_LIBS="$LIBS"; LIBS="$LIBS -L$SSLDIR/lib64 -L$SSLDIR/lib -lssl -lcrypto"
 AC_CHECK_HEADER([$SSLDIR/include/openssl/engine.h],
     [AC_DEFINE([HAVE_OSSL_ENGINE_H], [1], [Define to 1 if you have <engine.h> header file.])],
     [AC_MSG_WARN([OpenSSL engine header not found])])
+
+AC_CHECK_HEADER([$SSLDIR/include/openssl/ocsp.h],
+    [AC_DEFINE([HAVE_OSSL_OCSP_H], [1], [Define to 1 if you have <ocsp.h> header file.])],
+    [AC_MSG_WARN([OpenSSL ocsp header not found])])
 
 AC_MSG_CHECKING([for FIPS_mode_set])
 if test "$fips" = "auto"; then

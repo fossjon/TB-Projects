@@ -50,18 +50,25 @@ static LOG_MODE mode=LOG_MODE_NONE;
 
 #if !defined(USE_WIN32) && !defined(__vms)
 
+static int syslog_opened=0;
+
 void syslog_open(void) {
+    syslog_close();
     if(global_options.option.syslog)
 #ifdef __ultrix__
         openlog("stunnel", 0);
 #else
         openlog("stunnel", LOG_CONS|LOG_NDELAY, global_options.facility);
 #endif /* __ultrix__ */
+    syslog_opened=1;
 }
 
-void syslog_close(void) { /* this function is not currently used */
-    if(global_options.option.syslog)
-        closelog();
+void syslog_close(void) {
+    if(syslog_opened) {
+        if(global_options.option.syslog)
+            closelog();
+        syslog_opened=0;
+    }
 }
 
 #endif /* !defined(USE_WIN32) && !defined(__vms) */
@@ -89,7 +96,7 @@ void log_flush(LOG_MODE new_mode) {
 
     /* prevent changing LOG_MODE_CONFIGURED to LOG_MODE_ERROR
      * once stderr file descriptor is closed */
-    if(mode==LOG_MODE_NONE)
+    if(mode!=LOG_MODE_CONFIGURED)
         mode=new_mode;
 
     while(head) {
@@ -107,6 +114,7 @@ void s_log(int level, const char *format, ...) {
     va_list ap;
     char *text, *stamp, *id;
     struct LIST *tmp;
+    int libc_error, socket_error;
     time_t gmt;
     struct tm *timeptr;
 #if defined(HAVE_LOCALTIME_R) && defined(_REENTRANT)
@@ -116,6 +124,9 @@ void s_log(int level, const char *format, ...) {
     /* performance optimization: skip the trivial case early */
     if(mode==LOG_MODE_CONFIGURED && level>global_options.debug_level)
         return;
+
+    libc_error=get_last_error();
+    socket_error=get_last_socket_error();
 
     time(&gmt);
 #if defined(HAVE_LOCALTIME_R) && defined(_REENTRANT)
@@ -134,8 +145,6 @@ void s_log(int level, const char *format, ...) {
 
     if(mode==LOG_MODE_NONE) { /* save the text to log it later */
         tmp=str_alloc(sizeof(struct LIST));
-        if(!tmp) /* out of memory */
-            return;
         tmp->next=NULL;
         tmp->level=level;
         tmp->stamp=stamp;
@@ -152,6 +161,9 @@ void s_log(int level, const char *format, ...) {
         str_free(id);
         str_free(text);
     }
+
+    set_last_error(libc_error);
+    set_last_socket_error(socket_error);
 }
 
 static void log_raw(const int level, const char *stamp,
@@ -174,10 +186,18 @@ static void log_raw(const int level, const char *stamp,
 
     /* log the line to GUI/stderr */
 #ifdef USE_WIN32
-    if(mode==LOG_MODE_ERROR ||
+    if(mode==LOG_MODE_ERROR || /* always log to the GUI window */
             (mode==LOG_MODE_INFO && level<LOG_DEBUG) ||
             level<=global_options.debug_level)
-        win_log(line); /* always log to the GUI window */
+        SendMessage(hwnd, WM_LOG, (WPARAM)line, 0);
+#if 0
+    /* logging to Windows console for nogui.c */
+    LPTSTR tstr;
+
+    tstr=str2tstr(line);
+    RETAILMSG(TRUE, (TEXT("%s\r\n"), tstr));
+    str_free(tstr);
+#endif
 #else /* Unix */
     if(mode==LOG_MODE_ERROR || /* always log LOG_MODE_ERROR to stderr */
             (mode==LOG_MODE_INFO && level<LOG_DEBUG) ||
@@ -187,6 +207,50 @@ static void log_raw(const int level, const char *stamp,
 #endif
 
     str_free(line);
+}
+
+/* critical problem - str.c functions are not safe to use */
+void fatal(char *error, char *file, int line) {
+    char text[80];
+#ifdef USE_WIN32
+    DWORD num;
+#endif /* USE_WIN32 */
+
+    snprintf(text, sizeof text, /* with newline */
+        "INTERNAL ERROR: %s at %s, line %d\n", error, file, line);
+
+    if(outfile) {
+#ifdef USE_WIN32
+        WriteFile(outfile->fh, text, strlen(text), &num, NULL);
+#else /* USE_WIN32 */
+        /* no file -> write to stderr */
+        write(outfile ? outfile->fd : 2, text, strlen(text));
+#endif /* USE_WIN32 */
+    }
+
+#ifndef USE_WIN32
+    if(mode!=LOG_MODE_CONFIGURED || global_options.option.foreground)
+        fputs(text, stderr);
+#endif /* !USE_WIN32 */
+
+    snprintf(text, sizeof text, /* without newline */
+        "INTERNAL ERROR: %s at %s, line %d", error, file, line);
+
+#if !defined(USE_WIN32) && !defined(__vms)
+    if(global_options.option.syslog)
+        syslog(LOG_CRIT, "%s", text);
+#endif /* USE_WIN32, __vms */
+
+#ifdef USE_WIN32
+#ifdef _WIN32_WCE
+    MessageBox(hwnd, TEXT("INTERNAL ERROR"),
+        TEXT("stunnel"), MB_ICONERROR);
+#else /* _WIN32_WCE */
+    MessageBox(hwnd, text, "stunnel", MB_ICONERROR);
+#endif /* _WIN32_WCE */
+#endif /* USE_WIN32 */
+
+    abort();
 }
 
 void ioerror(const char *txt) { /* input/output error */

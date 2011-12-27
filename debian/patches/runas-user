@@ -3,7 +3,7 @@ Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
 +++ stunnel4/tools/stunnel.conf-sample.in
-@@ -10,8 +10,8 @@
+@@ -11,8 +11,8 @@
  ; Chroot conflicts with configuration file reload and many other features
  chroot = @localstatedir@/lib/stunnel4/
  ; Chroot jail can be escaped if setuid option is not used
