@@ -1,8 +1,35 @@
-stunnel4 (3:4.50-1~1) UNRELEASED; urgency=low
+stunnel4 (3:4.50-1) unstable; urgency=low
 
-  * New Upstream Release
+  * New Upstream Releases. Highlights:
+    + 4.46:
+      - Added Unix socket support (e.g. "connect = /var/run/stunnel/socket").
+      - Added "verify = 4" mode to ignore CA chain and only verify peer
+        certificate.
+      - Removed the limit of 16 IP addresses for a single 'connect' option.
+      - Removed the limit of 256 stunnel.conf sections in PTHREAD threading
+        model.
+    + 4.45:
+      - "protocol = proxy" support to send original client IP address to haproxy
+         http://haproxy.1wt.eu/download/1.5/doc/proxy-protocol.txt
+         This requires accept-proxy bind option of haproxy 1.5-dev3 or later.
+      - Libwrap helper processes are no longer started if libwrap is disabled
+        in all sections of the configuration file.
+      - Fixed -l option handling in stunnel3 script (thx to Kai Gülzau).
+      - Script to build default stunnel.pem was fixed (thx to Sebastian Kayser).
+    + 4.44:
+      - Heap buffer overflow protection with canaries.
+      - Stack buffer overflow protection with -fstack-protector.
+      - Fixed garbled error messages on errors with setuid/setgid options.
+    + 4.43:
+      - Major optimization of the logging subsystem.
+        Benchmarks indicate up to 15% stunnel performance improvement.
+  * Remove config.guess and config.sub in clean target, otherwise build fails
+    because of changes in source outside of a patch. Found and fixed by
+    Peter Eisentraut <petere@debian.org> (Closes: #647176).
+  * Updated watchfile to new upstream's directory structure for archived
+    releases.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Tue, 27 Dec 2011 14:13:18 -0800
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Thu, 29 Dec 2011 06:39:09 -0800
 
 stunnel4 (3:4.42-1) unstable; urgency=low
 
