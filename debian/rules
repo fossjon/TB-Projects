@@ -48,6 +48,7 @@ clean:
 	dh_clean build-stamp debian/stunnel4.init doc/stunnel4.8 doc/stunnel4.fr.8 doc/stunnel4.pl.8
 
 	[ ! -f Makefile ] || $(MAKE) distclean
+	rm -f config.guess config.sub
 
 install: build-stamp
 	dh_testdir
