@@ -1,6 +1,6 @@
 /*
  *   stunnel       Universal SSL tunnel
- *   Copyright (C) 1998-2011 Michal Trojnara <Michal.Trojnara@mirt.net>
+ *   Copyright (C) 1998-2012 Michal Trojnara <Michal.Trojnara@mirt.net>
  *
  *   This program is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU General Public License as published by the
@@ -422,6 +422,11 @@ extern char *sys_errlist[];
 #define OPENSSL_NO_TLSEXT
 #endif /* OpenSSL version < 1.0.0 */
 
+#ifndef OPENSSL_NO_COMP
+/* not defined in public headers before OpenSSL 0.9.8 */
+STACK_OF(SSL_COMP) *SSL_COMP_get_compression_methods(void);
+#endif /* OPENSSL_NO_COMP */
+
 /**************************************** other defines */
 
 /* change all non-printable characters to '.' */
@@ -451,6 +456,10 @@ extern char *sys_errlist[];
 #define LOG_INFO        6
 #define LOG_DEBUG       7
 #endif /* defined (USE_WIN32) || defined (__vms) */
+
+#ifndef offsetof
+#define offsetof(T, F) ((unsigned int)((char *)&((T *)0L)->F - (char *)0L))
+#endif
 
 #endif /* defined COMMON_H */
 

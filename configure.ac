@@ -1,10 +1,10 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([stunnel],[4.50])
+AC_INIT([stunnel],[4.51])
 AC_MSG_NOTICE([**************************************** initialization])
 AC_CONFIG_AUX_DIR(auto)
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE(stunnel, 4.50)
+AM_INIT_AUTOMAKE(stunnel, 4.51)
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_SRCDIR([src/stunnel.c])
 AC_DEFINE([_GNU_SOURCE], [1], [Use GNU source])
@@ -101,8 +101,10 @@ AC_CHECK_TYPES([struct sockaddr_un], [], [], [#include <sys/un.h>])
 
 AC_MSG_NOTICE([**************************************** PTY device files])
 if test "$cross_compiling" = "no"; then
-    AC_CHECK_FILE("/dev/ptmx", AC_DEFINE([HAVE_DEV_PTMX], [1], [Define to 1 if you have '/dev/ptmx' device.]))
-    AC_CHECK_FILE("/dev/ptc", AC_DEFINE([HAVE_DEV_PTS_AND_PTC], [1], [Define to 1 if you have '/dev/ptc' device.]))
+    AC_CHECK_FILE("/dev/ptmx", AC_DEFINE([HAVE_DEV_PTMX], [1],
+        [Define to 1 if you have '/dev/ptmx' device.]))
+    AC_CHECK_FILE("/dev/ptc", AC_DEFINE([HAVE_DEV_PTS_AND_PTC], [1],
+        [Define to 1 if you have '/dev/ptc' device.]))
 else
     AC_MSG_WARN([cross-compilation: assuming /dev/ptmx and /dev/ptc are not available])
 fi
