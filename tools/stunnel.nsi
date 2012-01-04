@@ -1,4 +1,4 @@
-# NSIS stunnel installer by Michal Trojnara 2011
+# NSIS stunnel installer by Michal Trojnara 1998-2012
 
 !include "Sections.nsh"
 
@@ -43,6 +43,7 @@ skip_process_exit:
   File "${DLLS}/libeay32.dll"
   File "${DLLS}/ssleay32.dll"
   File "${DLLS}/msvcr90.dll"
+  File "${DLLS}/zlib1.dll"
   #File "${DLLS}/*eay32.dll"
   #File "${DLLS}/zlib1.dll"
   File "src/stunnel.exe"
@@ -154,6 +155,7 @@ skip_service_uninstall:
   Delete "$INSTDIR\libeay32.dll"
   Delete "$INSTDIR\ssleay32.dll"
   Delete "$INSTDIR\msvcr90.dll"
+  Delete "$INSTDIR\zlib1.dll"
   #Delete "$INSTDIR\*eay32.dll"
   #Delete "$INSTDIR\zlib1.dll"
   Delete "$INSTDIR\stunnel.html"

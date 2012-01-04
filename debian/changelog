@@ -1,3 +1,14 @@
+stunnel4 (3:4.51~b5-1) experimental; urgency=low
+
+  * New upstream version 
+    - Fixed exec+connect sections (Closes: #653882).
+    - New "compression = deflate" global option to enable RFC 2246 compression.
+      For compatibility with previous versions "compression = zlib" and
+      "compression = rle" also enable the deflate (RFC 2246) compression.
+    - Separate default ciphers and sslVersion for "fips = yes" and "fips = no".
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Wed, 04 Jan 2012 11:24:58 -0800
+
 stunnel4 (3:4.50-1) unstable; urgency=low
 
   * New Upstream Releases. Highlights:
