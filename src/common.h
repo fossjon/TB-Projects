@@ -72,7 +72,6 @@ typedef int socklen_t;
 
 #ifdef USE_WIN32
 #define USE_IPv6
-/* #define USE_FIPS */
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE
 #define HAVE_OSSL_ENGINE_H
@@ -176,6 +175,7 @@ typedef int socklen_t;
 #include <time.h>
 #include <sys/stat.h>    /* stat */
 #include <setjmp.h>
+#include <fcntl.h>
 
 /**************************************** WIN32 headers */
 
@@ -185,6 +185,7 @@ typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned long u32;
 
+#define HAVE_STRUCT_ADDRINFO
 #define HAVE_SNPRINTF
 #define snprintf                    _snprintf
 #define HAVE_VSNPRINTF
@@ -313,7 +314,6 @@ typedef unsigned long u32;
 #ifdef __BEOS__
 #include <posix/grp.h>
 #endif
-#include <fcntl.h>
 
 #include <netinet/in.h>  /* struct sockaddr_in */
 #include <sys/socket.h>  /* getpeername */
