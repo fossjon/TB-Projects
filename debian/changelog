@@ -1,3 +1,9 @@
+stunnel4 (3:4.52-1~1) UNRELEASED; urgency=low
+
+  * New upstream version
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 05 Feb 2012 12:08:45 -0800
+
 stunnel4 (3:4.51~b5-1) experimental; urgency=low
 
   * New upstream version 
