@@ -15,7 +15,7 @@ SSLDIR=C:\OpenSSL-Win32
 INCDIR=$(SSLDIR)\include
 LIBDIR=$(SSLDIR)\lib
 # or compile one yourself
-#SSLDIR=..\..\openssl-1.0.0e
+#SSLDIR=..\..\openssl-1.0.0f
 #INCDIR=$(SSLDIR)\inc32
 #LIBDIR=$(SSLDIR)\out32dll
 
