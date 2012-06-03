@@ -1,8 +1,25 @@
-stunnel4 (3:4.53-2~1) UNRELEASED; urgency=low
+stunnel4 (3:4.53-1) unstable; urgency=low
 
   * New upstream version 4.53.
+    - Added client-mode "sni" option to directly control the value of
+      TLS Server Name Indication (RFC 3546) extension (Closes: #668041).
+    - Added support for IP_FREEBIND socket option with a pached Linux kernel.
+    - Glibc-specific dynamic allocation tuning was applied to help unused memory
+      deallocation.
+    - Non-blocking OCSP implementation.
+    - Various other bugfixes, see upstream changelog for details.
 
- -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Wed, 23 May 2012 21:35:19 -0700
+  * Enabled hardening compile flags. There were NO compile time warning messages
+    or errors triggered because of this.
+
+  * Updated to Standards-Version 3.9.3. No changes required.
+    - Migrating to /run from /var/run will be a hard problem, because we expect
+      user written config files to refer to the directory. We'll punt on making
+      this change for now.
+  * Updated copyright years to 2012.
+  * Added Description: LSB header to init script.
+
+ -- Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>  Sun, 03 Jun 2012 11:34:36 -0700
 
 stunnel4 (3:4.52-1) unstable; urgency=low
 
