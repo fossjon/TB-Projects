@@ -11,13 +11,8 @@ else
     SYSTEM = --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)
 endif
 
-CFLAGS 		     = -Wall -g
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-  CFLAGS += -O0
-else
-  CFLAGS += -O2
-endif
-
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CFLAGS_MAINT_APPEND=-Wall
 
 build: build-arch build-indep
 
@@ -35,8 +30,9 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
 
-	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr $(SYSTEM) \
-	  --localstatedir=/var --sysconfdir=/etc	           \
+	./configure --prefix=/usr $(SYSTEM)           \
+	  $(shell dpkg-buildflags --export=configure) \
+	  --localstatedir=/var --sysconfdir=/etc      \
 	  --enable-ipv6 --with-threads=pthread
 	$(MAKE) -C src
 	$(MAKE) -C doc
