@@ -1,3 +1,12 @@
+stunnel4 (3:4.53-1.1) unstable; urgency=high
+
+  * Non-maintainer upload.
+  * Add CVE-2013-1762.patch patch.
+    CVE-2013-1762: Fix buffer overflow in NTLM authentication of the CONNECT
+    protocol negotiation. (Closes: #702267)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Mon, 22 Apr 2013 19:47:34 +0200
+
 stunnel4 (3:4.53-1) unstable; urgency=low
 
   * New upstream version 4.53.

@@ -4,3 +4,4 @@ runas-user
 selective_tunnel_restart
 logrotate_warning_in_sample_conf
 init_script_description
+CVE-2013-1762.patch
