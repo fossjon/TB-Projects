@@ -1,4 +1,7 @@
-Add Description: LSB header to init script.
+Description: Add Description: LSB header to init script.
+Forwarded: no
+Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
+Last-Update: 2012-06-03
 
 Index: stunnel4/tools/stunnel.init.in
 ===================================================================

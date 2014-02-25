@@ -1,4 +1,9 @@
-# Change the default user the binary will run as to stunnel4
+Description: Change the default user the binary will run as to stunnel4
+Forwarded: not-needed
+Author: Julien Lemoine <speedblue@debian.org>,
+  Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
+Last-Update: 2011-12-27
+
 Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in

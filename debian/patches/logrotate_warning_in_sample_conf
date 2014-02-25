@@ -1,9 +1,14 @@
-Disable chroot setting from default sample config. Using this requires more
-tought from te user, including the logrotate configuration, and so it is
-misleading to have it on as default.
-
-This does not affect any current instalation, as this is only shipped as a
-sample for users.
+Description: Disable the chroot setting by default.
+  Disable chroot setting from default sample config. Using this requires more
+  thought from the user, including the logrotate configuration, and so it is
+  misleading to have it on as default.
+  .
+  This does not affect any current instalation, as this is only shipped as a
+  sample for users.
+Forwarded: not-needed
+Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
+Bug-Debian: http://bugs.debian.org/652812
+Last-Update: 2012-02-12
 
 Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================

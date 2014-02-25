@@ -1,6 +1,8 @@
-Subject: Support restarting only selected stunnel instances.
+Description: Support restarting only selected stunnel instances.
+Forwarded: not-needed
 Author: Peter Palfrader <weasel@debian.org>
 Bug-Debian: http://bugs.debian.org/627765
+Last-Update: 2011-07-21
 
 Index: stunnel4/tools/stunnel.init.in
 ===================================================================

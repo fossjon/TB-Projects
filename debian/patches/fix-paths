@@ -1,5 +1,11 @@
-## Do several path fixups, removing unneeded @prefix@s and changing
-## binaries install location from sbin to bin, to comply with the FHS
+Description: Update the installation directories.
+  Do several path fixups, removing unneeded @prefix@s and changing
+  binaries install location from sbin to bin, to comply with the FHS
+Forwarded: not-needed
+Author: Paolo Molaro <lupus@debian.org>, Julien Lemoine <speedblue@debian.org>,
+  Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
+Last-Update: 2011-12-27
+
 Index: stunnel4/tools/stunnel.conf-sample.in
 ===================================================================
 --- stunnel4.orig/tools/stunnel.conf-sample.in
