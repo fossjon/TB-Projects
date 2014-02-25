@@ -2,7 +2,7 @@ Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>,
   Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2012-05-23
+Last-Update: 2014-02-25
 
 Index: stunnel4/src/stunnel3.in
 ===================================================================
@@ -70,19 +70,6 @@ Index: stunnel4/src/Makefile.am
  
  # SSL library
  stunnel_LDFLAGS = -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
-Index: stunnel4/src/Makefile.in
-===================================================================
---- stunnel4.orig/src/Makefile.in
-+++ stunnel4/src/Makefile.in
-@@ -273,7 +273,7 @@
- # Additional preprocesor definitions
- stunnel_CPPFLAGS = -I/usr/kerberos/include -I$(SSLDIR)/include \
- 	-DLIBDIR='"$(pkglibdir)"' -DCONFDIR='"$(sysconfdir)/stunnel"' \
--	-DPIDFILE='"$(localstatedir)/run/stunnel/stunnel.pid"'
-+	-DPIDFILE='"$(localstatedir)/run/stunnel4.pid"'
- 
- # Win32 executable
- EXTRA_DIST = nogui.c make.bat makece.bat makew32.bat mingw.mak evc.mak \
 Index: stunnel4/doc/stunnel.pl.8
 ===================================================================
 --- stunnel4.orig/doc/stunnel.pl.8
