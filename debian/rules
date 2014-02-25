@@ -8,13 +8,6 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export DEB_CFLAGS_MAINT_APPEND=-Wall
 
 override_dh_auto_configure:
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
-
 	dh_auto_configure -- \
 	  $(shell dpkg-buildflags --export=configure) \
 	  --enable-ipv6 --with-threads=pthread
@@ -22,10 +15,6 @@ endif
 override_dh_auto_build:
 	dh_auto_build -- -C src
 	dh_auto_build -- -C doc
-
-override_dh_auto_clean:
-	dh_auto_clean
-	rm -f config.guess config.sub
 
 override_dh_auto_install:
 	dh_auto_install -- -C src
@@ -66,4 +55,4 @@ override_dh_compress:
 	dh_compress --exclude=StunnelConf-0.1.pl
 
 %:
-	dh $@
+	dh $@ --with autotools_dev
