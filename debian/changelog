@@ -13,6 +13,7 @@ stunnel4 (3:4.53-2) UNRELEASED; urgency=medium
     - watch a mirror in addition to the main site, at least temporarily
       until the main FTP site is fixed
     - watch for 5.x versions, too
+    - add Michal Trojnara's PGP key
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
