@@ -1,3 +1,15 @@
+stunnel (3:5.00-1) unstable; urgency=medium
+
+  This version DISABLES the creation of the process ID file and
+  the use of TCP wrappers for access control by default!
+  
+  Tunnel configurations that use PID files (e.g. for monitoring) or
+  TCP wrappers (/etc/hosts.allow, /etc/hosts.deny) will NEED to be
+  modified to explicitly specify the 'pidfile' global option or
+  the 'libwrap' service-level option respectively.
+
+ -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Mar 2014 18:05:11 +0200
+
 stunnel (3:4.33-1) experimental; urgency=low
 
   This version introduces support for reloading the configuration file

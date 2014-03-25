@@ -22,9 +22,9 @@ Last-Update: 2014-03-25
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL 8"
--.TH STUNNEL 8 "2013.03.20" "4.56" "stunnel"
+-.TH STUNNEL 8 "2014.03.06" "5.00" "stunnel"
 +.IX Title "STUNNEL4 8"
-+.TH STUNNEL 8 "2013.03.20" "4.56" "stunnel4"
++.TH STUNNEL 8 "2014.03.06" "5.00" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -51,17 +51,6 @@ Last-Update: 2014-03-25
  
  ; **************************************************************************
  ; * Service defaults may also be specified in individual service sections  *
---- a/src/Makefile.am
-+++ b/src/Makefile.am
-@@ -25,7 +25,7 @@
- stunnel_CPPFLAGS += -I$(SSLDIR)/include
- stunnel_CPPFLAGS += -DLIBDIR='"$(pkglibdir)"'
- stunnel_CPPFLAGS += -DCONFDIR='"$(sysconfdir)/stunnel"'
--stunnel_CPPFLAGS += -DPIDFILE='"$(localstatedir)/run/stunnel/stunnel.pid"'
-+stunnel_CPPFLAGS += -DPIDFILE='"$(localstatedir)/run/stunnel4.pid"'
- 
- # SSL library
- stunnel_LDFLAGS = -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
 --- a/doc/stunnel.pl.8
 +++ b/doc/stunnel.pl.8
 @@ -61,8 +61,8 @@
@@ -69,9 +58,9 @@ Last-Update: 2014-03-25
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.PL 8"
--.TH STUNNEL.PL 8 "2013.03.22" "4.56" "stunnel"
+-.TH STUNNEL.PL 8 "2014.03.06" "5.00" "stunnel"
 +.IX Title "STUNNEL4.PL 8"
-+.TH STUNNEL.PL 8 "2013.03.22" "4.56" "stunnel4"
++.TH STUNNEL.PL 8 "2014.03.06" "5.00" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
@@ -82,9 +71,9 @@ Last-Update: 2014-03-25
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.FR 8"
--.TH STUNNEL.FR 8 "2013.03.19" "4.56" "stunnel"
+-.TH STUNNEL.FR 8 "2014.03.06" "5.00" "stunnel"
 +.IX Title "STUNNEL4.FR 8"
-+.TH STUNNEL.FR 8 "2013.03.19" "4.56" "stunnel4"
++.TH STUNNEL.FR 8 "2014.03.06" "5.00" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l

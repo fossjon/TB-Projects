@@ -1,4 +1,4 @@
-stunnel4 (3:4.56-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
 
   TODO: really fix debian/copyright after updating to the latest upstream release
 
@@ -7,9 +7,6 @@ stunnel4 (3:4.56-1) UNRELEASED; urgency=medium
   * Switch to debhelper override rules.
   * Use dh-autoreconf and retarget the rename-binary patch.
   * Canonicalize the Vcs-Git and Vcs-Browser source control fields.
-  * Add the CVE-2014-0016 patch to reseed the PRNG for each forked child,
-    even though this does not affect the Debian package since it uses
-    the pthreads threading model.  Closes: #740802
   * Update the watch file a bit:
     - watch a mirror in addition to the main site, at least temporarily
       until the main FTP site is fixed
@@ -25,8 +22,11 @@ stunnel4 (3:4.56-1) UNRELEASED; urgency=medium
   * Drop the versions from the libssl-dev and openssl build dependencies.
   * Drop two automatically-created directories from debian/dirs
   * New upstream release:
-    - refresh the rename-binary and CVE-2014-0016 patches
+    - a fix for CVE-2014-0016 was included.  Closes: #740802
+    - refresh the rename-binary patch
     - drop the CVE-2013-1762 patch, it was taken from stunnel-4.55
+    - add a stunnel4.NEWS item to note the newly disabled by default
+      pidfile and libwrap options
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
