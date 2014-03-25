@@ -1,4 +1,4 @@
-stunnel4 (3:4.53-2) UNRELEASED; urgency=medium
+stunnel4 (3:4.54-1) UNRELEASED; urgency=medium
 
   TODO: really fix debian/copyright after updating to the latest upstream release
 
@@ -24,6 +24,8 @@ stunnel4 (3:4.53-2) UNRELEASED; urgency=medium
     - remove the libtool .la file in the multiarch lib directory
   * Drop the versions from the libssl-dev and openssl build dependencies.
   * Drop two automatically-created directories from debian/dirs
+  * New upstream release:
+    - refresh the rename-binary and CVE-2013-1762 patches
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
