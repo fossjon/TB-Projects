@@ -1,4 +1,4 @@
-stunnel4 (3:4.54-1) UNRELEASED; urgency=medium
+stunnel4 (3:4.55-1) UNRELEASED; urgency=medium
 
   TODO: really fix debian/copyright after updating to the latest upstream release
 
@@ -25,7 +25,8 @@ stunnel4 (3:4.54-1) UNRELEASED; urgency=medium
   * Drop the versions from the libssl-dev and openssl build dependencies.
   * Drop two automatically-created directories from debian/dirs
   * New upstream release:
-    - refresh the rename-binary and CVE-2013-1762 patches
+    - refresh the rename-binary and CVE-2014-0016 patches
+    - drop the CVE-2013-1762 patch, it was taken from stunnel-4.55
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
