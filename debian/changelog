@@ -1,7 +1,5 @@
 stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
 
-  TODO: really fix debian/copyright after updating to the latest upstream release
-
   * New maintainer.  Closes: #738093
   * Add DEP-3 headers to the patch files.
   * Switch to debhelper override rules.
@@ -27,6 +25,7 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
     - drop the CVE-2013-1762 patch, it was taken from stunnel-4.55
     - add a stunnel4.NEWS item to note the newly disabled by default
       pidfile and libwrap options
+    - update the copyright file
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
