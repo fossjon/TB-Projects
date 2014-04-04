@@ -32,6 +32,8 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
     - update the copyright file
   * Build with Large File Support - no problems there, since stunnel
     never really uses the position or the size of any open files.
+  * Add the init_script_status patch to support the 'status' command.
+    Closes: #548974
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
