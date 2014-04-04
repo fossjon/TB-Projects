@@ -5,3 +5,4 @@
 05-logrotate-warning-in-sample-conf.patch
 06-init-script-description.patch
 07-init-script-status.patch
+08-client-example.patch

@@ -35,6 +35,10 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
   * Add the init_script_status patch to support the 'status' command.
     Closes: #548974
   * Rename the Debian patches following a number sequence.
+  * Modify the debian/stunnel3.8 and add the 08-client-example patch
+    to add a client configuration example to the English manual page.
+    Closes: #644398, although this one shall have to be referred to
+    upstream for inclusion in the rest of the documentation, too.
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 

@@ -364,6 +364,14 @@ use
 \&  stunnel \-d 993 \-l /usr/sbin/imapd \-\- imapd
 .Ve
 .PP
+In order to let your local e-mail client connect to a \s-1SSL\s0-enabled
+\fIimapd\fR service on another server, configure the e-mail client to connect to
+localhost on port 119 and use:
+.PP
+.Vb 1
+\&  stunnel \-c \-d 143 \-r servername:993
+.Ve
+.PP
 If you want to provide tunneling to your \fIpppd\fR daemon on port 2020,
 use something like
 .PP
