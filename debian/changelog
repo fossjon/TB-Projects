@@ -30,6 +30,8 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
     - add a stunnel4.NEWS item to note the newly disabled by default
       pidfile and libwrap options
     - update the copyright file
+  * Build with Large File Support - no problems there, since stunnel
+    never really uses the position or the size of any open files.
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 
