@@ -43,7 +43,7 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
     and correct the URLs to the OpenSSL FIPS User Guide.
     Closes: #642440
 
- -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Sat, 05 Apr 2014 00:05:26 +0300
 
 stunnel4 (3:4.53-1.1) unstable; urgency=high
 
