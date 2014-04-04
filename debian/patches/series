@@ -1,7 +1,7 @@
-fix-paths
-rename-binary
-runas-user
-selective_tunnel_restart
-logrotate_warning_in_sample_conf
-init_script_description
-init_script_status
+01-fix-paths.patch
+02-rename-binary.patch
+03-runas-user.patch
+04-selective-tunnel-restart.patch
+05-logrotate-warning-in-sample-conf.patch
+06-init-script-description.patch
+07-init-script-status.patch
