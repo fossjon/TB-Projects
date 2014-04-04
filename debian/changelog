@@ -1,9 +1,12 @@
 stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
 
   * New maintainer.  Closes: #738093
+  * A new upload should fix the build with newer OpenSSL.
+    Closes: #737517
   * Add DEP-3 headers to the patch files.
   * Switch to debhelper override rules.
   * Use dh-autoreconf and retarget the rename-binary patch.
+    Closes: #727511
   * Canonicalize the Vcs-Git and Vcs-Browser source control fields.
   * Update the watch file a bit:
     - watch a mirror in addition to the main site, at least temporarily
@@ -20,6 +23,7 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
   * Drop the versions from the libssl-dev and openssl build dependencies.
   * Drop two automatically-created directories from debian/dirs
   * New upstream release:
+    - Closes: #723781 (package new upstream version)
     - a fix for CVE-2014-0016 was included.  Closes: #740802
     - refresh the rename-binary patch
     - drop the CVE-2013-1762 patch, it was taken from stunnel-4.55
