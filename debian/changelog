@@ -39,6 +39,9 @@ stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
     to add a client configuration example to the English manual page.
     Closes: #644398, although this one shall have to be referred to
     upstream for inclusion in the rest of the documentation, too.
+  * Reword the note about FIPS support in README.Debian, fix a typo
+    and correct the URLs to the OpenSSL FIPS User Guide.
+    Closes: #642440
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Feb 2014 13:52:49 +0200
 

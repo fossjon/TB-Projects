@@ -83,12 +83,14 @@ Read the manual page for openssl for more info on the various options.
 
 * FIPS
 
-stunnel 4.21 includes support for OpenSSL's FIPS mode. However, using 
-it requieres stunnel to be compiled statically against OpenSSL and all
+Since version 4.21 stunnel includes support for OpenSSL's FIPS mode. However,
+using it requires stunnel to be compiled statically against OpenSSL and all
 supporting libraries. Thus, this option is disabled in the Debian package.
 
-See the OpenSSL FIPS FAQ at
-http://oss-institute.org/fips-faq.html
+See the OpenSSL FIPS User Guide at
+http://www.openssl.org/docs/fips/UserGuide-2.0.pdf
+and the OpenSSL notes about FIPS 140-2 at
+http://www.openssl.org/docs/fips/fipsnotes.html
 
  - Julien LEMOINE <speedblue@debian.org>, Sun, 19 Feb 2006 17:31:24 +0100
 
