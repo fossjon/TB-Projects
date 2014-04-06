@@ -6,3 +6,4 @@
 06-init-script-description.patch
 07-init-script-status.patch
 08-client-example.patch
+09-init-script-ulimits.patch
