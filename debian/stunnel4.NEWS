@@ -1,4 +1,4 @@
-stunnel (3:5.00-1) unstable; urgency=medium
+stunnel (3:5.01-1) unstable; urgency=medium
 
   This version DISABLES the creation of the process ID file and
   the use of TCP wrappers for access control by default!

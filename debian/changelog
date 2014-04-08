@@ -1,4 +1,4 @@
-stunnel4 (3:5.00-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.01-1) unstable; urgency=medium
 
   * New maintainer.  Closes: #738093
   * A new upload should fix the build with newer OpenSSL.
