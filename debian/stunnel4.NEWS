@@ -8,6 +8,12 @@ stunnel (3:5.00-1) unstable; urgency=medium
   modified to explicitly specify the 'pidfile' global option or
   the 'libwrap' service-level option respectively.
 
+  This version also DISABLES the "zlib" and "deflate" compression
+  algorithms because they are not supported in the Debian OpenSSL
+  package since version 1.0.1e-5.  The only supported compression
+  algorithm is "rle".  Tunnel configurations that explicitly set
+  "compression" to something other than "rle" will NEED to be modified.
+
  -- Peter Pentchev <roam@ringlet.net>  Tue, 25 Mar 2014 18:05:11 +0200
 
 stunnel (3:4.33-1) experimental; urgency=low
