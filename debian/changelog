@@ -50,7 +50,7 @@ stunnel4 (3:5.00-1) unstable; urgency=medium
     later; the Debian OpenSSL package is compiled without support for
     zlib compression since version 1.0.1e-5.
 
- -- Peter Pentchev <roam@ringlet.net>  Sun, 06 Apr 2014 16:19:53 +0300
+ -- Peter Pentchev <roam@ringlet.net>  Tue, 08 Apr 2014 12:44:24 +0300
 
 stunnel4 (3:4.53-1.1) unstable; urgency=high
 
