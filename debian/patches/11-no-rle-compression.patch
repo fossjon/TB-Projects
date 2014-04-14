@@ -1,0 +1,30 @@
+Description: Disable RLE compression.
+ It is not really implemented in OpenSSL (there is no code that actually
+ compresses any data, just code that copies it unmodified), and it has
+ bit-rotted ever since OpenSSL 0.9.6d - it does not handle the empty
+ fragments introduced to mitigate some attacks against CBC mode.
+Forwarded: no
+Author: Peter Pentchev <roam@ringlet.net>
+Bug-Debian: http://bugs.debian.org/744350
+Last-Update: 2014-04-14
+
+--- a/src/options.c
++++ b/src/options.c
+@@ -163,7 +163,16 @@
+         else if(!strcasecmp(arg, "zlib"))
+             new_global_options.compression=COMP_ZLIB;
+         else if(!strcasecmp(arg, "rle"))
+-            new_global_options.compression=COMP_RLE;
++            /**
++             * OpenSSL RLE compression has never really been properly
++             * implemented.  The routines that are in place are
++             * non-functional for two reasons:
++             * - they do not really compress anything, just copy the data
++             * - they do not handle the empty (zero-length) fragment added
++             *   in OpenSSL 0.9.6d, so the first attempt to send data over
++             *   the SSL connection fails and aborts the connection
++             */
++            return "RLE compression is not implemented in OpenSSL";
+         else
+             return "Specified compression type is not available";
+         return NULL; /* OK */

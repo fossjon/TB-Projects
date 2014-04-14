@@ -1,3 +1,13 @@
+stunnel (3:5.01-2) unstable; urgency=medium
+
+  This version DISABLES the RLE compression method, too.  This means
+  that stunnel currently has no compression methods available at all,
+  since the underlying OpenSSL library does not have any, either.
+  Tunnel configurations that explicitly set "compression" to anything
+  other than "none" will NEED to be modified.
+
+ -- Peter Pentchev <roam@ringlet.net>  Mon, 14 Apr 2014 15:04:56 +0300
+
 stunnel (3:5.01-1) unstable; urgency=medium
 
   This version DISABLES the creation of the process ID file and
