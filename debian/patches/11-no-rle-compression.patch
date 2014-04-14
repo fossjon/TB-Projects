@@ -12,7 +12,7 @@ Last-Update: 2014-04-14
 +++ b/src/options.c
 @@ -163,7 +163,16 @@
          else if(!strcasecmp(arg, "zlib"))
-             new_global_options.compression=COMP_ZLIB;
+             return "zlib compression is disabled in the Debian package of OpenSSL";
          else if(!strcasecmp(arg, "rle"))
 -            new_global_options.compression=COMP_RLE;
 +            /**

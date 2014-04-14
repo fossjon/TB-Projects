@@ -3,7 +3,7 @@ Description: Do not depend on zlib compression being available.
  compression since version 1.0.1e-5.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2014-04-08
+Last-Update: 2014-04-14
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
@@ -40,3 +40,17 @@ Last-Update: 2014-04-08
          return 0;
      }
      if(!comp->method || comp->method->type==NID_undef) {
+--- a/src/options.c
++++ b/src/options.c
+@@ -159,9 +159,9 @@
+         if(strcasecmp(opt, "compression"))
+             break;
+         if(SSLeay()>=0x00908051L && !strcasecmp(arg, "deflate"))
+-            new_global_options.compression=COMP_DEFLATE;
++            return "deflate compression is not really implemented in OpenSSL";
+         else if(!strcasecmp(arg, "zlib"))
+-            new_global_options.compression=COMP_ZLIB;
++            return "zlib compression is disabled in the Debian package of OpenSSL";
+         else if(!strcasecmp(arg, "rle"))
+             new_global_options.compression=COMP_RLE;
+         else
