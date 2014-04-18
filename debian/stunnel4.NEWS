@@ -1,3 +1,19 @@
+stunnel4 (3:5.01-3) unstable; urgency=medium
+
+  This version temporarily brings back the creation of a default pid
+  file, /var/run/stunnel4.pid, if there is no "pid" setting in
+  the configuration file.  The reason for this is that the init script
+  cannot monitor the started stunnel processes if there is no pid file
+  at all.
+
+  The init script now warns about configuration files that have no
+  "pid" setting and will thus use the default pid file location.
+  In the future it will refuse to start with such configurations, so
+  it would be best to add the "pid" setting to all the *.conf files in
+  the /etc/stunnel/ directory.
+
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 18 Apr 2014 14:37:42 +0300
+
 stunnel (3:5.01-2) unstable; urgency=medium
 
   This version DISABLES the RLE compression method, too.  This means

@@ -1,9 +1,10 @@
 Description: Temporarily restore the pid file creation by default.
  The init script will not be able to monitor the automatically-started
- instances of stunnel if there is no pid file.  The intention is to
- warn about this in the future and even fail to start stunnel instances,
- but for the present for the upgrade from 4.53 it would be easiest to
- just restore the "create a pid file by default" behavior.
+ instances of stunnel if there is no pid file.  For the present for the
+ upgrade from 4.53 the "create the pid file by default" behavior is
+ restored and the init script warns about configuration files that have
+ no "pid" setting.  The intention is that in a future version the init
+ script will refuse to start stunnel for these configurations.
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
 Bug-Debian: http://bugs.debian.org/744851
@@ -42,3 +43,26 @@ Last-Update: 2014-04-18
          break;
      }
  #endif
+--- a/tools/stunnel.init.in
++++ b/tools/stunnel.init.in
+@@ -47,12 +47,17 @@
+     if test -f $file; then
+       ARGS="$file $OPTIONS"
+       PROCLIST=`get_pids $file`
++      if egrep -qe '^pid[[:space:]]*=' "$file"; then
++	warn=''
++      else
++	warn=' (no pid=pidfile specified!)'
++      fi
+       if [ "$PROCLIST" ] && kill -s 0 $PROCLIST 2>/dev/null; then
+-        echo -n "[Already running: $file] "
++        echo -n "[Already running$warn: $file] "
+       elif $DAEMON $ARGS; then
+-	echo -n "[Started: $file] "
++	echo -n "[Started$warn: $file] "
+       else
+-	echo "[Failed: $file]"
++	echo "[Failed$warn: $file]"
+ 	echo "You should check that you have specified the pid= in you configuration file"
+ 	exit 1
+       fi

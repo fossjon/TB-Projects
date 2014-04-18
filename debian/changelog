@@ -3,12 +3,11 @@ stunnel4 (3:5.01-3) unstable; urgency=medium
   * Add the 12-restore-pidfile-default patch to restore stunnel's
     "create the pid file by default" behavior, since the init script
     has no way of monitoring the started stunnel4 processes otherwise.
-    The intention is to modify the init script to refuse to start
-    the stunnel instance in the future, but for the present the easiest
-    solution is to temporarily restore the creation of pid files.
-    Closes: #744851
+    The init script now warns about configurations with no "pid"
+    setting; in a future version it will refuse to start stunnel for
+    these configurations.  Closes: #744851
 
- -- Peter Pentchev <roam@ringlet.net>  Fri, 18 Apr 2014 14:22:00 +0300
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 18 Apr 2014 14:37:42 +0300
 
 stunnel4 (3:5.01-2) unstable; urgency=medium
 
