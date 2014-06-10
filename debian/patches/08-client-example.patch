@@ -2,12 +2,12 @@ Description: Add a client config example to stunnel4(8).
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not-yet
 Bug-Debian: http://bugs.debian.org/644398
-Last-Update: 2014-04-04
+Last-Update: 2014-06-10
 
 --- a/doc/stunnel.8
 +++ b/doc/stunnel.8
-@@ -884,6 +884,17 @@
- \&    execargs = imapd
+@@ -903,6 +903,17 @@
+ \&    connect = servername:993
  .Ve
  .PP
 +In order to let your local e-mail client connect to a \s-1SSL\s0-enabled
@@ -22,5 +22,5 @@ Last-Update: 2014-04-04
 +.Ve
 +.PP
  If you want to provide tunneling to your \fIpppd\fR daemon on port 2020,
- use something like
+ use something like:
  .PP

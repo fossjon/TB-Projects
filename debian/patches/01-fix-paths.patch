@@ -4,24 +4,25 @@ Description: Update the installation directories.
 Forwarded: not-needed
 Author: Paolo Molaro <lupus@debian.org>, Julien Lemoine <speedblue@debian.org>,
   Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2011-12-27
+Last-Update: 2014-06-10
 
-Index: stunnel4/tools/stunnel.conf-sample.in
-===================================================================
---- stunnel4.orig/tools/stunnel.conf-sample.in
-+++ stunnel4/tools/stunnel.conf-sample.in
-@@ -9,7 +9,7 @@
+--- a/tools/stunnel.conf-sample.in
++++ b/tools/stunnel.conf-sample.in
+@@ -9,25 +9,25 @@
  
  ; A copy of some devices and system files is needed within the chroot jail
  ; Chroot conflicts with configuration file reload and many other features
--chroot = @prefix@/var/lib/stunnel/
-+chroot = @localstatedir@/lib/stunnel/
+-;chroot = @prefix@/var/lib/stunnel/
++;chroot = @localstatedir@/lib/stunnel/
  ; Chroot jail can be escaped if setuid option is not used
  setuid = nobody
  setgid = @DEFAULT_GROUP@
-@@ -19,15 +19,15 @@
  
- ; Debugging stuff (may useful for troubleshooting)
+ ; PID file is created inside the chroot jail (if enabled)
+-;pid = @prefix@/var/run/stunnel.pid
++;pid = @localstatedir@/run/stunnel.pid
+ 
+ ; Debugging stuff (may be useful for troubleshooting)
  ;debug = 7
 -;output = stunnel.log
 +;output = @localstatedir@/log/stunnel/stunnel.log
@@ -53,10 +54,8 @@ Index: stunnel4/tools/stunnel.conf-sample.in
  
  ; Disable support for insecure SSLv2 protocol
  options = NO_SSLv2
-Index: stunnel4/tools/script.sh
-===================================================================
---- stunnel4.orig/tools/script.sh
-+++ stunnel4/tools/script.sh
+--- a/tools/script.sh
++++ b/tools/script.sh
 @@ -2,7 +2,7 @@
  
  REMOTE_HOST="www.mirt.net:443"

@@ -2,13 +2,13 @@ Description: Set resource limits on startup if specified.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
 Bug-Debian: http://bugs.debian.org/599138
-Last-Update: 2014-04-06
+Last-Update: 2014-06-10
 
 --- a/tools/stunnel.init.in
 +++ b/tools/stunnel.init.in
-@@ -40,6 +40,9 @@
-     rm -rf /var/run/stunnel4
-     install -d -o stunnel4 -g stunnel4 /var/run/stunnel4
+@@ -43,6 +43,9 @@
+   if [ -n "$RLIMITS" ]; then
+     ulimit $RLIMITS
    fi
 +  if [ -n "$RLIMITS" ]; then
 +    ulimit $RLIMITS

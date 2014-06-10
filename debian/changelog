@@ -1,3 +1,16 @@
+stunnel4 (3:5.02-1) UNRELEASED; urgency=medium
+
+  * New upstream version:
+    - drop the 04-selective-tunnel-restart, 06-init-script-description,
+      and 07-init-script-status patches, applied upstream
+    - refresh the 01-fix-paths, 02-rename-binary, 03-runas-user,
+      05-logrotate-warning-in-sample-conf, 08-client-example,
+      09-init-script-ulimits, and 12-restore-pidfile-default patches
+    - augment the 01-fix-paths patch to also move the pidfile to
+      /var/run/ and not /usr/var/run/.
+
+ -- Peter Pentchev <roam@ringlet.net>  Tue, 10 Jun 2014 16:40:07 +0300
+
 stunnel4 (3:5.01-3) unstable; urgency=medium
 
   * Add the 12-restore-pidfile-default patch to restore stunnel's

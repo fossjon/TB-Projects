@@ -1,10 +1,7 @@
 01-fix-paths.patch
 02-rename-binary.patch
 03-runas-user.patch
-04-selective-tunnel-restart.patch
 05-logrotate-warning-in-sample-conf.patch
-06-init-script-description.patch
-07-init-script-status.patch
 08-client-example.patch
 09-init-script-ulimits.patch
 10-no-zlib-compression.patch

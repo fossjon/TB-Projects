@@ -1,31 +1,30 @@
-Description: Disable the chroot setting by default.
-  Disable chroot setting from default sample config. Using this requires more
-  thought from the user, including the logrotate configuration, and so it is
-  misleading to have it on as default.
+Description: Disable the setuid/setgid configuration by default.
+  Disable the set user/group ID setting from the chroot section of
+  the default sample config.  Changing stunnel's chroot, setuid or
+  setgid settings requires more thought from the user, including
+  the logrotate configuration, and so it is misleading to have it on
+  by default.
   .
   This does not affect any current instalation, as this is only shipped as a
   sample for users.
 Forwarded: not-needed
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
 Bug-Debian: http://bugs.debian.org/652812
-Last-Update: 2012-02-12
+Last-Update: 2014-06-10
 
-Index: stunnel4/tools/stunnel.conf-sample.in
-===================================================================
---- stunnel4.orig/tools/stunnel.conf-sample.in
-+++ stunnel4/tools/stunnel.conf-sample.in
+--- a/tools/stunnel.conf-sample.in
++++ b/tools/stunnel.conf-sample.in
 @@ -9,10 +9,11 @@
  
  ; A copy of some devices and system files is needed within the chroot jail
  ; Chroot conflicts with configuration file reload and many other features
--chroot = @localstatedir@/lib/stunnel4/
 +; Remember also to update the logrotate configuration.
-+;chroot = @localstatedir@/lib/stunnel4/
+ ;chroot = @localstatedir@/lib/stunnel4/
  ; Chroot jail can be escaped if setuid option is not used
 -setuid = stunnel4
 -setgid = stunnel4
 +;setuid = stunnel4
 +;setgid = stunnel4
  
- ; PID is created inside the chroot jail
- pid = /stunnel4.pid
+ ; PID file is created inside the chroot jail (if enabled)
+ ;pid = @localstatedir@/run/stunnel4.pid
