@@ -1,4 +1,4 @@
-stunnel4 (3:5.02-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.02-1) unstable; urgency=medium
 
   * New upstream version:
     - drop the 04-selective-tunnel-restart, 06-init-script-description,
@@ -9,7 +9,7 @@ stunnel4 (3:5.02-1) UNRELEASED; urgency=medium
     - augment the 01-fix-paths patch to also move the pidfile to
       /var/run/ and not /usr/var/run/.
 
- -- Peter Pentchev <roam@ringlet.net>  Tue, 10 Jun 2014 16:40:07 +0300
+ -- Peter Pentchev <roam@ringlet.net>  Tue, 10 Jun 2014 17:23:32 +0300
 
 stunnel4 (3:5.01-3) unstable; urgency=medium
 
