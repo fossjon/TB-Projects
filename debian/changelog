@@ -6,6 +6,8 @@ stunnel4 (3:5.03-1) UNRELEASED; urgency=medium
     - drop the 09-init-script-ulimits patch, it was actually
       included upstream in 5.02
     - add the 13-init-script-typo patch to remove a stray quote
+  * Add the 14-lsb-init-functions patch to source /lib/lsb/init-functions,
+    although the init script does not use anything there yet.
 
  -- Peter Pentchev <roam@ringlet.net>  Fri, 08 Aug 2014 17:35:53 +0300
 
