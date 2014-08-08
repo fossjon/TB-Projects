@@ -6,3 +6,4 @@
 10-no-zlib-compression.patch
 11-no-rle-compression.patch
 12-restore-pidfile-default.patch
+13-init-script-typo.patch

@@ -1,0 +1,16 @@
+Description: Fix a typo (a stray quote) in the init script.
+Author: Peter Pentchev <roam@ringlet.net>
+Forwarded: not-yet
+Last-Update: 2014-08-08
+
+--- a/tools/stunnel.init.in
++++ b/tools/stunnel.init.in
+@@ -31,7 +31,7 @@
+   local file=$1
+   if [ -f $file ]; then
+     CHROOT=`get_opt $file chroot`
+-    PIDFILE=`get_opt $file pid"`
++    PIDFILE=`get_opt $file pid`
+     if [ "$PIDFILE" = "" ]; then
+       PIDFILE=$DEFAULTPIDFILE
+     fi
