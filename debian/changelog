@@ -1,3 +1,13 @@
+stunnel4 (3:5.03-1) UNRELEASED; urgency=medium
+
+  * New upstream version:
+    - refresh the 02-rename-binary, 10-no-zlib-compression, and
+      12-restore-pidfile-default patches
+    - drop the 09-init-script-ulimits patch, it was actually
+      included upstream in 5.02
+
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 08 Aug 2014 17:35:53 +0300
+
 stunnel4 (3:5.02-1) unstable; urgency=medium
 
   * New upstream version:

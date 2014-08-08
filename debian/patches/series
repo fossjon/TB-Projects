@@ -3,7 +3,6 @@
 03-runas-user.patch
 05-logrotate-warning-in-sample-conf.patch
 08-client-example.patch
-09-init-script-ulimits.patch
 10-no-zlib-compression.patch
 11-no-rle-compression.patch
 12-restore-pidfile-default.patch

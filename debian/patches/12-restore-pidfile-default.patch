@@ -8,7 +8,7 @@ Description: Temporarily restore the pid file creation by default.
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
 Bug-Debian: http://bugs.debian.org/744851
-Last-Update: 2014-06-10
+Last-Update: 2014-08-08
 
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
@@ -45,8 +45,8 @@ Last-Update: 2014-06-10
  #endif
 --- a/tools/stunnel.init.in
 +++ b/tools/stunnel.init.in
-@@ -50,12 +50,17 @@
-     if test -f $file; then
+@@ -53,12 +53,17 @@
+     if [ -f $file ]; then
        ARGS="$file $OPTIONS"
        PROCLIST=`get_pids $file`
 +      if egrep -qe '^pid[[:space:]]*=' "$file"; then

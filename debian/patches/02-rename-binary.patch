@@ -2,7 +2,7 @@ Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>,
   Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2014-06-10
+Last-Update: 2014-08-08
 
 --- a/src/stunnel3.in
 +++ b/src/stunnel3.in
@@ -98,7 +98,7 @@ Last-Update: 2014-06-10
  NAME=stunnel
  DESC="SSL tunnels"
  OPTIONS=""
-@@ -36,9 +36,9 @@
+@@ -42,9 +42,9 @@
  }
  
  startdaemons() {
@@ -111,12 +111,12 @@ Last-Update: 2014-06-10
    fi
    if [ -n "$RLIMITS" ]; then
      ulimit $RLIMITS
-@@ -94,9 +94,9 @@
+@@ -100,9 +100,9 @@
    OPTIONS="-- $OPTIONS"
  fi
  
--test -f /etc/default/stunnel && . /etc/default/stunnel
-+test -f /etc/default/stunnel4 && . /etc/default/stunnel4
+-[ -f /etc/default/stunnel ] && . /etc/default/stunnel
++[ -f /etc/default/stunnel4 ] && . /etc/default/stunnel4
  if [ "$ENABLED" = "0" ] ; then
 -  echo "$DESC disabled, see /etc/default/stunnel"
 +  echo "$DESC disabled, see /etc/default/stunnel4"

@@ -3,7 +3,7 @@ Description: Do not depend on zlib compression being available.
  compression since version 1.0.1e-5.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2014-04-14
+Last-Update: 2014-08-08
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
@@ -13,13 +13,12 @@ Last-Update: 2014-04-14
              OPENSSL_free(comp);
 -            s_log(LOG_ERR, "Failed to initialize compression method");
 -            return 1;
--        }
--        comp->name=comp->method->name;
--        sk_SSL_COMP_push(ssl_comp_methods, comp);
 +        } else {
-+	    comp->name=comp->method->name;
-+	    sk_SSL_COMP_push(ssl_comp_methods, comp);
-+	}
++            comp->name=(char *)(comp->method->name);
++            sk_SSL_COMP_push(ssl_comp_methods, comp);
+         }
+-        comp->name=(char *)(comp->method->name);
+-        sk_SSL_COMP_push(ssl_comp_methods, comp);
      }
  
      /* also insert one of obsolete (ZLIB/RLE) algorithms */
