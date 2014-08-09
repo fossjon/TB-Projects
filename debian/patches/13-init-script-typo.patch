@@ -1,6 +1,6 @@
 Description: Fix a typo (a stray quote) in the init script.
 Author: Peter Pentchev <roam@ringlet.net>
-Forwarded: not-yet
+Forwarded: https://www.stunnel.org/pipermail/stunnel-users/2014-August/004685.html
 Last-Update: 2014-08-08
 
 --- a/tools/stunnel.init.in
