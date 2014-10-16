@@ -24,6 +24,8 @@ stunnel4 (3:5.06-1) UNRELEASED; urgency=low
       and the configuration options to enable them
     - add the 16-upstream-sslv23-method patch to fix the build for
       OpenSSL with disabled SSLv2 and SSLv3
+  * Drop an ancient README.Debian note about upgrading from 4.20 or
+    earlier, it has not even been in oldstable for quite some time now.
 
  -- Peter Pentchev <roam@ringlet.net>  Thu, 16 Oct 2014 13:51:58 +0300
 
