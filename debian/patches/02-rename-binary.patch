@@ -1,7 +1,7 @@
 Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
-Author: Julien Lemoine <speedblue@debian.org>,
-  Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
+Author: Julien Lemoine <speedblue@debian.org>
+Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
 Last-Update: 2014-10-16
 
 --- a/src/stunnel3.in
