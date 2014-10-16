@@ -3,7 +3,7 @@ Description: Do not depend on zlib compression being available.
  compression since version 1.0.1e-5.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2014-08-08
+Last-Update: 2014-10-16
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
@@ -41,7 +41,7 @@ Last-Update: 2014-08-08
      if(!comp->method || comp->method->type==NID_undef) {
 --- a/src/options.c
 +++ b/src/options.c
-@@ -159,9 +159,9 @@
+@@ -345,9 +345,9 @@
          if(strcasecmp(opt, "compression"))
              break;
          if(SSLeay()>=0x00908051L && !strcasecmp(arg, "deflate"))

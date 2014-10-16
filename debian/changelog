@@ -9,6 +9,11 @@ stunnel4 (3:5.04-1) unstable; urgency=low
   [ Santiago Vila <sanvila@unex.es> ]
   * Fix logrotate typo (closes: #762242).
 
+  [ Peter Pentchev ]
+  * Refresh the 08-client-example, 10-no-zlib-compression,
+    11-no-rle-compression, and 12-restore-pidfile-default patches;
+    line numbers only.
+
  -- Laszlo Boszormenyi (GCS) <gcs@debian.org>  Mon, 06 Oct 2014 15:51:07 +0000
 
 stunnel4 (3:5.03-1) unstable; urgency=medium

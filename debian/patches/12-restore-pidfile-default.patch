@@ -8,7 +8,7 @@ Description: Temporarily restore the pid file creation by default.
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
 Bug-Debian: http://bugs.debian.org/744851
-Last-Update: 2014-08-08
+Last-Update: 2014-10-16
 
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
@@ -22,7 +22,7 @@ Last-Update: 2014-08-08
  stunnel_LDFLAGS = -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
 --- a/src/options.c
 +++ b/src/options.c
-@@ -506,7 +506,7 @@
+@@ -692,7 +692,7 @@
  #ifndef USE_WIN32
      switch(cmd) {
      case CMD_BEGIN:
@@ -31,7 +31,7 @@ Last-Update: 2014-08-08
          break;
      case CMD_EXEC:
          if(strcasecmp(opt, "pid"))
-@@ -521,9 +521,10 @@
+@@ -707,9 +707,10 @@
      case CMD_FREE:
          break;
      case CMD_DEFAULT:
