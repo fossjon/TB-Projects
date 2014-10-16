@@ -1,4 +1,4 @@
-stunnel4 (3:5.04-1) unstable; urgency=low
+stunnel4 (3:5.04-1) UNRELEASED; urgency=low
 
   * New upstream release:
     - adds status target to initscript (closes: #750943)
