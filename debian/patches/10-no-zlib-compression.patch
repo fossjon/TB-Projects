@@ -53,3 +53,17 @@ Last-Update: 2014-10-16
          else if(!strcasecmp(arg, "rle"))
              new_global_options.compression=COMP_RLE;
          else
+--- a/configure.ac
++++ b/configure.ac
+@@ -188,10 +188,9 @@
+ AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
+ AC_SEARCH_LIBS([socket], [socket])
+ AC_SEARCH_LIBS([openpty], [util])
+-# Checks for dynamic loader and zlib needed by OpenSSL
++# Checks for dynamic loader needed by OpenSSL
+ AC_SEARCH_LIBS([dlopen], [dl])
+ AC_SEARCH_LIBS([shl_load], [dld])
+-AC_SEARCH_LIBS([inflateEnd], [z])
+ 
+ # Add BeOS libraries
+ if test "$host_os" = "beos"; then
