@@ -5,7 +5,7 @@ Forwarded: not-needed
 Author: Paolo Molaro <lupus@debian.org>
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2014-06-10
+Last-Update: 2014-10-16
 
 --- a/tools/stunnel.conf-sample.in
 +++ b/tools/stunnel.conf-sample.in
@@ -53,8 +53,8 @@ Last-Update: 2014-06-10
 -;CRLfile = @prefix@/etc/stunnel/crls.pem
 +;CRLfile = @sysconfdir@/stunnel/crls.pem
  
- ; Disable support for insecure SSLv2 protocol
- options = NO_SSLv2
+ ; Enable support for the insecure SSLv2 protocol
+ ;options = -NO_SSLv2
 --- a/tools/script.sh
 +++ b/tools/script.sh
 @@ -2,7 +2,7 @@
