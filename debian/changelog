@@ -1,4 +1,4 @@
-stunnel4 (3:5.04-1) UNRELEASED; urgency=low
+stunnel4 (3:5.05-1) UNRELEASED; urgency=low
 
   * New upstream release:
     - refresh patches
@@ -9,16 +9,15 @@ stunnel4 (3:5.04-1) UNRELEASED; urgency=low
   * Fix logrotate typo (closes: #762242).
 
   [ Peter Pentchev ]
-  * Refresh the 08-client-example, 10-no-zlib-compression,
-    11-no-rle-compression, and 12-restore-pidfile-default patches;
-    line numbers only.
   * Disable the autodetection of zlib in the configure script,
     it will most probably not be used at all later.
   * Fix the DEP-3 format of the 01-fix-paths, 02-rename-binary, and
     03-runas-user patches - use multiple "Author" headers.
   * Switch to the cgit frontend for Vcs-Browser.
+  * New upstream release:
+    - refresh the patches
 
- -- Laszlo Boszormenyi (GCS) <gcs@debian.org>  Mon, 06 Oct 2014 15:51:07 +0000
+ -- Peter Pentchev <roam@ringlet.net>  Thu, 16 Oct 2014 12:36:14 +0300
 
 stunnel4 (3:5.03-1) unstable; urgency=medium
 

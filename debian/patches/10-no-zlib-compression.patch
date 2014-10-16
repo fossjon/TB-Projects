@@ -41,7 +41,7 @@ Last-Update: 2014-10-16
      if(!comp->method || comp->method->type==NID_undef) {
 --- a/src/options.c
 +++ b/src/options.c
-@@ -345,9 +345,9 @@
+@@ -346,9 +346,9 @@
          if(strcasecmp(opt, "compression"))
              break;
          if(SSLeay()>=0x00908051L && !strcasecmp(arg, "deflate"))
@@ -55,7 +55,7 @@ Last-Update: 2014-10-16
          else
 --- a/configure.ac
 +++ b/configure.ac
-@@ -188,10 +188,9 @@
+@@ -189,10 +189,9 @@
  AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
  AC_SEARCH_LIBS([socket], [socket])
  AC_SEARCH_LIBS([openpty], [util])
@@ -64,6 +64,6 @@ Last-Update: 2014-10-16
  AC_SEARCH_LIBS([dlopen], [dl])
  AC_SEARCH_LIBS([shl_load], [dld])
 -AC_SEARCH_LIBS([inflateEnd], [z])
+ AC_SEARCH_LIBS([sd_listen_fds], [systemd-daemon])
  
- # Add BeOS libraries
- if test "$host_os" = "beos"; then
+ 

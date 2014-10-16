@@ -6,7 +6,7 @@ Last-Update: 2014-10-16
 
 --- a/doc/stunnel.8
 +++ b/doc/stunnel.8
-@@ -906,6 +906,17 @@
+@@ -917,6 +917,17 @@
  \&    connect = servername:993
  .Ve
  .PP
