@@ -7,3 +7,4 @@
 11-no-rle-compression.patch
 12-restore-pidfile-default.patch
 14-lsb-init-functions.patch
+15-upstream-systemd-libs.patch
