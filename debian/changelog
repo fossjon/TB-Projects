@@ -28,6 +28,8 @@ stunnel4 (3:5.06-1) unstable; urgency=medium
       activation code
   * Drop an ancient README.Debian note about upgrading from 4.20 or
     earlier, it has not even been in oldstable for quite some time now.
+  * Switch the /usr/bin/stunnel symlink from stunnel3 to stunnel4,
+    as README.Debian has threatened for ages.  Add a news blurb.
 
  -- Peter Pentchev <roam@ringlet.net>  Thu, 16 Oct 2014 15:09:42 +0300
 

@@ -11,9 +11,6 @@ syntax and calls stunnel4 with appropriate options. It appears to
 support every stunnel3 option *except* -S (which controls the defaults
 used for certificate sources).
 
-To simplify migration, /usr/bin/stunnel is a symlink to the wrapper
-script. A future version will make the link point to stunnel4.
-
 * Basic configuration
 
 After installation, you should :

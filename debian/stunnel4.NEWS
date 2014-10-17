@@ -1,6 +1,19 @@
-stunnel4 (3:5.06-1) unstable; urgency=low
+stunnel4 (3:5.06-1) unstable; urgency=medium
 
-  This version DISABLES support for the SSLv2 and SSLv3 protocols!
+  There are two major changes in this version of stunnel.
+
+  First, the /usr/bin/stunnel symlink has been switched from stunnel3
+  to stunnel4.  This should not affect any tools that invoke stunnel
+  using the stunnel4 name, and it should not affect any Debian packages
+  that use stunnel.  However, any local tools that invoke stunnel with
+  3.x-style command-line options instead of a 4.x-style configuration
+  file should make sure that they use the stunnel3 executable name and
+  not simply stunnel any more, or they should be converted to use
+  a 4.x-style configuration file (there is no need to create an actual
+  file on the filesystem, the configuration may be passed to stunnel
+  on its standard input using the "-fd 0" command-line option).
+
+  Second, this version DISABLES support for the SSLv2 and SSLv3 protocols!
 
   If needed, it may be re-enabled by editing the stunnel configuration
   file and adding "-NO_SSLv2" or "-NO_SSLv3" respectively to
