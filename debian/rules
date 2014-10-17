@@ -40,7 +40,7 @@ override_dh_auto_install:
 	mv $(CURDIR)/debian/stunnel4/usr/bin/stunnel 			\
 	  $(CURDIR)/debian/stunnel4/usr/bin/stunnel4
 
-	# Move docs into propper dir
+	# Move docs into proper dir
 	mv $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel		\
 	  $(CURDIR)/debian/stunnel4/usr/share/doc/stunnel4
 
