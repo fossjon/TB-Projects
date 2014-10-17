@@ -1,4 +1,4 @@
-stunnel4 (3:5.06-1) unstable; urgency=low
+stunnel4 (3:5.06-1) unstable; urgency=medium
 
   * New upstream release:
     - refresh patches
