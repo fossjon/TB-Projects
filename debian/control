@@ -15,7 +15,7 @@ Architecture: any
 Breaks: stunnel (<< 3:4.20-3)
 Provides: stunnel
 Replaces: stunnel
-Depends: ${shlibs:Depends}, ${misc:Depends}, openssl, netbase, perl-modules
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}, openssl, netbase, perl-modules
 Pre-Depends: ${misc:Pre-Depends}, adduser
 Suggests: logcheck-database
 Description: Universal SSL tunnel for network daemons
