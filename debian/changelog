@@ -32,7 +32,7 @@ stunnel4 (3:5.06-1) unstable; urgency=medium
     as README.Debian has threatened for ages.  Add a news blurb.
   * Add perl:Depends to the binary package.
 
- -- Peter Pentchev <roam@ringlet.net>  Thu, 16 Oct 2014 15:09:42 +0300
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 17 Oct 2014 12:04:50 +0300
 
 stunnel4 (3:5.03-1) unstable; urgency=medium
 
