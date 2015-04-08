@@ -4,6 +4,9 @@ stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
     connections when there is still data to be written.
     Thanks to Joachim Falk for backporting the patch!
     Closes: #771241
+  * Add the 18-lsb-startup patch to make the daemons' startup consistent
+    with the way things are done in Debian.
+    Among other things, Closes: #782030
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
 

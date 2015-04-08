@@ -1,0 +1,199 @@
+Description: Use the LSB start/stop functions in the init script
+DebianBug: https://bugs.debian.org/782030
+Author: Peter Pentchev <roam@ringlet.net>
+Forwarded: not needed
+Last-Update: 2015-04-08
+
+--- a/tools/stunnel.init.in
++++ b/tools/stunnel.init.in
+@@ -29,7 +29,7 @@
+     grep -i "^$2=" | sed -e "s;^[^=]*=;;"
+ }
+ 
+-get_pids() {
++get_pidfile() {
+   local file=$1
+   if [ -f $file ]; then
+     CHROOT=`get_opt $file chroot`
+@@ -37,13 +37,13 @@
+     if [ "$PIDFILE" = "" ]; then
+       PIDFILE=$DEFAULTPIDFILE
+     fi
+-    if [ -f $CHROOT/$PIDFILE ]; then
+-      cat $CHROOT/$PIDFILE
+-    fi
++    echo "$CHROOT/$PIDFILE"
+   fi
+ }
+ 
+ startdaemons() {
++  local res file args pidfile warn status
++
+   if ! [ -d /var/run/stunnel4 ]; then
+     rm -rf /var/run/stunnel4
+     install -d -o stunnel4 -g stunnel4 /var/run/stunnel4
+@@ -51,52 +51,81 @@
+   if [ -n "$RLIMITS" ]; then
+     ulimit $RLIMITS
+   fi
++  res=0
+   for file in $FILES; do 
+     if [ -f $file ]; then
+-      ARGS="$file $OPTIONS"
+-      PROCLIST=`get_pids $file`
++      echo -n " $file: "
++      args="$file $OPTIONS"
++      pidfile=`get_pidfile $file`
+       if egrep -qe '^pid[[:space:]]*=' "$file"; then
+-	warn=''
++        warn=''
+       else
+-	warn=' (no pid=pidfile specified!)'
++        warn=' (no pid=pidfile specified!)'
+       fi
+-      if [ "$PROCLIST" ] && kill -s 0 $PROCLIST 2>/dev/null; then
+-        echo -n "[Already running$warn: $file] "
+-      elif $DAEMON $ARGS; then
+-	echo -n "[Started$warn: $file] "
++      status=0
++      start_daemon -p "$pidfile" "$DAEMON" $args || status=$?
++      if [ "$status" -eq 0 ]; then
++        echo -n "started$warn"
+       else
+-	echo "[Failed$warn: $file]"
+-	echo "You should check that you have specified the pid= in you configuration file"
+-	exit 1
++        echo "failed$warn"
++        echo "You should check that you have specified the pid= in you configuration file"
++        res=1
+       fi
+     fi
+   done;
++  echo ''
++  return "$res"
+ }
+ 
+ killdaemons()
+ {
+-  SIGNAL=${1:-TERM}
++  local sig file pidfile status
++
++  sig=${1:-TERM}
++  res=0
+   for file in $FILES; do
+-    PROCLIST=`get_pids $file`
+-    if [ "$PROCLIST" ] && kill -s 0 $PROCLIST 2>/dev/null; then
+-       kill -s $SIGNAL $PROCLIST
+-       echo -n "[stopped: $file] "
++    echo -n " $file: "
++    pidfile=`get_pidfile $file`
++    if [ ! -e "$pidfile" ]; then
++      echo -n "no pid file"
++    else
++      status=0
++      killproc -p "$pidfile" "$DAEMON" "$sig" || status=$?
++      if [ "$status" -eq 0 ]; then
++        echo -n 'stopped'
++      else
++        echo -n 'failed'
++        res=1
++      fi
+     fi
+   done
++  echo ''
++  return "$res"
+ }
+ 
+ querydaemons()
+ {
++  local res file pidfile status
++
+   res=0
+-  echo -n "$DESC status:"
+   for file in $FILES; do
+     echo -n " $file: "
+-    PROCLIST=`get_pids $file`
+-    if [ "$PROCLIST" ] && kill -s 0 $PROCLIST 2>/dev/null; then
+-      echo -n 'running'
+-    else
+-      echo -n 'stopped'
++    pidfile=`get_pidfile "$file"`
++    if [ ! -e "$pidfile" ]; then
++      echo -n 'no pid file'
+       res=1
++    else
++      status=0
++      pidofproc -p "$pidfile" "$DAEMON" >/dev/null || status="$?"
++      if [ "$status" = 0 ]; then
++        echo -n 'running'
++      elif [ "$status" = 4 ]; then
++        echo "cannot access the pid file $pidfile"
++        res=1
++      else
++        echo -n 'stopped'
++        res=1
++      fi
+     fi
+   done
+   echo ''
+@@ -133,42 +162,43 @@
+ 
+ set -e
+ 
++res=0
+ case "$1" in
+   start)
+-        echo -n "Starting $DESC: "
++        echo -n "Starting $DESC:"
+         startdaemons
+-        echo "$NAME."
++        res=$?
+         ;;
+   stop)
+-        echo -n "Stopping $DESC: "
++        echo -n "Stopping $DESC:"
+         killdaemons
+-        echo "$NAME."
++        res=$?
+         ;;
+   reopen-logs)
+-        echo -n "Reopening log files $DESC: "
++        echo -n "Reopening log files $DESC:"
+         killdaemons USR1
+-        echo "$NAME."
++        res=$?
+         ;;
+   force-reload|reload)
+-        echo -n "Reloading configuration $DESC: "
++        echo -n "Reloading configuration $DESC:"
+         killdaemons HUP
+-        echo "$NAME."
++        res=$?
+         ;;  
+   restart)
+-        echo -n "Restarting $DESC: "
+-        killdaemons
+-        sleep 5
+-        startdaemons
+-        echo "$NAME."
++        echo -n "Restarting $DESC:"
++        killdaemons && startdaemons
++        res=$?
+         ;;
+   status)
+-	querydaemons
+-	;;
++        echo -n "$DESC status:"
++        querydaemons
++        res=$?
++        ;;
+   *)
+         N=/etc/init.d/$NAME
+         echo "Usage: $N {start|stop|status|reload|reopen-logs|restart} [<stunnel instance>]" >&2
+-        exit 1
++        res=1
+         ;;
+ esac
+ 
+-exit 0
++exit "$res"
