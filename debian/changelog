@@ -1,3 +1,12 @@
+stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
+
+  * Add the 17-upstream-hangup patch to fix prematurely closed
+    connections when there is still data to be written.
+    Thanks to Joachim Falk for backporting the patch!
+    Closes: #771241
+
+ -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
+
 stunnel4 (3:5.06-2) unstable; urgency=medium
 
   * Limit the systemd build dependency to Linux architectures only,

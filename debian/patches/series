@@ -9,3 +9,4 @@
 14-lsb-init-functions.patch
 15-upstream-systemd-libs.patch
 16-upstream-sslv23-method.patch
+17-upstream-hangup.patch
