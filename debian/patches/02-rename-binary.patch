@@ -2,7 +2,7 @@ Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2014-10-16
+Last-Update: 2015-04-27
 
 --- a/src/stunnel3.in
 +++ b/src/stunnel3.in
@@ -123,3 +123,14 @@ Last-Update: 2014-10-16
    exit 0
  fi
  
+--- a/tools/script.sh
++++ b/tools/script.sh
+@@ -2,7 +2,7 @@
+ 
+ REMOTE_HOST="www.mirt.net:443"
+ echo "client script connecting $REMOTE_HOST"
+-/usr/local/bin/stunnel -fd 10 \
++/usr/bin/stunnel4 -fd 10 \
+     11<&0 <<EOT 10<&0 0<&11 11<&-
+ client=yes
+ connect=$REMOTE_HOST

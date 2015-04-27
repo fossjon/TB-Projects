@@ -7,6 +7,13 @@ stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
   * Add the 18-lsb-startup patch to make the daemons' startup consistent
     with the way things are done in Debian.
     Among other things, Closes: #782030
+  * Rework the patches a bit:
+    - update the description of 01-fix-paths
+    - move the tools/script.sh chunk from 01-fix-paths to 02-rename-binary
+    - drop 08-client-example: it was actually applied upstream, no need
+      to add the same text twice
+    - drop 11-no-rle-compression: the OpenSSL bug has been fixed
+      somewhere in the 1.x release timeframe
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
 

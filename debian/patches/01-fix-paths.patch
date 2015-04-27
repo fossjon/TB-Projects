@@ -1,11 +1,11 @@
 Description: Update the installation directories.
-  Do several path fixups, removing unneeded @prefix@s and changing
-  binaries install location from sbin to bin, to comply with the FHS
+ Change @prefix@/... to @localstatedir@ or @sysconfdir@ as appropriate
+ to comply with the FHS
 Forwarded: not-needed
 Author: Paolo Molaro <lupus@debian.org>
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2014-10-16
+Last-Update: 2015-04-26
 
 --- a/tools/stunnel.conf-sample.in
 +++ b/tools/stunnel.conf-sample.in
@@ -55,14 +55,3 @@ Last-Update: 2014-10-16
  
  ; Enable support for the insecure SSLv2 protocol
  ;options = -NO_SSLv2
---- a/tools/script.sh
-+++ b/tools/script.sh
-@@ -2,7 +2,7 @@
- 
- REMOTE_HOST="www.mirt.net:443"
- echo "client script connecting $REMOTE_HOST"
--/usr/local/bin/stunnel -fd 10 \
-+/usr/bin/stunnel -fd 10 \
-     11<&0 <<EOT 10<&0 0<&11 11<&-
- client=yes
- connect=$REMOTE_HOST
