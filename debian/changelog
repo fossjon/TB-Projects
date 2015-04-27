@@ -14,6 +14,7 @@ stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
       to add the same text twice
     - drop 11-no-rle-compression: the OpenSSL bug has been fixed
       somewhere in the 1.x release timeframe
+  * Add the 19-typos patch to fix some minor documentation typos.
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
 
