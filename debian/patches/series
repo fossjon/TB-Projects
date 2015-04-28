@@ -10,3 +10,5 @@
 17-upstream-hangup.patch
 18-lsb-startup.patch
 19-typos.patch
+20-comparison.patch
+21-arg-null.patch
