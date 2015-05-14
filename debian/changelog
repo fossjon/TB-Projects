@@ -19,6 +19,7 @@ stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
     during the stunnel.pod -> stunnel.8 rebuild
   * Add the 20-comparison and 21-arg-null patches to fix a minor logging
     bug and remove a redundant check.
+  * Remove ${misc:Pre-Depends} as explained in debhelper's #783898.
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
 
