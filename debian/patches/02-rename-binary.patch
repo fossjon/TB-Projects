@@ -45,9 +45,9 @@ Last-Update: 2015-06-04
  .\" ========================================================================
  .\"
 -.IX Title "STUNNEL.PL 8"
--.TH STUNNEL.PL 8 "2014.12.12" "5.09" "stunnel"
+-.TH STUNNEL.PL 8 "2015.01.22" "5.10" "stunnel"
 +.IX Title "STUNNEL4.PL 8"
-+.TH STUNNEL.PL 8 "2014.12.12" "5.09" "stunnel4"
++.TH STUNNEL.PL 8 "2015.01.22" "5.10" "stunnel4"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
