@@ -378,7 +378,7 @@ Last-Update: 2015-06-04
  
  Currently supported protocols:
  
-@@ -675,7 +675,7 @@
+@@ -693,7 +693,7 @@
  
  authentication type for protocol negotiations
  
@@ -387,7 +387,7 @@ Last-Update: 2015-06-04
  
  default: basic
  
-@@ -683,11 +683,11 @@
+@@ -701,11 +701,11 @@
  
  destination address for protocol negotiations
  
@@ -401,7 +401,7 @@ Last-Update: 2015-06-04
  
  =item B<protocolPassword> = PASSWORD
  
-@@ -699,7 +699,7 @@
+@@ -717,7 +717,7 @@
  
  =item B<pty> = yes | no (Unix only)
  
@@ -410,7 +410,7 @@ Last-Update: 2015-06-04
  
  =item B<redirect> = [HOST:]PORT
  
-@@ -726,7 +726,7 @@
+@@ -744,7 +744,7 @@
  
  =item B<reset> = yes | no
  
@@ -419,7 +419,7 @@ Last-Update: 2015-06-04
  
  This option is not supported on some platforms.
  
-@@ -746,7 +746,7 @@
+@@ -764,7 +764,7 @@
  entries.
  
  The value of 0 can be used for unlimited size.  It is not recommended
@@ -428,7 +428,7 @@ Last-Update: 2015-06-04
  
  =item B<sessionCacheTimeout> = TIMEOUT
  
-@@ -778,7 +778,7 @@
+@@ -796,7 +796,7 @@
  
  =item B<TIMEOUTconnect> = SECONDS
  
@@ -437,7 +437,7 @@ Last-Update: 2015-06-04
  
  =item B<TIMEOUTidle> = SECONDS
  
-@@ -798,7 +798,7 @@
+@@ -816,7 +816,7 @@
  
  =item I<source>
  
@@ -446,7 +446,7 @@ Last-Update: 2015-06-04
  from the SSL client machine instead of the machine running B<stunnel>.
  
  This option is currently available in:
-@@ -808,7 +808,7 @@
+@@ -826,7 +826,7 @@
  =item Remote mode (I<connect> option) on I<Linux E<gt>=2.6.28>
  
  This configuration requires B<stunnel> to be executed as root and without
@@ -455,7 +455,7 @@ Last-Update: 2015-06-04
  
  This configuration requires the following setup for iptables and routing
  (possibly in /etc/rc.local or equivalent file):
-@@ -821,25 +821,25 @@
+@@ -839,25 +839,25 @@
      ip route add local 0.0.0.0/0 dev lo table 100
      echo 0 >/proc/sys/net/ipv4/conf/lo/rp_filter
  
@@ -486,7 +486,7 @@ Last-Update: 2015-06-04
  _RLD_LIST environment variable is used on Tru64, and LD_PRELOAD variable on
  other platforms.
  
-@@ -847,7 +847,7 @@
+@@ -865,7 +865,7 @@
  
  =item I<destination>
  
@@ -495,7 +495,7 @@ Last-Update: 2015-06-04
  
  A service section for transparent destination may look like this:
  
-@@ -871,7 +871,7 @@
+@@ -889,7 +889,7 @@
      /sbin/iptables -t nat -I PREROUTING -p tcp --dport <redirected_port> \
          -i eth0 -j DNAT --to-destination <local_ip>:<stunnel_port>
  
@@ -504,7 +504,7 @@ Last-Update: 2015-06-04
  
  =item I<both>
  
-@@ -885,40 +885,40 @@
+@@ -903,40 +903,40 @@
  
  =item I<yes>
  
@@ -553,7 +553,7 @@ Last-Update: 2015-06-04
  
  =item default
  
-@@ -926,7 +926,7 @@
+@@ -944,7 +944,7 @@
  
  =back
  
@@ -562,7 +562,7 @@ Last-Update: 2015-06-04
  control and not for authorization.  Specifically for level 2 every non-revoked
  certificate is accepted regardless of its Common Name.  For this reason a
  dedicated CA should be used with level 2, and not a generic CA commonly used
-@@ -976,16 +976,16 @@
+@@ -994,16 +994,16 @@
  
  =back
  
@@ -583,7 +583,7 @@ Last-Update: 2015-06-04
  This function can be used for log rotation.
  
  =item SIGTERM, SIGQUIT, SIGINT
-@@ -1080,8 +1080,8 @@
+@@ -1118,8 +1118,8 @@
  
  The order of contents of the I<.pem> file is important.  It should contain the
  unencrypted private key first, then a signed certificate (not certificate
@@ -594,7 +594,7 @@ Last-Update: 2015-06-04
  should be discarded. So the file should look like this:
  
      -----BEGIN RSA PRIVATE KEY-----
-@@ -1095,7 +1095,7 @@
+@@ -1133,7 +1133,7 @@
  
  =head2 RANDOMNESS
  
@@ -603,7 +603,7 @@ Last-Update: 2015-06-04
  order for SSL to use good randomness.  The following sources are loaded
  in order until sufficient random data has been gathered:
  
-@@ -1181,7 +1181,7 @@
+@@ -1219,7 +1219,7 @@
  
  =head1 BUGS
  

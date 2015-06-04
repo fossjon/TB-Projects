@@ -19,7 +19,7 @@ Last-Update: 2015-06-04
 +stunnel_CPPFLAGS += -DPIDFILE='"$(localstatedir)/run/stunnel4.pid"'
  
  # SSL library
- stunnel_LDFLAGS = -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
+ stunnel_LDFLAGS += -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
 --- a/src/options.c
 +++ b/src/options.c
 @@ -773,7 +773,7 @@
