@@ -7,7 +7,7 @@ Last-Update: 2015-06-04
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
-@@ -118,11 +118,10 @@
+@@ -120,11 +120,10 @@
          comp->method=COMP_zlib();
          if(!comp->method || comp->method->type==NID_undef) {
              OPENSSL_free(comp);
@@ -22,7 +22,7 @@ Last-Update: 2015-06-04
      }
  
      /* also insert one of obsolete (ZLIB/RLE) algorithms */
-@@ -138,9 +137,13 @@
+@@ -140,9 +139,13 @@
          comp->id=0xe1; /* 225 - within private range (193 to 255) */
          comp->method=COMP_rle();
      } else {
@@ -41,7 +41,7 @@ Last-Update: 2015-06-04
      if(!comp->method || comp->method->type==NID_undef) {
 --- a/src/options.c
 +++ b/src/options.c
-@@ -435,9 +435,9 @@
+@@ -440,9 +440,9 @@
          if(strcasecmp(opt, "compression"))
              break;
          if(SSLeay()>=0x00908051L && !strcasecmp(arg, "deflate"))
@@ -55,7 +55,7 @@ Last-Update: 2015-06-04
          else
 --- a/configure.ac
 +++ b/configure.ac
-@@ -188,10 +188,9 @@
+@@ -183,10 +183,9 @@
  AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
  AC_SEARCH_LIBS([socket], [socket])
  AC_SEARCH_LIBS([openpty], [util])

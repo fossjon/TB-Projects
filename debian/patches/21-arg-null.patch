@@ -1,11 +1,11 @@
 Description: Remove a redundant null pointer check.
 Forwarded: not yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-04-27
+Last-Update: 2015-06-04
 
 --- a/src/sthreads.c
 +++ b/src/sthreads.c
-@@ -433,8 +433,7 @@
+@@ -437,8 +437,7 @@
      s_log(LOG_DEBUG, "Creating a new thread");
      if((long)_beginthread((void(*)(void *))cli, arg->opt->stack_size, arg)==-1) {
          ioerror("_beginthread");
