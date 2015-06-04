@@ -5,7 +5,7 @@ Last-Update: 2015-06-04
 
 --- a/src/sthreads.c
 +++ b/src/sthreads.c
-@@ -437,8 +437,7 @@
+@@ -438,8 +438,7 @@
      s_log(LOG_DEBUG, "Creating a new thread");
      if((long)_beginthread((void(*)(void *))cli, arg->opt->stack_size, arg)==-1) {
          ioerror("_beginthread");
