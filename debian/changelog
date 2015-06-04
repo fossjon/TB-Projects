@@ -28,6 +28,7 @@ stunnel4 (3:5.09-1) UNRELEASED; urgency=medium
     - drop the 15-upstream-systemd-libs, 16-upstream-sslv23-method, and
       17-upstream-hangup patches since they were cherry-picked from
       upstream to begin with
+    - remove handling for the dropped French manual page
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
 

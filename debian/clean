@@ -3,5 +3,4 @@ debian/stunnel4.init
 doc/stunnel.8
 doc/stunnel.html
 doc/stunnel4.8
-doc/stunnel4.fr.8
 doc/stunnel4.pl.8
