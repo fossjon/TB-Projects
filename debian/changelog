@@ -1,4 +1,4 @@
-stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
+stunnel4 (3:5.07-1) UNRELEASED; urgency=medium
 
   * Add the 17-upstream-hangup patch to fix prematurely closed
     connections when there is still data to be written.
@@ -22,6 +22,11 @@ stunnel4 (3:5.06-3) UNRELEASED; urgency=medium
   * Remove ${misc:Pre-Depends} as explained in debhelper's #783898.
   * Bump the year on my debian/* copyright notice.
   * Add --parallel to the debhelper invocation.
+  * New upstream version:
+    - refresh patches
+    - drop the 05-logrotate-warning-in-sample-conf, applied upstream
+    - drop the 15-upstream-systemd-libs and 16-upstream-sslv23-method
+      patches since they were cherry-picked from upstream
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
 

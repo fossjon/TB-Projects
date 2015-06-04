@@ -3,7 +3,7 @@ Description: Do not depend on zlib compression being available.
  compression since version 1.0.1e-5.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2014-10-16
+Last-Update: 2015-06-04
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
@@ -41,7 +41,7 @@ Last-Update: 2014-10-16
      if(!comp->method || comp->method->type==NID_undef) {
 --- a/src/options.c
 +++ b/src/options.c
-@@ -425,9 +425,9 @@
+@@ -435,9 +435,9 @@
          if(strcasecmp(opt, "compression"))
              break;
          if(SSLeay()>=0x00908051L && !strcasecmp(arg, "deflate"))
@@ -55,7 +55,7 @@ Last-Update: 2014-10-16
          else
 --- a/configure.ac
 +++ b/configure.ac
-@@ -189,10 +189,9 @@
+@@ -188,10 +188,9 @@
  AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
  AC_SEARCH_LIBS([socket], [socket])
  AC_SEARCH_LIBS([openpty], [util])
@@ -64,6 +64,6 @@ Last-Update: 2014-10-16
  AC_SEARCH_LIBS([dlopen], [dl])
  AC_SEARCH_LIBS([shl_load], [dld])
 -AC_SEARCH_LIBS([inflateEnd], [z])
- AC_SEARCH_LIBS([sd_listen_fds], [systemd-daemon])
  
- 
+ # Add BeOS libraries
+ if test "$host_os" = "beos"; then

@@ -1,12 +1,9 @@
 01-fix-paths.patch
 02-rename-binary.patch
 03-runas-user.patch
-05-logrotate-warning-in-sample-conf.patch
 10-no-zlib-compression.patch
 12-restore-pidfile-default.patch
 14-lsb-init-functions.patch
-15-upstream-systemd-libs.patch
-16-upstream-sslv23-method.patch
 17-upstream-hangup.patch
 18-lsb-startup.patch
 19-typos.patch
