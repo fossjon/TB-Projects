@@ -1,44 +1,55 @@
-Description: Do not depend on zlib compression being available.
+Description: Do not depend on zlib or RLE compression being available.
  The Debian OpenSSL package is built without support for zlib
- compression since version 1.0.1e-5.
+ compression since version 1.0.1e-5, and OpenSSL does not support
+ RLE compression in all versions.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-06-04
+Last-Update: 2015-06-13
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
-@@ -120,11 +120,10 @@
-         comp->method=COMP_zlib();
-         if(!comp->method || comp->method->type==NID_undef) {
-             OPENSSL_free(comp);
--            s_log(LOG_ERR, "Failed to initialize compression method");
--            return 1;
-+        } else {
-+            comp->name=(char *)(comp->method->name);
-+            sk_SSL_COMP_push(ssl_comp_methods, comp);
-         }
--        comp->name=(char *)(comp->method->name);
--        sk_SSL_COMP_push(ssl_comp_methods, comp);
+@@ -115,13 +115,35 @@
      }
  
      /* also insert one of obsolete (ZLIB/RLE) algorithms */
-@@ -140,9 +139,13 @@
-         comp->id=0xe1; /* 225 - within private range (193 to 255) */
-         comp->method=COMP_rle();
-     } else {
--        s_log(LOG_INFO, "Compression enabled: %d algorithm(s)",
--            sk_SSL_COMP_num(ssl_comp_methods));
--        OPENSSL_free(comp);
-+	const int count = sk_SSL_COMP_num(ssl_comp_methods);
-+	OPENSSL_free(comp);
-+	if(count==0) {
-+	    s_log(LOG_ERR, "No valid compression algorithms found");
-+	    return 1;
-+	}
-+        s_log(LOG_INFO, "Compression enabled: %d algorithm(s)", count);
-         return 0;
+-    if(global->compression==COMP_ZLIB) {
+-        /* 224 - within the private range (193 to 255) */
+-        SSL_COMP_add_compression_method(0xe0, COMP_zlib());
+-    } else if(global->compression==COMP_RLE) {
+-        /* 225 - within the private range (193 to 255) */
+-        SSL_COMP_add_compression_method(0xe1, COMP_rle());
++    int id;
++    COMP_METHOD *comp;
++    switch (global->compression)
++    {
++#ifdef COMP_ZLIB
++        case COMP_ZLIB:
++            /* 224 - within the private range (193 to 255) */
++            id = 0xe0;
++            comp = COMP_zlib();
++            break;
++#endif
++
++#ifdef COMP_RLE
++        case COMP_RLE:
++            /* 225 - within the private range (193 to 255) */
++            id = 0xe1;
++            comp = COMP_rle();
++            break;
++#endif
++
++        default:
++            s_log(LOG_ERR, "Unknown or unsupported compression method specified");
++            return 1;
++    }
++    if (comp == NULL) {
++        s_log(LOG_ERR, "Unsupported compression method");
++        return 1;
      }
-     if(!comp->method || comp->method->type==NID_undef) {
++    SSL_COMP_add_compression_method(id, comp);
+     s_log(LOG_INFO, "Compression enabled: %d method(s)",
+         sk_SSL_COMP_num(methods));
+     return 0; /* success */
 --- a/src/options.c
 +++ b/src/options.c
 @@ -439,9 +439,9 @@
