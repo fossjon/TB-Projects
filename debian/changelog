@@ -1,4 +1,4 @@
-stunnel4 (3:5.11-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.12-1) UNRELEASED; urgency=medium
 
   * Add the 17-upstream-hangup patch to fix prematurely closed
     connections when there is still data to be written.
