@@ -8,7 +8,7 @@ Last-Update: 2015-06-13
 
 --- a/src/ssl.c
 +++ b/src/ssl.c
-@@ -115,13 +115,35 @@
+@@ -121,13 +121,35 @@
      }
  
      /* also insert one of obsolete (ZLIB/RLE) algorithms */
@@ -52,7 +52,7 @@ Last-Update: 2015-06-13
      return 0; /* success */
 --- a/src/options.c
 +++ b/src/options.c
-@@ -442,9 +442,9 @@
+@@ -444,9 +444,9 @@
          if(strcasecmp(opt, "compression"))
              break;
          if(SSLeay()>=0x00908051L && !strcasecmp(arg, "deflate"))
