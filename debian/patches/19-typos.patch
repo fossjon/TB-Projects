@@ -1,7 +1,7 @@
 Description: Fix some typos.
 Forwarded: not yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-06-04
+Last-Update: 2015-06-13
 
 --- a/doc/en/VNC_StunnelHOWTO.html
 +++ b/doc/en/VNC_StunnelHOWTO.html
@@ -265,6 +265,15 @@ Last-Update: 2015-06-04
  
      openssl ecparam -list_curves
  
+@@ -482,7 +482,7 @@
+ 
+ connection identifier type
+ 
+-This identifier allows to distinguish log entries generated for each of the
++This identifier allows you to distinguish log entries generated for each of the
+ connections.
+ 
+ Currently supported types:
 @@ -521,7 +521,7 @@
  
  =item B<delay> = yes | no
