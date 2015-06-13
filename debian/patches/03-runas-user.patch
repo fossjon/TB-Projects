@@ -2,18 +2,18 @@ Description: Change the default user the binary will run as to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2015-06-04
+Last-Update: 2015-06-13
 
 --- a/tools/stunnel.conf-sample.in
 +++ b/tools/stunnel.conf-sample.in
-@@ -12,8 +12,8 @@
- ; Remember also to update the logrotate configuration.
- ;chroot = @localstatedir@/lib/stunnel4/
- ; Chroot jail can be escaped if setuid option is not used
+@@ -8,8 +8,8 @@
+ ; **************************************************************************
+ 
+ ; It is recommended to drop root privileges if stunnel is started by root
 -;setuid = nobody
 -;setgid = @DEFAULT_GROUP@
 +;setuid = stunnel4
 +;setgid = stunnel4
  
  ; PID file is created inside the chroot jail (if enabled)
- ;pid = @localstatedir@/run/stunnel4.pid
+ ;pid = @localstatedir@/run/stunnel.pid
