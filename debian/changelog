@@ -1,4 +1,4 @@
-stunnel4 (3:5.18-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.18-1) unstable; urgency=medium
 
   * Add the 17-upstream-hangup patch to fix prematurely closed
     connections when there is still data to be written.
@@ -31,7 +31,7 @@ stunnel4 (3:5.18-1) UNRELEASED; urgency=medium
       upstream to begin with
     - remove handling for the dropped French manual page
 
- -- Peter Pentchev <roam@ringlet.net>  Wed, 08 Apr 2015 12:41:01 +0300
+ -- Peter Pentchev <roam@ringlet.net>  Sun, 14 Jun 2015 04:13:02 +0300
 
 stunnel4 (3:5.06-2) unstable; urgency=medium
 
