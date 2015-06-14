@@ -17,8 +17,7 @@ stunnel4 (3:5.18-1) UNRELEASED; urgency=medium
   * Add the 19-typos patch to fix some minor documentation typos and
     rework the 02-rename-binary patch to make the change in the manual page
     during the stunnel.pod -> stunnel.8 rebuild
-  * Add the 20-comparison and 21-arg-null patches to fix a minor logging
-    bug and remove a redundant check.
+  * Add the 20-comparison patch to fix a minor logging bug.
   * Remove ${misc:Pre-Depends} as explained in debhelper's #783898.
   * Bump the year on my debian/* copyright notice.
   * Add --parallel to the debhelper invocation.
