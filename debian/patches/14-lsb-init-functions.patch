@@ -1,7 +1,7 @@
 Description: Source /lib/lsb/init-functions, don't use it yet
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not-needed
-Last-Update: 2014-08-08
+Last-Update: 2014-06-13
 
 --- a/tools/stunnel.init.in
 +++ b/tools/stunnel.init.in
@@ -12,5 +12,5 @@ Last-Update: 2014-08-08
 +. /lib/lsb/init-functions
 +
  DEFAULTPIDFILE="/var/run/stunnel4.pid"
- DAEMON=@prefix@/bin/stunnel4
+ DAEMON=@bindir@/stunnel4
  NAME=stunnel

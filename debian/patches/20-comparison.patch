@@ -1,11 +1,11 @@
 Description: Fix a log level check to not be always true.
 Forwarded: not yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-06-13
+Last-Update: 2015-06-14
 
 --- a/src/log.c
 +++ b/src/log.c
-@@ -224,7 +224,7 @@
+@@ -229,7 +229,7 @@
                  file_putline(outfile, line); /* send log to file */
          }
      } else if(mode==LOG_MODE_ERROR) {

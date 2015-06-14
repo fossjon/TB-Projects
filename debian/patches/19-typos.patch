@@ -1,7 +1,7 @@
 Description: Fix some typos.
 Forwarded: not yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-06-13
+Last-Update: 2015-06-14
 
 --- a/doc/en/VNC_StunnelHOWTO.html
 +++ b/doc/en/VNC_StunnelHOWTO.html
@@ -130,7 +130,7 @@ Last-Update: 2015-06-13
  
  =over 4
  
-@@ -191,7 +191,7 @@
+@@ -189,7 +189,7 @@
  
  debugging level
  
@@ -139,7 +139,7 @@ Last-Update: 2015-06-13
  emerg (0), alert (1), crit (2), err (3), warning (4), notice (5),
  info (6), or debug (7).  All logs for the specified level and
  all levels numerically less than it will be shown.  Use I<debug = debug> or
-@@ -206,7 +206,7 @@
+@@ -204,7 +204,7 @@
  
  path to Entropy Gathering Daemon socket
  
@@ -148,7 +148,7 @@ Last-Update: 2015-06-13
  generator.  (Available only if compiled with B<OpenSSL 0.9.5a> or higher)
  
  =item B<engine> = auto | ENGINE_ID
-@@ -215,7 +215,7 @@
+@@ -213,7 +213,7 @@
  
  default: software-only cryptography
  
@@ -157,7 +157,7 @@ Last-Update: 2015-06-13
  OpenSC engine
  
      engine=dynamic
-@@ -251,7 +251,7 @@
+@@ -249,7 +249,7 @@
  
  Enable or disable FIPS 140-2 mode.
  
@@ -166,7 +166,7 @@ Last-Update: 2015-06-13
  with FIPS 140-2 support.
  
  default: no (since version 5.00)
-@@ -290,7 +290,7 @@
+@@ -288,7 +288,7 @@
  
  log file handling
  
@@ -175,7 +175,7 @@ Last-Update: 2015-06-13
  option) is appended or overwritten when opened or re-opened.
  
  default: append
-@@ -308,7 +308,7 @@
+@@ -306,7 +306,7 @@
  
  If the argument is empty, then no pid file will be created.
  
@@ -184,7 +184,7 @@ Last-Update: 2015-06-13
  
  =item B<RNDbytes> = BYTES
  
-@@ -352,10 +352,10 @@
+@@ -350,10 +350,10 @@
  
  =item B<socket> = a|l|r:OPTION=VALUE[:VALUE]
  
@@ -198,7 +198,7 @@ Last-Update: 2015-06-13
  
  Examples:
  
-@@ -386,7 +386,7 @@
+@@ -384,7 +384,7 @@
  
  =head2 SERVICE-LEVEL OPTIONS
  
@@ -207,7 +207,7 @@ Last-Update: 2015-06-13
  The service name is used for libwrap (TCP Wrappers) access control and lets
  you distinguish B<stunnel> services in your log files.
  
-@@ -413,20 +413,20 @@
+@@ -411,20 +411,20 @@
  Certificate Authority directory
  
  This is the directory in which B<stunnel> will look for certificates when using
@@ -231,7 +231,7 @@ Last-Update: 2015-06-13
  
  =item B<cert> = PEM_FILE
  
-@@ -468,7 +468,7 @@
+@@ -466,7 +466,7 @@
  
  Select permitted SSL ciphers
  
@@ -240,7 +240,7 @@ Last-Update: 2015-06-13
  for example DES-CBC3-SHA:IDEA-CBC-MD5.
  
  =item B<client> = yes | no
-@@ -494,25 +494,25 @@
+@@ -492,25 +492,25 @@
  Certificate Revocation Lists directory
  
  This is the directory in which B<stunnel> will look for CRLs when
@@ -270,7 +270,7 @@ Last-Update: 2015-06-13
  
      openssl ecparam -list_curves
  
-@@ -522,7 +522,7 @@
+@@ -520,7 +520,7 @@
  
  connection identifier type
  
@@ -279,7 +279,7 @@ Last-Update: 2015-06-13
  connections.
  
  Currently supported types:
-@@ -561,7 +561,7 @@
+@@ -559,7 +559,7 @@
  
  =item B<delay> = yes | no
  
@@ -288,7 +288,7 @@ Last-Update: 2015-06-13
  
  This option is useful for dynamic DNS, or when DNS is not available during
  B<stunnel> startup (road warrior VPN, dial-up configurations).
-@@ -585,19 +585,19 @@
+@@ -583,19 +583,19 @@
  
  =item B<exec> = EXECUTABLE_PATH
  
@@ -313,7 +313,7 @@ Last-Update: 2015-06-13
  
  =item B<failover> = rr | prio
  
-@@ -614,15 +614,15 @@
+@@ -618,15 +618,15 @@
  
  =item B<key> = KEY_FILE
  
@@ -333,7 +333,7 @@ Last-Update: 2015-06-13
  
  =item B<libwrap> = yes | no
  
-@@ -632,8 +632,8 @@
+@@ -636,8 +636,8 @@
  
  =item B<local> = HOST
  
@@ -344,7 +344,7 @@ Last-Update: 2015-06-13
  
  =item B<sni> = SERVICE:SERVER_PATTERN (server mode)
  
-@@ -641,29 +641,29 @@
+@@ -645,29 +645,29 @@
  Name Indication TLS extension (RFC 3546).
  
  I<service_name> specifies the master service that accepts client connections
@@ -383,7 +383,7 @@ Last-Update: 2015-06-13
  
  =item B<OCSP> = URL
  
-@@ -715,7 +715,7 @@
+@@ -719,7 +719,7 @@
  
  This option enables initial, protocol-specific negotiation of the SSL/TLS
  encryption.
@@ -392,7 +392,7 @@ Last-Update: 2015-06-13
  
  Currently supported protocols:
  
-@@ -782,7 +782,7 @@
+@@ -786,7 +786,7 @@
  
  authentication type for protocol negotiations
  
@@ -401,7 +401,7 @@ Last-Update: 2015-06-13
  
  default: basic
  
-@@ -790,11 +790,11 @@
+@@ -794,11 +794,11 @@
  
  destination address for protocol negotiations
  
@@ -415,7 +415,7 @@ Last-Update: 2015-06-13
  
  =item B<protocolPassword> = PASSWORD
  
-@@ -826,7 +826,7 @@
+@@ -830,7 +830,7 @@
  
  =item B<pty> = yes | no (Unix only)
  
@@ -424,7 +424,7 @@ Last-Update: 2015-06-13
  
  =item B<redirect> = [HOST:]PORT
  
-@@ -854,7 +854,7 @@
+@@ -858,7 +858,7 @@
  
  =item B<reset> = yes | no
  
@@ -433,7 +433,7 @@ Last-Update: 2015-06-13
  
  This option is not supported on some platforms.
  
-@@ -874,7 +874,7 @@
+@@ -878,7 +878,7 @@
  entries.
  
  The value of 0 can be used for unlimited size.  It is not recommended
@@ -442,7 +442,7 @@ Last-Update: 2015-06-13
  
  =item B<sessionCacheTimeout> = TIMEOUT
  
-@@ -906,7 +906,7 @@
+@@ -910,7 +910,7 @@
  
  =item B<TIMEOUTconnect> = SECONDS
  
@@ -451,7 +451,7 @@ Last-Update: 2015-06-13
  
  =item B<TIMEOUTidle> = SECONDS
  
-@@ -926,7 +926,7 @@
+@@ -930,7 +930,7 @@
  
  =item I<source>
  
@@ -460,7 +460,7 @@ Last-Update: 2015-06-13
  from the SSL client machine instead of the machine running B<stunnel>.
  
  This option is currently available in:
-@@ -936,7 +936,7 @@
+@@ -940,7 +940,7 @@
  =item Remote mode (I<connect> option) on I<Linux E<gt>=2.6.28>
  
  This configuration requires B<stunnel> to be executed as root and without
@@ -469,7 +469,7 @@ Last-Update: 2015-06-13
  
  This configuration requires the following setup for iptables and routing
  (possibly in /etc/rc.local or equivalent file):
-@@ -949,25 +949,25 @@
+@@ -953,25 +953,25 @@
      ip route add local 0.0.0.0/0 dev lo table 100
      echo 0 >/proc/sys/net/ipv4/conf/lo/rp_filter
  
@@ -500,7 +500,7 @@ Last-Update: 2015-06-13
  _RLD_LIST environment variable is used on Tru64, and LD_PRELOAD variable on
  other platforms.
  
-@@ -975,7 +975,7 @@
+@@ -979,7 +979,7 @@
  
  =item I<destination>
  
@@ -509,7 +509,7 @@ Last-Update: 2015-06-13
  
  A service section for transparent destination may look like this:
  
-@@ -999,7 +999,7 @@
+@@ -1003,7 +1003,7 @@
      /sbin/iptables -t nat -I PREROUTING -p tcp --dport <redirected_port> \
          -i eth0 -j DNAT --to-destination <local_ip>:<stunnel_port>
  
@@ -518,7 +518,7 @@ Last-Update: 2015-06-13
  
  =item I<both>
  
-@@ -1013,40 +1013,40 @@
+@@ -1017,40 +1017,40 @@
  
  =item I<yes>
  
@@ -567,7 +567,7 @@ Last-Update: 2015-06-13
  
  =item default
  
-@@ -1054,7 +1054,7 @@
+@@ -1058,7 +1058,7 @@
  
  =back
  
@@ -576,7 +576,7 @@ Last-Update: 2015-06-13
  control and not for authorization.  Specifically for level 2 every non-revoked
  certificate is accepted regardless of its Common Name.  For this reason a
  dedicated CA should be used with level 2, and not a generic CA commonly used
-@@ -1104,16 +1104,16 @@
+@@ -1108,16 +1108,16 @@
  
  =back
  
@@ -597,7 +597,7 @@ Last-Update: 2015-06-13
  This function can be used for log rotation.
  
  =item SIGTERM, SIGQUIT, SIGINT
-@@ -1228,8 +1228,8 @@
+@@ -1232,8 +1232,8 @@
  
  The order of contents of the I<.pem> file is important.  It should contain the
  unencrypted private key first, then a signed certificate (not certificate
@@ -608,7 +608,7 @@ Last-Update: 2015-06-13
  should be discarded. So the file should look like this:
  
      -----BEGIN RSA PRIVATE KEY-----
-@@ -1243,7 +1243,7 @@
+@@ -1247,7 +1247,7 @@
  
  =head2 RANDOMNESS
  
@@ -617,7 +617,7 @@ Last-Update: 2015-06-13
  order for SSL to use good randomness.  The following sources are loaded
  in order until sufficient random data has been gathered:
  
-@@ -1329,7 +1329,7 @@
+@@ -1333,7 +1333,7 @@
  
  =head1 BUGS
  
