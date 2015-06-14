@@ -2,7 +2,7 @@ Description: Use the LSB start/stop functions in the init script
 DebianBug: https://bugs.debian.org/782030
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not needed
-Last-Update: 2015-04-08
+Last-Update: 2015-06-14
 
 --- a/tools/stunnel.init.in
 +++ b/tools/stunnel.init.in
@@ -188,7 +188,7 @@ Last-Update: 2015-04-08
 +        res=$?
 +        ;;
    *)
-         N=/etc/init.d/$NAME
+         N=@sysconfdir@/init.d/$NAME
          echo "Usage: $N {start|stop|status|reload|reopen-logs|restart} [<stunnel instance>]" >&2
 -        exit 1
 +        res=1
