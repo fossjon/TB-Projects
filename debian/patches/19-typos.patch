@@ -100,8 +100,8 @@ Last-Update: 2015-06-14
 -    print "<P><P><center><H1>Cant open file</H1></center>\n";
 +    print "<P><P><center><H1>Can't open file</H1></center>\n";
  }
---- a/doc/stunnel.pod
-+++ b/doc/stunnel.pod
+--- a/doc/stunnel.pod.in
++++ b/doc/stunnel.pod.in
 @@ -85,11 +85,11 @@
  
  =item B<-reload> (Windows NT and later only)
