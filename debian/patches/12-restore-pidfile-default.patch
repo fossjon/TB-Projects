@@ -8,11 +8,11 @@ Description: Temporarily restore the pid file creation by default.
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
 Bug-Debian: http://bugs.debian.org/744851
-Last-Update: 2015-06-14
+Last-Update: 2015-07-13
 
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -28,6 +28,7 @@
+@@ -31,6 +31,7 @@
  stunnel_CPPFLAGS += -I$(SSLDIR)/include
  stunnel_CPPFLAGS += -DLIBDIR='"$(pkglibdir)"'
  stunnel_CPPFLAGS += -DCONFDIR='"$(sysconfdir)/stunnel"'
