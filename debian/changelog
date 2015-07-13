@@ -5,6 +5,8 @@ stunnel4 (3:5.20-1) UNRELEASED; urgency=medium
       20-comparison patches, applied upstream
     - rework the 02-rename-binary and 10-no-zlib-compression patches
     - refresh patches
+    - add the 21-author-tests patch to make the building of the Win32
+      binaries conditional as discussed on the stunnel-users mailing list
 
  -- Peter Pentchev <roam@ringlet.net>  Mon, 13 Jul 2015 14:47:03 +0300
 
