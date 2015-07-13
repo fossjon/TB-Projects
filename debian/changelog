@@ -1,7 +1,8 @@
-stunnel4 (3:5.19-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.20-1) UNRELEASED; urgency=medium
 
   * New upstream version:
-    - drop the 19-typos and 20-comparison patches, applied upstream
+    - drop the 14-lsb-init-functions, 18-lsb-startup, 19-typos, and
+      20-comparison patches, applied upstream
     - rework the 02-rename-binary and 10-no-zlib-compression patches
     - refresh patches
 
