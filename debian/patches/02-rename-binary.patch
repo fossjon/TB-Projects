@@ -2,7 +2,7 @@ Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2015-06-14
+Last-Update: 2015-07-13
 
 --- a/src/stunnel3.in
 +++ b/src/stunnel3.in
@@ -15,19 +15,6 @@ Last-Update: 2015-06-14
  
  # stunnel3 script body begins here
  ($read_fd, $write_fd)=POSIX::pipe();
---- a/doc/stunnel.pl.8
-+++ b/doc/stunnel.pl.8
-@@ -70,8 +70,8 @@
- .rr rF
- .\" ========================================================================
- .\"
--.IX Title "STUNNEL.PL 8"
--.TH STUNNEL.PL 8 "2015.06.11" "5.18" "stunnel"
-+.IX Title "STUNNEL4.PL 8"
-+.TH STUNNEL.PL 8 "2015.06.11" "5.18" "stunnel4"
- .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
- .\" way too many mistakes in technical documents.
- .if n .ad l
 --- a/tools/stunnel.init.in
 +++ b/tools/stunnel.init.in
 @@ -1,6 +1,6 @@
@@ -87,17 +74,30 @@ Last-Update: 2015-06-14
  connect=$REMOTE_HOST
 --- a/doc/Makefile.am
 +++ b/doc/Makefile.am
-@@ -11,11 +11,11 @@
- SUFFIXES = .pod .8 .html
+@@ -13,11 +13,11 @@
+ SUFFIXES = .pod.in .8.in .html.in
  
- .pod.8:
+ .pod.in.8.in:
 -	pod2man -u --section=8 --release=$(VERSION) --center=stunnel \
 +	pod2man -u --section=8 --release=$(VERSION) --center=stunnel4 \
  		--date=`date +%Y.%m.%d` $< $@
  
- .pod.html:
+ .pod.in.html.in:
 -	pod2html --noindex --title stunnel.8 --infile=$< --outfile=$@
 +	pod2html --noindex --title stunnel4.8 --infile=$< --outfile=$@
  	rm -f pod2htmd.tmp pod2htmi.tmp
  
  edit = sed \
+--- a/doc/stunnel.pl.8.in
++++ b/doc/stunnel.pl.8.in
+@@ -70,8 +70,8 @@
+ .rr rF
+ .\" ========================================================================
+ .\"
+-.IX Title "STUNNEL.PL.POD.IN 8"
+-.TH STUNNEL.PL.POD.IN 8 "2015.06.12" "5.19" "stunnel"
++.IX Title "STUNNEL4.PL.POD.IN 8"
++.TH STUNNEL.PL.POD.IN 8 "2015.06.12" "5.19" "stunnel4"
+ .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
+ .\" way too many mistakes in technical documents.
+ .if n .ad l

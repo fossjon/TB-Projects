@@ -1,3 +1,11 @@
+stunnel4 (3:5.19-1) UNRELEASED; urgency=medium
+
+  * New upstream version:
+    - drop the 19-typos and 20-comparison patches, applied upstream
+    - rework the 02-rename-binary and 10-no-zlib-compression patches
+
+ -- Peter Pentchev <roam@ringlet.net>  Mon, 13 Jul 2015 14:47:03 +0300
+
 stunnel4 (3:5.18-1) unstable; urgency=medium
 
   * Add the 17-upstream-hangup patch to fix prematurely closed

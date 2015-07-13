@@ -1,26 +1,10 @@
-Description: Do not depend on zlib compression being available.
+Description: Do not look for zlib at all.
  The Debian OpenSSL package is built without support for zlib
  compression since version 1.0.1e-5.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-06-14
+Last-Update: 2015-07-13
 
---- a/src/ssl.c
-+++ b/src/ssl.c
-@@ -145,7 +145,12 @@
-     /* also insert the obsolete ZLIB algorithm */
-     if(global->compression==COMP_ZLIB) {
-         /* 224 - within the private range (193 to 255) */
--        SSL_COMP_add_compression_method(0xe0, COMP_zlib());
-+        COMP_METHOD *comp = COMP_zlib();
-+        if (comp == NULL || comp->type == NID_undef) {
-+            s_log(LOG_ERR, "Unsupported compression method");
-+            return 1;
-+        }
-+        SSL_COMP_add_compression_method(0xe0, comp);
-     }
-     s_log(LOG_INFO, "Compression enabled: %d method(s)",
-         sk_SSL_COMP_num(methods));
 --- a/configure.ac
 +++ b/configure.ac
 @@ -180,10 +180,9 @@
