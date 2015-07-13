@@ -5,11 +5,11 @@ Forwarded: not-needed
 Author: Paolo Molaro <lupus@debian.org>
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2015-06-14
+Last-Update: 2015-07-13
 
 --- a/tools/stunnel.conf-sample.in
 +++ b/tools/stunnel.conf-sample.in
-@@ -50,7 +50,7 @@
+@@ -55,7 +55,7 @@
  accept = 127.0.0.1:110
  connect = pop.gmail.com:995
  verify = 2
@@ -18,7 +18,7 @@ Last-Update: 2015-06-14
  checkHost = pop.gmail.com
  
  [gmail-imap]
-@@ -58,7 +58,7 @@
+@@ -63,7 +63,7 @@
  accept = 127.0.0.1:143
  connect = imap.gmail.com:993
  verify = 2
@@ -27,7 +27,7 @@ Last-Update: 2015-06-14
  checkHost = imap.gmail.com
  
  [gmail-smtp]
-@@ -66,7 +66,7 @@
+@@ -71,7 +71,7 @@
  accept = 127.0.0.1:25
  connect = smtp.gmail.com:465
  verify = 2
