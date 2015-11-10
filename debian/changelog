@@ -1,4 +1,4 @@
-stunnel4 (3:5.20-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.21-1) UNRELEASED; urgency=medium
 
   * New upstream version:
     - drop the 14-lsb-init-functions, 18-lsb-startup, 19-typos, and
@@ -6,7 +6,8 @@ stunnel4 (3:5.20-1) UNRELEASED; urgency=medium
     - rework the 02-rename-binary and 10-no-zlib-compression patches
     - refresh patches
     - add the 21-author-tests patch to make the building of the Win32
-      binaries conditional as discussed on the stunnel-users mailing list
+      binaries conditional on an environment variable and not on
+      the presence of the .git directory
   * Drop the perl-modules dependency - "perl", brought in by perl:Depends,
     ought to be enough.
 

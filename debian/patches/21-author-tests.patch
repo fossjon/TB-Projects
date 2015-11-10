@@ -1,32 +1,16 @@
 Description: Only build the Win32 executables if requested.
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not yet
-Last-Update: 2015-07-13
+Last-Update: 2015-11-11
 
 --- a/configure.ac
 +++ b/configure.ac
-@@ -9,6 +9,7 @@
+@@ -9,7 +9,7 @@
  AM_INIT_AUTOMAKE
  AC_DEFINE([_GNU_SOURCE], [1], [Use GNU source])
  
+-AM_CONDITIONAL([AUTHOR_TESTS], [test -d ".git"])
 +AM_CONDITIONAL([AUTHOR_TESTS], [test -n "$AUTHOR_TESTS"])
  AC_CANONICAL_HOST
  AC_SUBST([host])
  AC_DEFINE_UNQUOTED([HOST], ["$host"], [Host description])
---- a/src/Makefile.am
-+++ b/src/Makefile.am
-@@ -44,12 +44,14 @@
- # SSL library
- stunnel_LDFLAGS = -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
- 
-+if AUTHOR_TESTS
- # Win32 executables
- 
- # Just check if the programs can be built, don't perform any actual tests
- check_PROGRAMS = stunnel.exe tstunnel.exe
- stunnel_exe_SOURCES = $(common_headers) $(common_sources) $(win32_gui_sources)
- tstunnel_exe_SOURCES = $(common_headers) $(common_sources) $(win32_cli_sources)
-+endif
- 
- # Remaining files to be included
- # EXTRA_PROGRAMS = stunnel.exe tstunnel.exe
