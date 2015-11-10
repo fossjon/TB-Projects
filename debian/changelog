@@ -7,6 +7,8 @@ stunnel4 (3:5.20-1) UNRELEASED; urgency=medium
     - refresh patches
     - add the 21-author-tests patch to make the building of the Win32
       binaries conditional as discussed on the stunnel-users mailing list
+  * Drop the perl-modules dependency - "perl", brought in by perl:Depends,
+    ought to be enough.
 
  -- Peter Pentchev <roam@ringlet.net>  Mon, 13 Jul 2015 14:47:03 +0300
 
