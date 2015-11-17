@@ -71,7 +71,7 @@ typedef enum {
 } LOG_MODE;
 
 typedef enum {
-    LOG_ID_SEQENTIAL,
+    LOG_ID_SEQUENTIAL,
     LOG_ID_UNIQUE,
     LOG_ID_THREAD
 } LOG_ID;
@@ -128,8 +128,6 @@ typedef struct {
 #endif
     unsigned long dpid;
     char *pidfile;
-    uid_t uid;
-    gid_t gid;
 #endif
 
         /* logging-support data for log.c */
@@ -183,6 +181,12 @@ typedef struct service_options_struct {
     SSL_CTX *ctx;                                            /*  SSL context */
     char *servname;        /* service name for logging & permission checking */
 
+        /* service-specific data for stunnel.c */
+#ifndef USE_WIN32
+    uid_t uid;
+    gid_t gid;
+#endif
+
         /* service-specific data for log.c */
     int log_level;                                /* debug level for logging */
     LOG_ID log_id;                                /* logging session id type */
@@ -198,7 +202,6 @@ typedef struct service_options_struct {
     char *crl_dir;                              /* directory for hashed CRLs */
     char *crl_file;                       /* file containing bunches of CRLs */
     int verify_level;
-    X509_STORE *revocation_store;             /* cert store for CRL checking */
 #ifndef OPENSSL_NO_OCSP
     char *ocsp_url;
     unsigned long ocsp_flags;
@@ -255,6 +258,7 @@ typedef struct service_options_struct {
         /* service-specific data for protocol.c */
     char * protocol;
     char *protocol_host;
+    char *protocol_domain;
     char *protocol_username;
     char *protocol_password;
     char *protocol_authentication;
@@ -283,8 +287,8 @@ typedef struct service_options_struct {
 #ifndef USE_WIN32
         unsigned pty:1;
         unsigned transparent_src:1;
-        unsigned transparent_dst:1;     /* endpoint: transparent destination */
 #endif
+        unsigned transparent_dst:1;     /* endpoint: transparent destination */
         unsigned protocol_endpoint:1;   /* dynamic target from the protocol */
         unsigned reset:1;               /* reset sockets on error */
         unsigned renegotiation:1;
@@ -387,6 +391,7 @@ typedef struct {
     unsigned long pid; /* PID of the local process */
     SOCKET fd; /* temporary file descriptor */
     RENEG_STATE reneg_state; /* used to track renegotiation attempts */
+    unsigned long long seq; /* sequential thread number for logging */
 
     /* data for transfer() function */
     char sock_buff[BUFFSIZE]; /* socket read buffer */
@@ -531,6 +536,7 @@ void s_poll_dump(s_poll_set *, int);
 
 int set_socket_options(SOCKET, int);
 int make_sockets(SOCKET[2]);
+int original_dst(const SOCKET, SOCKADDR_UNION *);
 
 /**************************************** prototypes for client.c */
 
@@ -626,7 +632,7 @@ typedef enum {
 #ifndef USE_WIN32
     CRIT_LIBWRAP,                           /* libwrap.c */
 #endif
-    CRIT_LOG, CRIT_ID, CRIT_LEAK,           /* log.c */
+    CRIT_LOG, CRIT_LEAK,                    /* log.c */
 #ifndef OPENSSL_NO_DH
     CRIT_DH,                                /* ctx.c */
 #endif /* OPENSSL_NO_DH */
