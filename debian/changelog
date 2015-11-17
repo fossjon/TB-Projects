@@ -1,4 +1,4 @@
-stunnel4 (3:5.22-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.23-1) UNRELEASED; urgency=medium
 
   * New upstream version:
     - drop the 14-lsb-init-functions, 18-lsb-startup, 19-typos, and
