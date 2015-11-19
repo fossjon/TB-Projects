@@ -74,7 +74,7 @@ Last-Update: 2015-11-19
  connect=$REMOTE_HOST
 --- a/doc/Makefile.am
 +++ b/doc/Makefile.am
-@@ -14,11 +14,11 @@
+@@ -15,11 +15,11 @@
  
  .pod.in.8.in:
  	pod2man -u -n stunnel -s 8 -r $(VERSION) \
@@ -95,9 +95,9 @@ Last-Update: 2015-11-19
  .\" ========================================================================
  .\"
 -.IX Title "stunnel 8"
--.TH stunnel 8 "2015.10.06" "5.24" "stunnel TLS Proxy"
+-.TH stunnel 8 "2015.10.16" "5.25" "stunnel TLS Proxy"
 +.IX Title "stunnel4 8"
-+.TH stunnel 8 "2015.10.06" "5.24" "stunnel4 TLS Proxy"
++.TH stunnel 8 "2015.10.16" "5.25" "stunnel4 TLS Proxy"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
