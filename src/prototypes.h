@@ -149,7 +149,8 @@ typedef struct {
         unsigned taskbar:1;                       /* enable the taskbar icon */
 #else /* !USE_WIN32 */
         unsigned foreground:1;
-        unsigned syslog:1;
+        unsigned log_stderr:1;
+        unsigned log_syslog:1;
 #endif
 #ifdef USE_FIPS
         unsigned fips:1;                           /* enable FIPS 140-2 mode */
@@ -208,6 +209,7 @@ typedef struct service_options_struct {
 #endif /* !defined(OPENSSL_NO_OCSP) */
 #if OPENSSL_VERSION_NUMBER>=0x10002000L
     NAME_LIST *check_host, *check_email, *check_ip;   /* cert subject checks */
+    NAME_LIST *config;                               /* OpenSSL CONF options */
 #endif /* OPENSSL_VERSION_NUMBER>=0x10002000L */
 
         /* service-specific data for ctx.c */
@@ -396,7 +398,7 @@ typedef struct {
     /* data for transfer() function */
     char sock_buff[BUFFSIZE]; /* socket read buffer */
     char ssl_buff[BUFFSIZE]; /* SSL read buffer */
-    unsigned long sock_ptr, ssl_ptr; /* index of the first unused byte */
+    size_t sock_ptr, ssl_ptr; /* index of the first unused byte */
     FD *sock_rfd, *sock_wfd; /* read and write socket descriptors */
     FD *ssl_rfd, *ssl_wfd; /* read and write SSL descriptors */
     uint64_t sock_bytes, ssl_bytes; /* bytes written to socket and SSL */
@@ -561,6 +563,8 @@ void fd_printf(CLI *, SOCKET, const char *, ...)
 void s_ssl_write(CLI *, const void *, int);
 void s_ssl_read(CLI *, void *, int);
 char *ssl_getstring(CLI *c);
+char *ssl_getline(CLI *c);
+void ssl_putline(CLI *c, const char *);
 
 /**************************************** prototype for protocol.c */
 

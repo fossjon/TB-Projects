@@ -1,4 +1,5 @@
 ## Process this file with automake to produce Makefile.in
+# by Michal Trojnara 2015
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -19,6 +20,9 @@ doc_DATA += INSTALL.W32 INSTALL.WCE INSTALL.FIPS
 
 distcleancheck_listfiles = find -type f -exec sh -c 'test -f $(srcdir)/{} || echo {}' ';'
 
+clean-local:
+	rm -rf obj bin
+
 distclean-local:
 	rm -rf autom4te.cache
 #	rm -f $(distdir)-installer.exe
@@ -28,7 +32,6 @@ distclean-local:
 #		-DSTUNNEL_DIR=$(srcdir) \
 #		-DROOT_DIR=/usr/src \
 #		$(srcdir)/tools/stunnel.nsi
-
 
 sign: dist
 	cp -f $(distdir).tar.gz $(distdir)-installer.exe $(distdir)-android.zip ../dist
