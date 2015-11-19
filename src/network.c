@@ -156,8 +156,8 @@ void s_poll_dump(s_poll_set *fds, int level) {
     unsigned i;
 
     for(i=0; i<fds->nfds; i++)
-        s_log(level, "fd=%d events=0x%X revents=0x%X",
-            fds->ufds[i].fd, fds->ufds[i].events, fds->ufds[i].revents);
+        s_log(level, "FD=%ld events=0x%X revents=0x%X",
+            (long)fds->ufds[i].fd, fds->ufds[i].events, fds->ufds[i].revents);
 }
 
 #ifdef USE_UCONTEXT
@@ -453,7 +453,7 @@ void s_poll_dump(s_poll_set *fds, int level) {
         ow=FD_ISSET(fd, fds->owfds);
         ox=FD_ISSET(fd, fds->oxfds);
         if(ir || iw || ix || or || ow || ox)
-            s_log(level, "fd=%d ifds=%c%c%c ofds=%c%c%c", fd,
+            s_log(level, "FD=%ld ifds=%c%c%c ofds=%c%c%c", (long)fd,
                 ir?'r':'-', iw?'w':'-', ix?'x':'-',
                 or?'r':'-', ow?'w':'-', ox?'x':'-');
     }
@@ -651,9 +651,8 @@ void fd_putline(CLI *c, SOCKET fd, const char *line) {
     tmpline=str_printf("%s%s", line, crlf);
     len=strlen(tmpline);
     s_write(c, fd, tmpline, len);
-    tmpline[len-2]='\0'; /* remove CRLF */
-    s_log(LOG_DEBUG, " -> %s", tmpline);
     str_free(tmpline);
+    s_log(LOG_DEBUG, " -> %s", line);
 }
 
 char *fd_getline(CLI *c, SOCKET fd) {
@@ -776,7 +775,7 @@ char *ssl_getstring(CLI *c) { /* get null-terminated string */
     line=str_alloc(allocated);
     for(;;) {
         if(ptr>65536) { /* >64KB --> DoS protection */
-            s_log(LOG_ERR, "fd_getline: Line too long");
+            s_log(LOG_ERR, "ssl_getstring: Line too long");
             str_free(line);
             longjmp(c->err, 1);
         }
@@ -790,6 +789,52 @@ char *ssl_getstring(CLI *c) { /* get null-terminated string */
         ++ptr;
     }
     return line;
+}
+
+char *ssl_getline(CLI *c) { /* get newline-terminated string */
+    char *line;
+    size_t ptr=0, allocated=32;
+
+    line=str_alloc(allocated);
+    for(;;) {
+        if(ptr>65536) { /* >64KB --> DoS protection */
+            s_log(LOG_ERR, "ssl_getline: Line too long");
+            str_free(line);
+            longjmp(c->err, 1);
+        }
+        if(allocated<ptr+1) {
+            allocated*=2;
+            line=str_realloc(line, allocated);
+        }
+        s_ssl_read(c, line+ptr, 1);
+        if(line[ptr]=='\r')
+            continue;
+        if(line[ptr]=='\n')
+            break;
+        if(line[ptr]=='\0')
+            break;
+        ++ptr;
+    }
+    line[ptr]='\0';
+    s_log(LOG_DEBUG, " <- %s", line);
+    return line;
+}
+
+void ssl_putline(CLI *c, const char *line) { /* put newline-terminated string */
+    char *tmpline;
+    const char crlf[]="\r\n";
+    size_t len;
+
+    tmpline=str_printf("%s%s", line, crlf);
+    len=strlen(tmpline);
+    if(len>INT_MAX) { /* paranoia */
+        s_log(LOG_ERR, "ssl_putline: Line too long");
+        str_free(tmpline);
+        longjmp(c->err, 1);
+    }
+    s_ssl_write(c, tmpline, (int)len);
+    str_free(tmpline);
+    s_log(LOG_DEBUG, " -> %s", line);
 }
 
 /**************************************** network helpers */

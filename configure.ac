@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([stunnel],[5.24])
+AC_INIT([stunnel],[5.25])
 AC_MSG_NOTICE([**************************************** initialization])
 AC_CONFIG_AUX_DIR(auto)
 AC_CONFIG_MACRO_DIR([m4])
@@ -423,16 +423,6 @@ AC_DEFINE_UNQUOTED([SSLDIR], ["$SSLDIR"], [SSL directory])
 
 valid_CPPFLAGS="$CPPFLAGS"; CPPFLAGS="$CPPFLAGS -I$SSLDIR/include"
 valid_LIBS="$LIBS"; LIBS="$LIBS -L$SSLDIR/lib64 -L$SSLDIR/lib -lssl -lcrypto"
-
-AC_CHECK_HEADER([$SSLDIR/include/openssl/engine.h],
-    [AC_DEFINE([HAVE_OSSL_ENGINE_H], [1],
-    [Define to 1 if you have <engine.h> header file.])],
-    [AC_MSG_WARN([OpenSSL engine header not found])])
-
-AC_CHECK_HEADER([$SSLDIR/include/openssl/ocsp.h],
-    [AC_DEFINE([HAVE_OSSL_OCSP_H], [1],
-    [Define to 1 if you have <ocsp.h> header file.])],
-    [AC_MSG_WARN([OpenSSL ocsp header not found])])
 
 if test "x$use_fips" = "xauto"; then
     AC_CHECK_FUNCS(FIPS_mode_set, [

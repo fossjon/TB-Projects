@@ -257,13 +257,15 @@ skompilowany ze wsparciem dla FIPS 140-2.
 
 domyślnie: no (od wersji 5.00)
 
-=item B<foreground> = yes | no (tylko Unix)
+=item B<foreground> = yes | quiet | no (tylko Unix)
 
 tryb pierwszoplanowy
 
-Użycie tej opcji powoduje, że B<stunnel> nie przechodzi w tło logując
-swoje komunikaty na konsolę zamiast przez I<syslog> (o ile nie użyto
-opcji I<output>).
+Użycie tej opcji powoduje, że B<stunnel> nie przechodzi w tło.
+
+Parametr I<yes> powoduje dodatkowo, że komunikaty diagnostyczne logowane są na
+standardowy strumień błędów (stderr) oprócz wyjść zdefiniowanych przy pomocy
+opcji I<syslog> i I<output>.
 
 =item B<iconActive> = PLIK_Z_IKONKĄ (tylko GUI)
 
@@ -446,6 +448,8 @@ Certyfikaty są akceptowane, jeżeli sekcja nie zawiera opcji B<checkEmail>,
 albo adres email przedstawionego certyfikatu pasuje do jednego z adresów
 email określonych przy pomocy B<checkEmail>.
 
+Opcja ta wymaga biblioteki OpenSSL w wersji 1.0.2 lub nowszej.
+
 =item B<checkHost> = NAZWA_SERWERA
 
 nazwa serwera przedstawionego certyfikatu
@@ -455,6 +459,8 @@ Certyfikaty są akceptowane, jeżeli sekcja nie zawiera opcji B<checkHost>, albo
 nazwa serwera przedstawionego certyfikatu pasuje do jednego nazw określonych
 przy pomocy B<checkHost>.
 
+Opcja ta wymaga biblioteki OpenSSL w wersji 1.0.2 lub nowszej.
+
 =item B<checkIP> = IP
 
 adres IP przedstawionego certyfikatu
@@ -463,6 +469,8 @@ Pojedyncza sekcja może zawierać wiele wystąpień opcji B<checkIP>.  Certyfika
 są akceptowane, jeżeli sekcja nie zawiera opcji B<checkIP>, albo adres IP
 przedstawionego certyfikatu pasuje do jednego z adresów IP określonych przy
 pomocy B<checkIP>.
+
+Opcja ta wymaga biblioteki OpenSSL w wersji 1.0.2 lub nowszej.
 
 =item B<ciphers> = LISTA_SZYFRÓW
 
@@ -477,6 +485,20 @@ tryb kliencki (zdalna usługa używa SSL)
 
 domyślnie: no (tryb serwerowy)
 
+=item B<config> = KOMENDA[:PARAMETR]
+
+komenda konfiguracyjna B<OpenSSL>
+
+Komenda konfiguracyjna B<OpenSSL> zostaje wykonana z podanym parametrem.
+Pozwala to na wydawanie komend konfiguracyjnych B<OpenSSL> z pliku
+konfiguracyjnego stunnela.  Dostępne komendy opisane są w manualu
+I<SSL_CONF_cmd(3ssl)>.
+
+Możliwe jest wyspecyfikowanie wielu opcji B<OpenSSL> przez wielokrotne użycie
+komendy B<config>.
+
+Opcja ta wymaga biblioteki OpenSSL w wersji 1.0.2 lub nowszej.
+
 =item B<connect> = [HOST:]PORT
 
 połącz się ze zdalnym serwerem na podany port
@@ -484,7 +506,7 @@ połącz się ze zdalnym serwerem na podany port
 Jeżeli nie został podany adres, B<stunnel> domyślnie łączy się
 z lokalnym serwerem.
 
-Komenda może byc użyta wielokrotnie w pojedynczej sekcji
+Komenda może być użyta wielokrotnie w pojedynczej sekcji
 celem zapewnienia wysokiej niezawodności lub rozłożenia
 ruchu pomiędzy wiele serwerów.
 
@@ -801,13 +823,17 @@ w oparciu o szyfrowany protokół SOCKS.
 
 =back
 
-=item B<protocolAuthentication> = basic | ntlm
+=item B<protocolAuthentication> = UWIERZYTELNIENIE
 
 rodzaj uwierzytelnienia do negocjacji protokołu
 
-Obecnie typ uwierzytelnienia ma zastosowanie wyłącznie w protokole 'connect'.
+Opcja ta jest wpierana wyłącznie w klienckich protokołach 'connect' i 'smtp'.
 
-domyślnie: basic
+W protokole 'connect' wspierane jest uwierzytelnienie 'basic' oraz 'ntlm'.
+Domyślnym rodzajem uwierzytelnienia protokołu 'connect' jest 'basic'.
+
+W protokole 'smtp' wspierane jest uwierzytelnienie 'plain' oraz 'login'.
+Domyślnym rodzajem uwierzytelnienia protokołu 'smtp' jest 'plain'.
 
 =item B<protocolDomain> = DOMENA
 
@@ -830,9 +856,13 @@ W obecnej wersji adres docelowy protokołu ma zastosowanie wyłącznie w protoko
 
 hasło do negocjacji protokołu
 
+Opcja ta jest wspierana wyłącznie w klienckich protokołach 'connect' i 'smtp'.
+
 =item B<protocolUsername> = UŻYTKOWNIK
 
 nazwa użytkownika do negocjacji protokołu
+
+Opcja ta jest wspierana wyłącznie w klienckich protokołach 'connect' i 'smtp'.
 
 =item B<PSKidentity> = TOŻSAMOŚĆ
 

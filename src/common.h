@@ -98,8 +98,6 @@ typedef int                 ssize_t;
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE
 #define _CRT_NON_CONFORMING_SWPRINTFS
-#define HAVE_OSSL_ENGINE_H
-#define HAVE_OSSL_OCSP_H
 /* prevent including wincrypt.h, as it defines its own OCSP_RESPONSE */
 #define __WINCRYPT_H__
 #define S_EADDRINUSE  WSAEADDRINUSE
@@ -449,14 +447,6 @@ extern char *sys_errlist[];
 #endif /* !defined(OPENSSL_NO_SSL2) */
 #endif /* OpenSSL 1.1.0 or newer */
 
-#if !defined(HAVE_OSSL_ENGINE_H) && !defined(OPENSSL_NO_ENGINE)
-#define OPENSSL_NO_ENGINE
-#endif /* !defined(HAVE_OSSL_ENGINE_H) && !defined(OPENSSL_NO_ENGINE) */
-
-#if !defined(HAVE_OSSL_OCSP_H) && !defined(OPENSSL_NO_OCSP)
-#define OPENSSL_NO_OCSP
-#endif /* !defined(HAVE_OSSL_OCSP_H) && !defined(OPENSSL_NO_OCSP) */
-
 #if defined(USE_WIN32) && defined(OPENSSL_FIPS)
 #define USE_FIPS
 #endif
@@ -486,6 +476,12 @@ extern char *sys_errlist[];
 /* not defined in public headers before OpenSSL 0.9.8 */
 STACK_OF(SSL_COMP) *SSL_COMP_get_compression_methods(void);
 #endif /* !defined(OPENSSL_NO_COMP) */
+
+#ifndef OPENSSL_VERSION
+#define OPENSSL_VERSION SSLEAY_VERSION
+#define OpenSSL_version_num() SSLeay()
+#define OpenSSL_version(x) SSLeay_version(x)
+#endif
 
 /**************************************** other defines */
 
