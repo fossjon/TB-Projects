@@ -3,11 +3,11 @@ Description: Do not look for zlib at all.
  compression since version 1.0.1e-5.
 Forwarded: not-yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2015-11-11
+Last-Update: 2015-11-19
 
 --- a/configure.ac
 +++ b/configure.ac
-@@ -181,10 +181,9 @@
+@@ -183,10 +183,9 @@
  AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
  AC_SEARCH_LIBS([socket], [socket])
  AC_SEARCH_LIBS([openpty], [util])
