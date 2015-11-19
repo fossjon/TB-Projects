@@ -8,7 +8,7 @@ Description: Temporarily restore the pid file creation by default.
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
 Bug-Debian: http://bugs.debian.org/744851
-Last-Update: 2015-07-13
+Last-Update: 2015-11-19
 
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
@@ -22,7 +22,7 @@ Last-Update: 2015-07-13
  dhparam.c: version.h
 --- a/src/options.c
 +++ b/src/options.c
-@@ -897,7 +897,7 @@
+@@ -902,7 +902,7 @@
  #ifndef USE_WIN32
      switch(cmd) {
      case CMD_BEGIN:
@@ -31,7 +31,7 @@ Last-Update: 2015-07-13
          break;
      case CMD_EXEC:
          if(strcasecmp(opt, "pid"))
-@@ -912,9 +912,10 @@
+@@ -917,9 +917,10 @@
      case CMD_FREE:
          break;
      case CMD_DEFAULT:
