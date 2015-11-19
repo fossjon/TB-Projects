@@ -3,4 +3,5 @@
 03-runas-user.patch
 10-no-zlib-compression.patch
 12-restore-pidfile-default.patch
+19-typos.patch
 21-author-tests.patch
