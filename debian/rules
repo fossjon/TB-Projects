@@ -18,10 +18,6 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 	  --enable-ipv6 --with-threads=pthread
 
-override_dh_auto_build:
-	dh_auto_build -- -C src
-	dh_auto_build -- -C doc
-
 override_dh_auto_install:
 	dh_auto_install -- -C src
 	dh_auto_install -- -C doc
