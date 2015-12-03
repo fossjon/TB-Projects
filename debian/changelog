@@ -1,10 +1,10 @@
-stunnel4 (3:5.27-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.27-1) unstable; urgency=medium
 
   * New upstream release:
     - refresh the patches
     - drop the 19-typos patch, applied upstream
 
- -- Peter Pentchev <roam@ringlet.net>  Fri, 04 Dec 2015 00:27:37 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 04 Dec 2015 00:34:30 +0200
 
 stunnel4 (3:5.26-1) unstable; urgency=medium
 
