@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([stunnel],[5.26])
+AC_INIT([stunnel],[5.27])
 AC_MSG_NOTICE([**************************************** initialization])
 AC_CONFIG_AUX_DIR(auto)
 AC_CONFIG_MACRO_DIR([m4])
@@ -65,20 +65,22 @@ AC_ARG_WITH(threads,
 ])
 
 AC_MSG_NOTICE([**************************************** compiler/linker flags])
-AX_APPEND_COMPILE_FLAGS([-Wall])
-AX_APPEND_COMPILE_FLAGS([-Wextra])
-AX_APPEND_COMPILE_FLAGS([-Wpedantic])
-AX_APPEND_COMPILE_FLAGS([-Wformat=2])
-AX_APPEND_COMPILE_FLAGS([-Wconversion])
-AX_APPEND_COMPILE_FLAGS([-Wno-long-long])
-AX_APPEND_COMPILE_FLAGS([-Wno-deprecated-declarations])
-AX_APPEND_COMPILE_FLAGS([-fstack-protector])
-AX_APPEND_COMPILE_FLAGS([-fPIE])
+if test "$GCC" = yes; then
+    AX_APPEND_COMPILE_FLAGS([-Wall])
+    AX_APPEND_COMPILE_FLAGS([-Wextra])
+    AX_APPEND_COMPILE_FLAGS([-Wpedantic])
+    AX_APPEND_COMPILE_FLAGS([-Wformat=2])
+    AX_APPEND_COMPILE_FLAGS([-Wconversion])
+    AX_APPEND_COMPILE_FLAGS([-Wno-long-long])
+    AX_APPEND_COMPILE_FLAGS([-Wno-deprecated-declarations])
+    AX_APPEND_COMPILE_FLAGS([-fstack-protector])
+    AX_APPEND_COMPILE_FLAGS([-fPIE])
+    AX_APPEND_LINK_FLAGS([-fPIE -pie])
+    AX_APPEND_LINK_FLAGS([-Wl,-z,relro])
+    AX_APPEND_LINK_FLAGS([-Wl,-z,now])
+    AX_APPEND_LINK_FLAGS([-Wl,-z,noexecstack])
+fi
 AX_APPEND_COMPILE_FLAGS([-D_FORTIFY_SOURCE=2])
-AX_APPEND_LINK_FLAGS([-fPIE -pie])
-AX_APPEND_LINK_FLAGS([-Wl,-z,relro])
-AX_APPEND_LINK_FLAGS([-Wl,-z,now])
-AX_APPEND_LINK_FLAGS([-Wl,-z,noexecstack])
 
 AC_MSG_NOTICE([**************************************** libtool])
 LT_INIT([disable-static])
@@ -393,7 +395,7 @@ check_ssl_dir() { :
 find_ssl_dir() { :
     stunnel_prefix="$prefix"
     test "x$stunnel_prefix" = "xNONE" && stunnel_prefix=$ac_default_prefix
-    for main_dir in "$stunnel_prefix" "/usr/local" "/usr/lib" "/usr/pkg" "/opt/local" "/opt" "/usr" ""; do
+    for main_dir in "$stunnel_prefix" "/usr/local" "/usr/lib" "/usr/pkg" "/opt/local" "/opt" "/opt/csw" "/usr" ""; do
         for sub_dir in "/ssl" "/openssl" "/ossl" ""; do
             check_ssl_dir "$sysroot$main_dir$sub_dir"
             test -n "$SSLDIR" && return
