@@ -71,19 +71,23 @@ NOEXPORT unsigned psk_client_callback(SSL *, const char *,
 NOEXPORT unsigned psk_server_callback(SSL *, const char *,
     unsigned char *, unsigned);
 #endif /* !defined(OPENSSL_NO_PSK) */
-NOEXPORT int load_cert(SERVICE_OPTIONS *);
+NOEXPORT int load_cert_file(SERVICE_OPTIONS *);
 NOEXPORT int load_key_file(SERVICE_OPTIONS *);
 #ifndef OPENSSL_NO_ENGINE
+NOEXPORT int load_cert_engine(SERVICE_OPTIONS *);
 NOEXPORT int load_key_engine(SERVICE_OPTIONS *);
 #endif
 NOEXPORT int password_cb(char *, int, int, void *);
 
-/* session cache callbacks */
+/* session callbacks */
 NOEXPORT int sess_new_cb(SSL *, SSL_SESSION *);
 NOEXPORT SSL_SESSION *sess_get_cb(SSL *, unsigned char *, int, int *);
 NOEXPORT void sess_remove_cb(SSL_CTX *, SSL_SESSION *);
 
 /* sessiond interface */
+NOEXPORT void cache_new(SSL *, SSL_SESSION *);
+NOEXPORT SSL_SESSION *cache_get(SSL *, unsigned char *, int);
+NOEXPORT void cache_remove(SSL_CTX *, SSL_SESSION *);
 NOEXPORT void cache_transfer(SSL_CTX *, const u_char, const long,
     const u_char *, const size_t,
     const u_char *, const size_t,
@@ -159,11 +163,9 @@ int context_init(SERVICE_OPTIONS *section) { /* init SSL context */
 #endif
     SSL_CTX_sess_set_cache_size(section->ctx, section->session_size);
     SSL_CTX_set_timeout(section->ctx, section->session_timeout);
-    if(section->option.sessiond) {
-        SSL_CTX_sess_set_new_cb(section->ctx, sess_new_cb);
-        SSL_CTX_sess_set_get_cb(section->ctx, sess_get_cb);
-        SSL_CTX_sess_set_remove_cb(section->ctx, sess_remove_cb);
-    }
+    SSL_CTX_sess_set_new_cb(section->ctx, sess_new_cb);
+    SSL_CTX_sess_set_get_cb(section->ctx, sess_get_cb);
+    SSL_CTX_sess_set_remove_cb(section->ctx, sess_remove_cb);
 
     /* set info callback */
     SSL_CTX_set_info_callback(section->ctx, info_callback);
@@ -415,19 +417,40 @@ NOEXPORT int conf_init(SERVICE_OPTIONS *section) {
 /**************************************** initialize authentication */
 
 NOEXPORT int auth_init(SERVICE_OPTIONS *section) {
-    int result;
+    int cert_needed=1, key_needed=1;
 
-    result=load_cert(section);
 #ifndef OPENSSL_NO_PSK
     if(section->psk_keys) {
         if(section->option.client)
             SSL_CTX_set_psk_client_callback(section->ctx, psk_client_callback);
         else
             SSL_CTX_set_psk_server_callback(section->ctx, psk_server_callback);
-        result=0;
     }
 #endif /* !defined(OPENSSL_NO_PSK) */
-    return result;
+
+    /* load the certificate and private key */
+    if(!section->cert || !section->key) {
+        s_log(LOG_DEBUG, "No certificate or private key specified");
+        return 0; /* OK */
+    }
+#ifndef OPENSSL_NO_ENGINE
+    if(section->engine) { /* try to use the engine first */
+        cert_needed=load_cert_engine(section);
+        key_needed=load_key_engine(section);
+    }
+#endif
+    if(cert_needed && load_cert_file(section))
+        return 1; /* FAILED */
+    if(key_needed && load_key_file(section))
+        return 1; /* FAILED */
+
+    /* validate the private key against the certificate */
+    if(!SSL_CTX_check_private_key(section->ctx)) {
+        sslerror("Private key does not match the certificate");
+        return 1; /* FAILED */
+    }
+    s_log(LOG_DEBUG, "Private key check succeeded");
+    return 0; /* OK */
 }
 
 #ifndef OPENSSL_NO_PSK
@@ -538,50 +561,25 @@ PSK_KEYS *psk_find(const PSK_TABLE *table, const char *identity) {
 
 #endif /* !defined(OPENSSL_NO_PSK) */
 
-static int cache_initialized=0;
-
-NOEXPORT int load_cert(SERVICE_OPTIONS *section) {
-    /* load the certificate */
-    if(section->cert) {
-        s_log(LOG_INFO, "Loading certificate from file: %s", section->cert);
-        if(!SSL_CTX_use_certificate_chain_file(section->ctx, section->cert)) {
-            sslerror("SSL_CTX_use_certificate_chain_file");
-            return 1; /* FAILED */
-        }
-    }
-
-    /* load the private key */
-    if(!section->key) {
-        s_log(LOG_DEBUG, "No private key specified");
-        return 0; /* OK */
-    }
-#ifndef OPENSSL_NO_ENGINE
-    if(section->engine) {
-        if(load_key_engine(section))
-            return 1; /* FAILED */
-    } else
-#endif
-    {
-        if(load_key_file(section))
-            return 1; /* FAILED */
-    }
-
-    /* validate the private key */
-    if(!SSL_CTX_check_private_key(section->ctx)) {
-        sslerror("Private key does not match the certificate");
+NOEXPORT int load_cert_file(SERVICE_OPTIONS *section) {
+    s_log(LOG_INFO, "Loading certificate from file: %s", section->cert);
+    if(!SSL_CTX_use_certificate_chain_file(section->ctx, section->cert)) {
+        sslerror("SSL_CTX_use_certificate_chain_file");
         return 1; /* FAILED */
     }
-    s_log(LOG_DEBUG, "Private key check succeeded");
+    s_log(LOG_INFO, "Certificate loaded from file: %s", section->cert);
     return 0; /* OK */
 }
+
+static int cache_initialized=0;
 
 NOEXPORT int load_key_file(SERVICE_OPTIONS *section) {
     int i, reason;
     UI_DATA ui_data;
 
-    s_log(LOG_INFO, "Loading key from file: %s", section->key);
+    s_log(LOG_INFO, "Loading private key from file: %s", section->key);
     if(file_permissions(section->key))
-        return 1;
+        return 1; /* FAILED */
 
     ui_data.section=section; /* setup current section for callbacks */
     SSL_CTX_set_default_passwd_cb(section->ctx, password_cb);
@@ -603,17 +601,41 @@ NOEXPORT int load_key_file(SERVICE_OPTIONS *section) {
         sslerror("SSL_CTX_use_PrivateKey_file");
         return 1; /* FAILED */
     }
+    s_log(LOG_INFO, "Private key loaded from file: %s", section->key);
     return 0; /* OK */
 }
 
 #ifndef OPENSSL_NO_ENGINE
+
+NOEXPORT int load_cert_engine(SERVICE_OPTIONS *section) {
+    struct {
+        const char *id;
+        X509 *cert;
+    } parms;
+
+    s_log(LOG_INFO, "Loading certificate from engine ID: %s", section->cert);
+    parms.id=section->cert;
+    parms.cert=NULL;
+    ENGINE_ctrl_cmd(section->engine, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
+    if(!parms.cert) {
+        sslerror("ENGINE_ctrl_cmd");
+        return 1; /* FAILED */
+    }
+    if(!SSL_CTX_use_certificate(section->ctx, parms.cert)) {
+        sslerror("SSL_CTX_use_certificate");
+        return 1; /* FAILED */
+    }
+    s_log(LOG_INFO, "Certificate loaded from engine ID: %s", section->cert);
+    return 0; /* OK */
+}
+
 NOEXPORT int load_key_engine(SERVICE_OPTIONS *section) {
     int i, reason;
     UI_DATA ui_data;
     EVP_PKEY *pkey;
     UI_METHOD *ui_method;
 
-    s_log(LOG_INFO, "Loading key from engine: %s", section->key);
+    s_log(LOG_INFO, "Initializing private key on engine ID: %s", section->key);
 
     ui_data.section=section; /* setup current section for callbacks */
     SSL_CTX_set_default_passwd_cb(section->ctx, password_cb);
@@ -644,8 +666,10 @@ NOEXPORT int load_key_engine(SERVICE_OPTIONS *section) {
         sslerror("SSL_CTX_use_PrivateKey");
         return 1; /* FAILED */
     }
+    s_log(LOG_INFO, "Private key initialized on engine ID: %s", section->key);
     return 0; /* OK */
 }
+
 #endif /* !defined(OPENSSL_NO_ENGINE) */
 
 NOEXPORT int password_cb(char *buf, int size, int rwflag, void *userdata) {
@@ -671,7 +695,40 @@ NOEXPORT int password_cb(char *buf, int size, int rwflag, void *userdata) {
     return len;
 }
 
-/**************************************** session cache callbacks */
+/**************************************** session callbacks */
+
+NOEXPORT int sess_new_cb(SSL *ssl, SSL_SESSION *sess) {
+    CLI *c;
+
+    s_log(LOG_DEBUG, "New session callback");
+    c=SSL_get_ex_data(ssl, index_cli);
+    if(c->opt->option.sessiond)
+        cache_new(ssl, sess);
+    return 1; /* leave the session in local cache for reuse */
+}
+
+NOEXPORT SSL_SESSION *sess_get_cb(SSL *ssl,
+        unsigned char *key, int key_len, int *do_copy) {
+    CLI *c;
+
+    s_log(LOG_DEBUG, "Get session callback");
+    *do_copy=0; /* allow the session to be freed automatically */
+    c=SSL_get_ex_data(ssl, index_cli);
+    if(c->opt->option.sessiond)
+        return cache_get(ssl, key, key_len);
+    return NULL; /* no session to resume */
+}
+
+NOEXPORT void sess_remove_cb(SSL_CTX *ctx, SSL_SESSION *sess) {
+    SERVICE_OPTIONS *opt;
+
+    s_log(LOG_DEBUG, "Remove session callback");
+    opt=SSL_CTX_get_ex_data(ctx, index_opt);
+    if(opt->option.sessiond)
+        cache_remove(ctx, sess);
+}
+
+/**************************************** sessiond functionality */
 
 #define CACHE_CMD_NEW     0x00
 #define CACHE_CMD_GET     0x01
@@ -679,7 +736,7 @@ NOEXPORT int password_cb(char *buf, int size, int rwflag, void *userdata) {
 #define CACHE_RESP_ERR    0x80
 #define CACHE_RESP_OK     0x81
 
-NOEXPORT int sess_new_cb(SSL *ssl, SSL_SESSION *sess) {
+NOEXPORT void cache_new(SSL *ssl, SSL_SESSION *sess) {
     unsigned char *val, *val_tmp;
     ssize_t val_len;
     const unsigned char *session_id;
@@ -699,16 +756,14 @@ NOEXPORT int sess_new_cb(SSL *ssl, SSL_SESSION *sess) {
         SSL_SESSION_get_timeout(sess),
         session_id, session_id_length, val, (size_t)val_len, NULL, NULL);
     str_free(val);
-    return 1; /* leave the session in local cache for reuse */
 }
 
-NOEXPORT SSL_SESSION *sess_get_cb(SSL *ssl,
-        unsigned char *key, int key_len, int *do_copy) {
+NOEXPORT SSL_SESSION *cache_get(SSL *ssl,
+        unsigned char *key, int key_len) {
     unsigned char *val, *val_tmp=NULL;
     ssize_t val_len=0;
     SSL_SESSION *sess;
 
-    *do_copy = 0; /* allow the session to be freed autmatically */
     cache_transfer(SSL_get_SSL_CTX(ssl), CACHE_CMD_GET, 0,
         key, (size_t)key_len, NULL, 0, &val, (size_t *)&val_len);
     if(!val)
@@ -723,7 +778,7 @@ NOEXPORT SSL_SESSION *sess_get_cb(SSL *ssl,
     return sess;
 }
 
-NOEXPORT void sess_remove_cb(SSL_CTX *ctx, SSL_SESSION *sess) {
+NOEXPORT void cache_remove(SSL_CTX *ctx, SSL_SESSION *sess) {
     const unsigned char *session_id;
     unsigned int session_id_length;
 
