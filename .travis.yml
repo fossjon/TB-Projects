@@ -1,3 +1,5 @@
+sudo: false
+
 language: c
 
 os:
@@ -8,8 +10,18 @@ compiler:
   - gcc
   - clang
 
-before_install:
-  - if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then sudo apt-get update -qq; fi
-  - if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then sudo apt-get install -y libssl-dev libwrap0-dev; fi
+env:
+  - CONFIGURE_OPTIONS='--with-threads=pthread'
+  - CONFIGURE_OPTIONS='--with-threads=fork'
+  - CONFIGURE_OPTIONS='--with-threads=ucontext'
+  - CONFIGURE_OPTIONS='--disable-ipv6 --disable-fips --disable-systemd --disable-libwrap'
+
+addons:
+  apt:
+    packages:
+    - libssl-dev
+    - libwrap0-dev
 
 before_script: autoreconf -fvi && touch src/dhparam.c
+
+script: ./configure $CONFIGURE_OPTIONS && make && make test

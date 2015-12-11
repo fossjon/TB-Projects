@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([stunnel],[5.27])
+AC_INIT([stunnel],[5.28])
 AC_MSG_NOTICE([**************************************** initialization])
 AC_CONFIG_AUX_DIR(auto)
 AC_CONFIG_MACRO_DIR([m4])
@@ -8,6 +8,11 @@ AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_SRCDIR([src/stunnel.c])
 AM_INIT_AUTOMAKE
 AC_DEFINE([_GNU_SOURCE], [1], [Use GNU source])
+AC_DEFINE([_DARWIN_C_SOURCE], [1], [Use Darwin source])
+# OSX does not declare chroot() with newer _XOPEN_SOURCE versions
+AC_DEFINE([_XOPEN_SOURCE], [500], [Use X/Open 5 with POSIX 1995])
+# Solaris does not declare IPv6 structures without __EXTENSIONS__
+AC_DEFINE([__EXTENSIONS__], [1], [Use extended system interfaces])
 
 AM_CONDITIONAL([AUTHOR_TESTS], [test -d ".git"])
 AC_CANONICAL_HOST
