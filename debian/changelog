@@ -1,11 +1,13 @@
 stunnel4 (3:5.28-1) unstable; urgency=high
 
   * New upstream release:
-    - high urgency: fix a bug possibly resulting in incomplete processing
-      of the config file during initialization
+    - high urgency: fix a bug introduced in 3:5.27-1: if an OpenSSL
+      engine is used, the SSL library's initialization would not be
+      performed completely, skipping, for instance, the proper
+      initialization of the pseudo-random number generator
     - refresh the patches
 
- -- Peter Pentchev <roam@ringlet.net>  Fri, 11 Dec 2015 13:47:08 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 11 Dec 2015 23:24:40 +0200
 
 stunnel4 (3:5.27-1) unstable; urgency=medium
 
