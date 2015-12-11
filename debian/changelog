@@ -1,11 +1,11 @@
-stunnel4 (3:5.28-1) UNRELEASED; urgency=high
+stunnel4 (3:5.28-1) unstable; urgency=high
 
   * New upstream release:
     - high urgency: fix a bug possibly resulting in incomplete processing
       of the config file during initialization
     - refresh the patches
 
- -- Peter Pentchev <roam@ringlet.net>  Fri, 11 Dec 2015 13:34:36 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 11 Dec 2015 13:47:08 +0200
 
 stunnel4 (3:5.27-1) unstable; urgency=medium
 
