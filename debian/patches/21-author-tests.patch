@@ -5,9 +5,9 @@ Last-Update: 2015-11-11
 
 --- a/configure.ac
 +++ b/configure.ac
-@@ -9,7 +9,7 @@
- AM_INIT_AUTOMAKE
- AC_DEFINE([_GNU_SOURCE], [1], [Use GNU source])
+@@ -14,7 +14,7 @@
+ # Solaris does not declare IPv6 structures without __EXTENSIONS__
+ AC_DEFINE([__EXTENSIONS__], [1], [Use extended system interfaces])
  
 -AM_CONDITIONAL([AUTHOR_TESTS], [test -d ".git"])
 +AM_CONDITIONAL([AUTHOR_TESTS], [test -n "$AUTHOR_TESTS"])

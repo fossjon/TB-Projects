@@ -22,7 +22,7 @@ Last-Update: 2015-12-02
  stunnel_LDFLAGS = -L$(SSLDIR)/lib64 -L$(SSLDIR)/lib -lssl -lcrypto
 --- a/src/options.c
 +++ b/src/options.c
-@@ -906,7 +906,7 @@
+@@ -913,7 +913,7 @@
  #ifndef USE_WIN32
      switch(cmd) {
      case CMD_BEGIN:
@@ -31,7 +31,7 @@ Last-Update: 2015-12-02
          break;
      case CMD_EXEC:
          if(strcasecmp(opt, "pid"))
-@@ -921,9 +921,10 @@
+@@ -928,9 +928,10 @@
      case CMD_FREE:
          break;
      case CMD_DEFAULT:

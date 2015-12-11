@@ -2,7 +2,7 @@ Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2015-12-02
+Last-Update: 2015-12-11
 
 --- a/src/stunnel3.in
 +++ b/src/stunnel3.in
@@ -95,9 +95,9 @@ Last-Update: 2015-12-02
  .\" ========================================================================
  .\"
 -.IX Title "stunnel 8"
--.TH stunnel 8 "2015.11.06" "5.27" "stunnel TLS Proxy"
+-.TH stunnel 8 "2015.12.05" "5.28" "stunnel TLS Proxy"
 +.IX Title "stunnel4 8"
-+.TH stunnel 8 "2015.11.06" "5.27" "stunnel4 TLS Proxy"
++.TH stunnel 8 "2015.12.05" "5.28" "stunnel4 TLS Proxy"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
