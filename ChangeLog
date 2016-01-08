@@ -1,5 +1,16 @@
 stunnel change log
 
+Version 5.29, 2016.01.08, urgency: LOW
+* New features
+  - New WIN32 icons.
+  - Performance improvement: rwlocks used for locking with pthreads.
+* Bugfixes
+  - Compilation fix for *BSD.
+  - Fixed configuration file reload for relative stunnel.conf path
+    on Unix.
+  - Fixed ignoring CRLfile unless CAfile was also specified (thx
+    to Strukov Petr).
+
 Version 5.28, 2015.12.11, urgency: HIGH
 * New features
   - Build matrix (.travis.yml) extended with ./configure options.
