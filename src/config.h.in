@@ -102,6 +102,9 @@
 /* Define to 1 if you have the <pty.h> header file. */
 #undef HAVE_PTY_H
 
+/* Define to 1 if you have the `realpath' function. */
+#undef HAVE_REALPATH
+
 /* Define to 1 if you have the `setgroups' function. */
 #undef HAVE_SETGROUPS
 
@@ -289,9 +292,6 @@
 
 /* Use X/Open 5 with POSIX 1995 */
 #undef _XOPEN_SOURCE
-
-/* Use extended system interfaces */
-#undef __EXTENSIONS__
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #undef gid_t
