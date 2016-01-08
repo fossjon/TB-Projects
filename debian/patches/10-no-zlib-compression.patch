@@ -7,7 +7,7 @@ Last-Update: 2015-12-02
 
 --- a/configure.ac
 +++ b/configure.ac
-@@ -190,10 +190,9 @@
+@@ -196,10 +196,9 @@
  AC_SEARCH_LIBS([yp_get_default_domain], [nsl])
  AC_SEARCH_LIBS([socket], [socket])
  AC_SEARCH_LIBS([openpty], [util])
