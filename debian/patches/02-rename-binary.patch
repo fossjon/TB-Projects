@@ -2,7 +2,7 @@ Description: Change references to the binary from stunnel to stunnel4
 Forwarded: not-needed
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2015-12-11
+Last-Update: 2016-01-31
 
 --- a/src/stunnel3.in
 +++ b/src/stunnel3.in
@@ -25,7 +25,7 @@ Last-Update: 2015-12-11
  # Required-Start:    $local_fs $remote_fs
  # Required-Stop:     $local_fs $remote_fs
  # Should-Start:      $syslog
-@@ -16,8 +16,8 @@
+@@ -21,8 +21,8 @@
  
  . /lib/lsb/init-functions
  
@@ -36,7 +36,7 @@ Last-Update: 2015-12-11
  NAME=stunnel
  DESC="SSL tunnels"
  OPTIONS=""
-@@ -44,9 +44,9 @@
+@@ -49,9 +49,9 @@
  startdaemons() {
    local res file args pidfile warn status
  
@@ -49,12 +49,12 @@ Last-Update: 2015-12-11
    fi
    if [ -n "$RLIMITS" ]; then
      ulimit $RLIMITS
-@@ -136,9 +136,9 @@
+@@ -141,9 +141,9 @@
    OPTIONS="-- $OPTIONS"
  fi
  
--[ -f @sysconfdir@/default/stunnel ] && . /etc/default/stunnel
-+[ -f @sysconfdir@/default/stunnel4 ] && . /etc/default/stunnel4
+-[ -f @sysconfdir@/default/stunnel ] && . @sysconfdir@/default/stunnel
++[ -f @sysconfdir@/default/stunnel4 ] && . @sysconfdir@/default/stunnel4
  if [ "$ENABLED" = "0" ] ; then
 -  echo "$DESC disabled, see @sysconfdir@/default/stunnel"
 +  echo "$DESC disabled, see @sysconfdir@/default/stunnel4"
