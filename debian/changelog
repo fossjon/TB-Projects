@@ -1,8 +1,8 @@
-stunnel4 (3:5.29-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.29-1) unstable; urgency=medium
 
   * New upstream release, refresh the patches' line numbers.
 
- -- Peter Pentchev <roam@ringlet.net>  Fri, 08 Jan 2016 20:55:44 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Fri, 08 Jan 2016 20:59:02 +0200
 
 stunnel4 (3:5.28-1) unstable; urgency=high
 
