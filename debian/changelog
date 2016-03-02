@@ -1,6 +1,7 @@
 stunnel4 (3:5.31-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Declare compliance with Debian Policy 3.9.7 with no changes.
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 01 Mar 2016 18:38:15 +0200
 
