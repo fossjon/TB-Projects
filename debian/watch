@@ -2,7 +2,7 @@ version=3
 
 # Latest version is directly at /stunnel
 opts=pgpsigurlmangle=s/$/.asc/ \
-http://www.stunnel.org/downloads.html downloads/stunnel-([45]).([\d]+)+\.tar\.gz debian
+https://www.stunnel.org/downloads.html downloads/stunnel-([45]).([\d]+)+\.tar\.gz debian
 
 # Any previous versions are at /stunnel/obsolete/4.x
 #opts=pgpsigurlmangle=s/$/.asc/ \
