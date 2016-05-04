@@ -9,7 +9,6 @@
 # Copyright 2014 by Peter Pentchev <roam@ringlet.net>
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
-export DEB_CPPFLAGS_MAINT_APPEND=-D_FILE_OFFSET_BITS=64
 export DEB_CFLAGS_MAINT_APPEND=-Wall
 
 multiarch_path=	$(shell dpkg-architecture -qDEB_HOST_MULTIARCH)

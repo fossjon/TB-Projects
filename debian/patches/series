@@ -4,3 +4,4 @@
 10-no-zlib-compression.patch
 12-restore-pidfile-default.patch
 21-author-tests.patch
+22-lfs.patch
