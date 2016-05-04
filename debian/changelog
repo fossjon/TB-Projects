@@ -17,6 +17,8 @@ stunnel4 (3:5.32-1) unstable; urgency=medium
   * Bump the debhelper compatibility level to 10:
     - override the Lintian debhelper warning as it itself suggests
     - let debhelper handle the parallel building and autoreconf by itself
+  * Add the 23-path-max patch to allocate the configuration filename
+    dynamically and avoid the use of the possibly undefined PATH_MAX.
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 04 May 2016 12:52:03 +0300
 

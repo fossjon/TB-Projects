@@ -1,0 +1,71 @@
+Description: Allocate the config filename dynamically.
+ Avoid the use of PATH_MAX which may not be defined.
+Forwarded: not-yet
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2016-05-04
+
+--- a/src/common.h
++++ b/src/common.h
+@@ -94,7 +94,6 @@
+ typedef int                 ssize_t;
+ #endif /* _WIN64 */
+ #endif /* !__MINGW32__ */
+-#define PATH_MAX MAX_PATH
+ #define USE_IPv6
+ #define _CRT_SECURE_NO_DEPRECATE
+ #define _CRT_NONSTDC_NO_DEPRECATE
+--- a/src/options.c
++++ b/src/options.c
+@@ -201,7 +201,7 @@
+ NOEXPORT char **argalloc(char *);
+ #endif
+ 
+-char configuration_file[PATH_MAX];
++char *configuration_file;
+ 
+ GLOBAL_OPTIONS global_options;
+ SERVICE_OPTIONS service_options;
+@@ -278,17 +278,27 @@
+     }
+ 
+ #ifdef HAVE_REALPATH
++    char *nconf;
+     if(type==CONF_FILE) {
+-        if(!realpath(name, configuration_file)) {
++        nconf = realpath(name, NULL);
++        if(nconf == NULL) {
+             s_log(LOG_ERR, "Invalid configuration file name \"%s\"", name);
+             ioerror("realpath");
+             return 1;
+         }
+-        return options_parse(type);
+-    }
++        free(configuration_file);
++    } else
+ #endif
+-    strncpy(configuration_file, name, PATH_MAX-1);
+-    configuration_file[PATH_MAX-1]='\0';
++    {
++        size_t sz = strlen(name) + 1;
++        nconf = realloc(configuration_file, sz);
++        if(nconf == NULL) {
++            s_log(LOG_ERR, "Could not allocate memory");
++            return 1;
++        }
++        snprintf(nconf, sz, "%s", name);
++    }
++    configuration_file = nconf;
+     return options_parse(type);
+ }
+ 
+--- a/src/prototypes.h
++++ b/src/prototypes.h
+@@ -428,7 +428,7 @@
+ 
+ /**************************************** prototypes for options.c */
+ 
+-extern char configuration_file[PATH_MAX];
++extern char *configuration_file;
+ 
+ int options_cmdline(char *, char *);
+ int options_parse(CONF_TYPE);
