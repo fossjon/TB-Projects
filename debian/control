@@ -12,9 +12,7 @@ Homepage: http://www.stunnel.org/
 
 Package: stunnel4
 Architecture: any
-Breaks: stunnel (<< 3:4.20-3)
 Provides: stunnel
-Replaces: stunnel
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}, openssl, netbase
 Pre-Depends: adduser
 Suggests: logcheck-database
