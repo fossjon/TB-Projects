@@ -4,9 +4,8 @@ version=3
 opts=pgpsigurlmangle=s/$/.asc/ \
 https://www.stunnel.org/downloads.html downloads/stunnel-([45]).([\d]+)+\.tar\.gz debian
 
-# Any previous versions are at /stunnel/obsolete/4.x
-#opts=pgpsigurlmangle=s/$/.asc/ \
-#ftp://ftp.stunnel.org/stunnel/archive/4.x/stunnel-(4).([\d]+)+\.tar\.gz debian
+opts=pgpsigurlmangle=s/$/.asc/,pasv \
+ftp://ftp.stunnel.org/stunnel/archive/5.x/stunnel-(5).([\d]+)+\.tar\.gz
 
 # Temporarily use a mirror to find old versions
 opts=pgpsigurlmangle=s/$/.asc/ \
