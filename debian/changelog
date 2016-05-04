@@ -14,6 +14,9 @@ stunnel4 (3:5.32-1) UNRELEASED; urgency=medium
     - update the upstream author's e-mail address in the copyright file,
       the upstream metadata file, and the stunnel3.8 manual page
     - refresh the 02-rename-binary patch
+  * Bump the debhelper compatibility level to 10:
+    - override the Lintian debhelper warning as it itself suggests
+    - let debhelper handle the parallel building and autoreconf by itself
 
  -- Peter Pentchev <roam@ringlet.net>  Wed, 04 May 2016 10:50:10 +0300
 

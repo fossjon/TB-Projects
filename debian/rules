@@ -55,4 +55,4 @@ override_dh_compress:
 	dh_compress --exclude=StunnelConf-0.1.pl
 
 %:
-	dh $@ --with autoreconf --parallel
+	dh $@
