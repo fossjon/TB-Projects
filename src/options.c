@@ -205,6 +205,7 @@ char configuration_file[PATH_MAX];
 
 GLOBAL_OPTIONS global_options;
 SERVICE_OPTIONS service_options;
+unsigned number_of_sections=0;
 
 static GLOBAL_OPTIONS new_global_options;
 static SERVICE_OPTIONS new_service_options;
@@ -539,10 +540,16 @@ void options_defaults() {
 }
 
 void options_apply() { /* apply default/validated configuration */
+    unsigned num=0;
+    SERVICE_OPTIONS *section;
+
+    for(section=new_service_options.next; section; section=section->next)
+        section->section_number=num++;
     /* FIXME: this operation may be unsafe, as client() threads use it */
     memcpy(&global_options, &new_global_options, sizeof(GLOBAL_OPTIONS));
     /* service_options are used for inetd mode and to enumerate services */
     memcpy(&service_options, &new_service_options, sizeof(SERVICE_OPTIONS));
+    number_of_sections=num;
 }
 
 /**************************************** global options */

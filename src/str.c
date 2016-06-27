@@ -51,10 +51,10 @@
 #define system_free(p) free(p)
 #endif
 
-#define CANARY_INITIALIZED  0x0000c0ded0000000L
-#define CANARY_UNINTIALIZED 0x0000abadbabe0000L
-#define MAGIC_ALLOCATED     0x0000a110c8ed0000L
-#define MAGIC_DEALLOCATED   0x0000defec8ed0000L
+#define CANARY_INITIALIZED  0x0000c0ded0000000LL
+#define CANARY_UNINTIALIZED 0x0000abadbabe0000LL
+#define MAGIC_ALLOCATED     0x0000a110c8ed0000LL
+#define MAGIC_DEALLOCATED   0x0000defec8ed0000LL
 
 /* most platforms require allocations to be aligned */
 #ifdef _MSC_VER
@@ -95,6 +95,7 @@ NOEXPORT void str_leak_debug(const ALLOC_LIST *, int);
 
 NOEXPORT LEAK_ENTRY *leak_search(const ALLOC_LIST *);
 NOEXPORT void leak_report();
+NOEXPORT long leak_threshold();
 
 TLS_DATA *ui_tls;
 NOEXPORT uint8_t canary[10]; /* 80-bit canary value */
@@ -396,14 +397,17 @@ NOEXPORT void str_leak_debug(const ALLOC_LIST *alloc_list, int change) {
     static size_t entries=0;
     LEAK_ENTRY *entry;
     int new_entry, allocations;
+    long limit;
 
     if(!stunnel_locks[STUNNEL_LOCKS-1]) /* threads not initialized */
         return;
+    if(!number_of_sections) /* configuration file not initialized */
+        return;
 
-    CRYPTO_THREAD_read_lock(stunnel_locks[LOCK_LEAK_HASH]);
     entry=leak_search(alloc_list);
-    new_entry=entry->alloc_line==0;
-    CRYPTO_THREAD_read_unlock(stunnel_locks[LOCK_LEAK_HASH]);
+    /* the race condition may lead to false positives, which is handled later */
+    new_entry=entry->alloc_line!=alloc_list->alloc_line ||
+        entry->alloc_file!=alloc_list->alloc_file;
 
     if(new_entry) { /* the file:line pair was encountered for the first time */
         CRYPTO_THREAD_write_lock(stunnel_locks[LOCK_LEAK_HASH]);
@@ -420,9 +424,17 @@ NOEXPORT void str_leak_debug(const ALLOC_LIST *alloc_list, int change) {
         CRYPTO_THREAD_write_unlock(stunnel_locks[LOCK_LEAK_HASH]);
     }
 
+#ifdef PRECISE_LEAK_ALLOCATON_COUNTERS
+    /* this is *really* slow in OpenSSL < 1.1.0 */
     CRYPTO_atomic_add(&entry->num, change, &allocations,
-        stunnel_locks[LOCK_LEAK_ALLOCATIONS]);
-    if(allocations>10000+100*num_clients) {
+        stunnel_locks[LOCK_LEAK_HASH]);
+#else
+    allocations=(entry->num+=change); /* we just need an estimate... */
+#endif
+
+    limit=leak_threshold();
+
+    if(allocations>limit) {
         CRYPTO_THREAD_write_lock(stunnel_locks[LOCK_LEAK_RESULTS]);
         if(allocations>entry->max) {
             if(entry->max==0) /* discovered for the first time */
@@ -447,13 +459,27 @@ NOEXPORT LEAK_ENTRY *leak_search(const ALLOC_LIST *alloc_list) {
 /* report identified leaks */
 NOEXPORT void leak_report() {
     int i;
+    long limit;
+
+    limit=leak_threshold();
 
     CRYPTO_THREAD_read_lock(stunnel_locks[LOCK_LEAK_RESULTS]);
     for(i=0; i<leak_result_num; ++i)
-        s_log(LOG_WARNING, "Possible memory leak at %s:%d: %d allocations",
-            leak_results[i]->alloc_file, leak_results[i]->alloc_line,
-            leak_results[i]->max);
+        if(leak_results[i]->max>limit) /* the limit could have changed */
+            s_log(LOG_WARNING, "Possible memory leak at %s:%d: %d allocations",
+                leak_results[i]->alloc_file, leak_results[i]->alloc_line,
+                leak_results[i]->max);
     CRYPTO_THREAD_read_unlock(stunnel_locks[LOCK_LEAK_RESULTS]);
+}
+
+NOEXPORT long leak_threshold() {
+    long limit;
+
+    limit=10000*((int)number_of_sections+1);
+#ifndef USE_FORK
+    limit+=100*num_clients;
+#endif
+    return limit;
 }
 
 /**************************************** memcmp() replacement */
