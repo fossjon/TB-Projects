@@ -1,4 +1,4 @@
-stunnel4 (3:5.33-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.33-1) unstable; urgency=medium
 
   * Switch the bugs.debian.org URL in a patch to HTTPS.
   * Switch the copyright format URL to HTTPS.
@@ -8,7 +8,7 @@ stunnel4 (3:5.33-1) UNRELEASED; urgency=medium
   * Add the 24-ssl23.h patch to further fix the OpenSSL 1.1 build -
     the ssl23.h file was removed.
 
- -- Peter Pentchev <roam@ringlet.net>  Mon, 27 Jun 2016 11:39:54 +0300
+ -- Peter Pentchev <roam@ringlet.net>  Mon, 27 Jun 2016 13:26:26 +0300
 
 stunnel4 (3:5.32-1) unstable; urgency=medium
 
