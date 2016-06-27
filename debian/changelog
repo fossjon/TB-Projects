@@ -4,7 +4,7 @@ stunnel4 (3:5.33-1) UNRELEASED; urgency=medium
   * Switch the copyright format URL to HTTPS.
   * New upstream version:
     - fix the build with OpenSSL-1.1; Closes: #828562
-    - refresh the 23-path-max patch
+    - refresh the 12-restore-pidfile-default and 23-path-max patches
   * Add the 24-ssl23.h patch to further fix the OpenSSL 1.1 build -
     the ssl23.h file was removed.
 
