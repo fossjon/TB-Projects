@@ -193,8 +193,8 @@ NOEXPORT void client_run(CLI *c) {
         SSL_set_shutdown(c->ssl, SSL_SENT_SHUTDOWN|SSL_RECEIVED_SHUTDOWN);
         SSL_free(c->ssl);
         c->ssl=NULL;
-#if OPENSSL_VERSION_NUMBER>=0x10100004L
-        /* OpenSSL version >= 1.1.0-pre4 */
+#if OPENSSL_VERSION_NUMBER==0x10100004L || OPENSSL_VERSION_NUMBER==0x10100005L
+        /* OpenSSL version 1.1.0-pre4 or 1.1.0-pre5 (to be removed) */
         ERR_remove_thread_state();
 #elif OPENSSL_VERSION_NUMBER>=0x10000000L
         /* OpenSSL version >= 1.0.0 */

@@ -435,8 +435,11 @@ extern char *sys_errlist[];
 #endif /* !defined(OPENSSL_NO_OCSP) */
 #endif /* OpenSSL older than 0.9.8h */
 
-#if OPENSSL_VERSION_NUMBER<0x10000000L
+#if OPENSSL_VERSION_NUMBER<0x00908060L
 #define OPENSSL_NO_TLSEXT
+#endif /* OpenSSL older than 0.9.8f */
+
+#if OPENSSL_VERSION_NUMBER<0x10000000L
 #define OPENSSL_NO_PSK
 #endif /* OpenSSL older than 1.0.0 */
 
@@ -465,6 +468,7 @@ extern char *sys_errlist[];
 #include <openssl/crypto.h> /* for CRYPTO_* and SSLeay_version */
 #include <openssl/rand.h>
 #include <openssl/bn.h>
+#include <openssl/pkcs12.h>
 #ifndef OPENSSL_NO_MD4
 #include <openssl/md4.h>
 #endif /* !defined(OPENSSL_NO_MD4) */
