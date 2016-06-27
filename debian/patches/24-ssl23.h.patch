@@ -1,6 +1,6 @@
 Description: Do not include the ssl23.h file.
  It's not there any more in OpenSSL 1.1.
-Forwarded: not yet
+Forwarded: https://www.stunnel.org/pipermail/stunnel-users/2016-June/005559.html
 Author: Peter Pentchev <roam@ringlet.net>
 Last-Update: 2016-06-27
 
