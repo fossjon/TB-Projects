@@ -7,9 +7,8 @@ Description: Temporarily restore the pid file creation by default.
  script will refuse to start stunnel for these configurations.
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
-Bug-Debian: http://bugs.debian.org/744851
+Bug-Debian: https://bugs.debian.org/744851
 Last-Update: 2015-12-02
-
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -44,6 +44,7 @@
