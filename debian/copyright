@@ -1,4 +1,4 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: stunnel
 Upstream-Contact: Michal Trojnara <Michal.Trojnara@stunnel.org>
 Source: http://www.stunnel.org/download/source.html
