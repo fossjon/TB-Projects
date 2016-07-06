@@ -5,14 +5,14 @@ Forwarded: not-needed
 Author: Paolo Molaro <lupus@debian.org>
 Author: Julien Lemoine <speedblue@debian.org>
 Author: Luis Rodrigo Gallardo Cruz <rodrigo@debian.org>
-Last-Update: 2015-11-12
+Last-Update: 2016-07-06
 
 --- a/tools/stunnel.conf-sample.in
 +++ b/tools/stunnel.conf-sample.in
 @@ -55,7 +55,7 @@
  accept = 127.0.0.1:110
  connect = pop.gmail.com:995
- verify = 2
+ verifyChain = yes
 -CApath = /etc/ssl/certs
 +CApath = @sysconfdir/ssl/certs
  checkHost = pop.gmail.com
@@ -21,7 +21,7 @@ Last-Update: 2015-11-12
 @@ -64,7 +64,7 @@
  accept = 127.0.0.1:143
  connect = imap.gmail.com:993
- verify = 2
+ verifyChain = yes
 -CApath = /etc/ssl/certs
 +CApath = @sysconfdir/ssl/certs
  checkHost = imap.gmail.com
@@ -30,7 +30,7 @@ Last-Update: 2015-11-12
 @@ -73,7 +73,7 @@
  accept = 127.0.0.1:25
  connect = smtp.gmail.com:465
- verify = 2
+ verifyChain = yes
 -CApath = /etc/ssl/certs
 +CApath = @sysconfdir/ssl/certs
  checkHost = smtp.gmail.com

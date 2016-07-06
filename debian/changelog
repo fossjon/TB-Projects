@@ -1,3 +1,11 @@
+stunnel4 (3:5.34-1) UNRELEASED; urgency=medium
+
+  * New upstream release:
+    - drop the 24-ssl23 patch, integrated upstream
+    - refresh the other patches
+
+ -- Peter Pentchev <roam@ringlet.net>  Wed, 06 Jul 2016 18:06:31 +0300
+
 stunnel4 (3:5.33-1) unstable; urgency=medium
 
   * Switch the bugs.debian.org URL in a patch to HTTPS.

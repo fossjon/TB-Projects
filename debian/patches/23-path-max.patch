@@ -60,7 +60,7 @@ Last-Update: 2016-06-27
  
 --- a/src/prototypes.h
 +++ b/src/prototypes.h
-@@ -428,7 +428,7 @@
+@@ -431,7 +431,7 @@
  
  /**************************************** prototypes for options.c */
  
