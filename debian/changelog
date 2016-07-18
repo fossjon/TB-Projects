@@ -1,4 +1,4 @@
-stunnel4 (3:5.34-1) unstable; urgency=medium
+stunnel4 (3:5.35-1) UNRELEASED; urgency=medium
 
   * New upstream release:
     - drop the 24-ssl23 patch, integrated upstream
