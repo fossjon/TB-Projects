@@ -1,6 +1,8 @@
-stunnel4 (3:5.35-2) UNRELEASED; urgency=medium
+stunnel4 (3:5.36-1) UNRELEASED; urgency=medium
 
   * Add the 24-typos patch to fix some typographical errors.
+  * New upstream version:
+    - drop the 10-no-zlib-compression patch, integrated upstream
 
  -- Peter Pentchev <roam@ringlet.net>  Sat, 24 Sep 2016 12:39:58 +0300
 
