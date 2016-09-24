@@ -91,7 +91,7 @@ Last-Update: 2016-09-24
      int r=0;
 --- a/src/stunnel.c
 +++ b/src/stunnel.c
-@@ -158,9 +158,9 @@
+@@ -161,9 +161,9 @@
      if(drop_privileges(1))
          return 1;
  
