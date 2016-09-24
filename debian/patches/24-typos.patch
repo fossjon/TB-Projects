@@ -1,0 +1,127 @@
+Description: Fix some typographical errors.
+Forwarded: not yet
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2016-09-24
+
+--- a/src/fd.c
++++ b/src/fd.c
+@@ -84,7 +84,7 @@
+         max_fds=FD_SETSIZE; /* start with select() limit */
+ #endif /* select() on Unix */
+ 
+-    /* stunnel needs at least 16 file desriptors */
++    /* stunnel needs at least 16 file descriptors */
+     if(max_fds && max_fds<16)
+         max_fds=16;
+ 
+--- a/src/make.bat
++++ b/src/make.bat
+@@ -1,8 +1,8 @@
+ @echo off
+ :: pdelaage commented : make.exe -f mingw.mak %1 %2 %3 %4 %5 %6 %7 %8 %9
+ :: on Windows, make is Borland make, but mingw.mak is NOW only compatible
+-:: with gnu make (due to various improvments I made, for compatibility between
+-:: linux and Windows host environments.
++:: with gnu make (due to various improvements I made, for compatibility between
++:: linux and Windows host environments).
+ :: and echo OFF is the sign we are HERE on Windows, isn't it?...
+ 
+ mingw32-make.exe -f mingw.mak %1 %2 %3 %4 %5 %6 %7 %8 %9
+--- a/src/protocol.c
++++ b/src/protocol.c
+@@ -1042,7 +1042,7 @@
+         } else if(is_prefix(tail, "CAPABILITY")) {
+             fd_putline(c, c->remote_fd.fd, line); /* send it to server */
+             str_free(line);
+-            line=fd_getline(c, c->remote_fd.fd); /* get the capabilites */
++            line=fd_getline(c, c->remote_fd.fd); /* get the capabilities */
+             if(*line=='*') {
+                 /*
+                  * append STARTTLS
+--- a/src/prototypes.h
++++ b/src/prototypes.h
+@@ -137,7 +137,7 @@
+     char *output_file;
+     FILE_MODE log_file_mode;
+ 
+-        /* user interface configuraion */
++        /* user interface configuration */
+ #ifdef ICON_IMAGE
+     ICON_IMAGE icon[ICON_NONE];                  /* user-specified GUI icons */
+ #endif
+@@ -364,7 +364,7 @@
+ #else
+     int fd;
+ #endif
+-    /* the inteface is prepared to easily implement buffering if needed */
++    /* the interface is prepared to easily implement buffering if needed */
+ } DISK_FILE;
+ 
+     /* definitions for client.c */
+@@ -382,7 +382,7 @@
+ 
+ typedef struct {
+     jmp_buf err; /* 64-bit platforms require jmp_buf to be 16-byte aligned */
+-    SSL *ssl; /* SSL connnection */
++    SSL *ssl; /* SSL connection */
+     SERVICE_OPTIONS *opt;
+     TLS_DATA *tls;
+ 
+--- a/src/resolver.c
++++ b/src/resolver.c
+@@ -174,7 +174,7 @@
+         }
+     }
+ #endif
+-    /* copy the first address resolved (curently AF_UNIX) */
++    /* copy the first address resolved (currently AF_UNIX) */
+     memcpy(addr, &addr_list->addr[0], sizeof(SOCKADDR_UNION));
+ }
+ 
+--- a/src/str.c
++++ b/src/str.c
+@@ -485,7 +485,7 @@
+ /**************************************** memcmp() replacement */
+ 
+ /* a version of memcmp() with execution time not dependent on data values */
+-/* it does *not* allow to test whether s1 is greater or lesser than s2  */
++/* it does *not* allow testing whether s1 is greater or lesser than s2  */
+ int safe_memcmp(const void *s1, const void *s2, size_t n) {
+     uint8_t *p1=(uint8_t *)s1, *p2=(uint8_t *)s2;
+     int r=0;
+--- a/src/stunnel.c
++++ b/src/stunnel.c
+@@ -158,9 +158,9 @@
+     if(drop_privileges(1))
+         return 1;
+ 
+-    /* log_open() must be be called after drop_privileges()
++    /* log_open() must be called after drop_privileges()
+      * or logfile rotation won't be possible */
+-    /* log_open() must be be called before daemonize()
++    /* log_open() must be called before daemonize()
+      * since daemonize() invalidates stderr */
+     if(log_open())
+         return 1;
+--- a/tools/stunnel.init.in
++++ b/tools/stunnel.init.in
+@@ -10,7 +10,7 @@
+ # Short-Description: Start or stop stunnel 4.x (SSL tunnel for network daemons)
+ # Description:       Starts or stops all configured SSL network tunnels. Each *.conf file in
+ #                    @sysconfdir@/stunnel/ will spawn a separate stunnel process. The list of files
+-#                    can be overriden in @sysconfdir@/default/stunnel, and that same file can be used
++#                    can be overridden in @sysconfdir@/default/stunnel, and that same file can be used
+ #                    to completely disable *all* tunnels.
+ ### END INIT INFO
+ 
+--- a/tools/stunnel.rh.init
++++ b/tools/stunnel.rh.init
+@@ -16,7 +16,7 @@
+ # Short-Description: Start or stop stunnel 4.x (SSL tunnel for network daemons)
+ # Description:       Starts or stops all configured SSL network tunnels. Each *.conf file in
+ #                    /etc/stunnel/ will spawn a separate stunnel process. The list of files
+-#                    can be overriden in /etc/sysconfig/stunnel, and that same file can be used
++#                    can be overridden in /etc/sysconfig/stunnel, and that same file can be used
+ #                    to completely disable *all* tunnels.
+ ### END INIT INFO
+ 
