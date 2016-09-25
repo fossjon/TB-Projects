@@ -1,4 +1,4 @@
-stunnel4 (3:5.36-1) unstable; urgency=medium
+stunnel4 (3:5.36-1) UNRELEASED; urgency=medium
 
   * Add the 24-typos patch to fix some typographical errors.
   * New upstream version:
