@@ -1,8 +1,8 @@
 01-fix-paths.patch
 02-rename-binary.patch
 03-runas-user.patch
-12-restore-pidfile-default.patch
-21-author-tests.patch
-22-lfs.patch
-23-path-max.patch
-24-typos.patch
+04-restore-pidfile-default.patch
+05-author-tests.patch
+06-lfs.patch
+07-path-max.patch
+08-typos.patch

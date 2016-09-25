@@ -4,6 +4,7 @@ stunnel4 (3:5.36-1) UNRELEASED; urgency=medium
   * New upstream version:
     - drop the 10-no-zlib-compression patch, integrated upstream
   * Bump the debhelper B-D to 10 and drop the Lintian override.
+  * Rename the patch files to "reindex" sequentially.
 
  -- Peter Pentchev <roam@ringlet.net>  Sat, 24 Sep 2016 14:17:50 +0300
 
