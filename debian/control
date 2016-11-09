@@ -1,8 +1,13 @@
 Source: stunnel4
 Section: net
 Priority: optional
-Build-Depends: debhelper (>= 10), libssl-dev,
- openssl, libsystemd-dev [linux-any], libwrap0-dev, sdf
+Build-Depends:
+ debhelper (>= 10),
+ libssl-dev,
+ libsystemd-dev [linux-any],
+ libwrap0-dev,
+ openssl,
+ sdf
 Maintainer: Peter Pentchev <roam@ringlet.net>
 Uploaders: Laszlo Boszormenyi (GCS) <gcs@debian.org>
 Standards-Version: 3.9.8
@@ -13,7 +18,12 @@ Homepage: http://www.stunnel.org/
 Package: stunnel4
 Architecture: any
 Provides: stunnel
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}, openssl, netbase
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ ${perl:Depends},
+ netbase,
+ openssl
 Pre-Depends: adduser
 Suggests: logcheck-database
 Description: Universal SSL tunnel for network daemons
