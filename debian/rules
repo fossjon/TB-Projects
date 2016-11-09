@@ -45,9 +45,6 @@ override_dh_auto_install:
 	install -p -m 0644 $(CURDIR)/debian/stunnel4.conf.README \
 	  $(CURDIR)/debian/stunnel4/etc/stunnel/README
 
-override_dh_installinit:
-	dh_installinit --restart-after-upgrade
-
 override_dh_installppp:
 	dh_installppp --name=0stunnel4
 
