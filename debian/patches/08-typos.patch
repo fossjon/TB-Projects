@@ -1,7 +1,7 @@
 Description: Fix some typographical errors.
 Forwarded: not yet
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2016-09-24
+Last-Update: 2016-11-10
 
 --- a/src/fd.c
 +++ b/src/fd.c
@@ -125,3 +125,23 @@ Last-Update: 2016-09-24
  #                    to completely disable *all* tunnels.
  ### END INIT INFO
  
+--- a/src/network.c
++++ b/src/network.c
+@@ -65,7 +65,7 @@
+ 
+ void s_poll_init(s_poll_set *fds) {
+     fds->nfds=0;
+-    fds->allocated=4; /* prealloc 4 file desciptors */
++    fds->allocated=4; /* prealloc 4 file descriptors */
+     s_poll_realloc(fds);
+ }
+ 
+@@ -360,7 +360,7 @@
+ 
+ void s_poll_init(s_poll_set *fds) {
+ #ifdef USE_WIN32
+-    fds->allocated=4; /* prealloc 4 file desciptors */
++    fds->allocated=4; /* prealloc 4 file descriptors */
+ #endif
+     s_poll_realloc(fds);
+     FD_ZERO(fds->irfds);
