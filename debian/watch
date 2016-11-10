@@ -2,17 +2,17 @@ version=4
 
 # Latest version is directly at /stunnel
 opts=pgpsigurlmangle=s/$/.asc/ \
-https://www.stunnel.org/downloads.html downloads/stunnel-([\d.]+)\.tar\.gz debian
+https://www.stunnel.org/downloads.html downloads/stunnel-([\d.]+)@ARCHIVE_EXT@ debian
 
 opts=pgpsigurlmangle=s/$/.asc/,pasv \
-ftp://ftp.stunnel.org/stunnel/archive/5.x/stunnel-([\d.]+)\.tar\.gz
+ftp://ftp.stunnel.org/stunnel/archive/5.x/stunnel-([\d.]+)@ARCHIVE_EXT@
 
 # Temporarily use a mirror to find old versions
 opts=pgpsigurlmangle=s/$/.asc/ \
-http://stunnel.cybermirror.org/ stunnel-([\d.]+)\.tar\.gz debian
+http://stunnel.cybermirror.org/ stunnel-([\d.]+)@ARCHIVE_EXT@ debian
 
 # And the older versions in the archive/ subdirectories...
 opts=pgpsigurlmangle=s/$/.asc/ \
-http://stunnel.cybermirror.org/archive/4.x/ stunnel-([\d]+)\.tar\.gz debian
+http://stunnel.cybermirror.org/archive/4.x/ stunnel-([\d]+)@ARCHIVE_EXT@ debian
 opts=pgpsigurlmangle=s/$/.asc/ \
-http://stunnel.cybermirror.org/archive/5.x/ stunnel-([\d]+)\.tar\.gz debian
+http://stunnel.cybermirror.org/archive/5.x/ stunnel-([\d]+)@ARCHIVE_EXT@ debian
