@@ -11,6 +11,7 @@ stunnel4 (3:5.37-1) UNRELEASED; urgency=medium
     - use v4's @ARCHIVE_EXT@ substitution variable
   * Add another correction to the typos patch.
   * New upstream release.
+  * Correct the download webpage's URL in the copyright file.
 
  -- Peter Pentchev <roam@ringlet.net>  Thu, 10 Nov 2016 01:34:38 +0200
 
