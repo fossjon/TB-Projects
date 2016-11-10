@@ -13,6 +13,7 @@ stunnel4 (3:5.37-1) UNRELEASED; urgency=medium
   * New upstream release.
   * Correct the download webpage's URL in the copyright file.
   * Correct the project homepage's URL in the stunnel3 manual page.
+  * Use the HTTPS scheme for various upstream URLs.
 
  -- Peter Pentchev <roam@ringlet.net>  Thu, 10 Nov 2016 01:34:38 +0200
 

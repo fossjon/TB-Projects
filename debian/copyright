@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: stunnel
 Upstream-Contact: Michal Trojnara <Michal.Trojnara@stunnel.org>
-Source: http://www.stunnel.org/downloads.html
+Source: https://www.stunnel.org/downloads.html
 License: GPL-2+-openssl
 
 Files: *

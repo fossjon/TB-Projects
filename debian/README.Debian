@@ -75,9 +75,9 @@ using it requires stunnel to be compiled statically against OpenSSL and all
 supporting libraries. Thus, this option is disabled in the Debian package.
 
 See the OpenSSL FIPS User Guide at
-http://www.openssl.org/docs/fips/UserGuide-2.0.pdf
+https://www.openssl.org/docs/fips/UserGuide-2.0.pdf
 and the OpenSSL notes about FIPS 140-2 at
-http://www.openssl.org/docs/fips/fipsnotes.html
+https://www.openssl.org/docs/fips/fipsnotes.html
 
  - Julien LEMOINE <speedblue@debian.org>, Sun, 19 Feb 2006 17:31:24 +0100
 

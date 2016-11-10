@@ -13,7 +13,7 @@ Uploaders: Laszlo Boszormenyi (GCS) <gcs@debian.org>
 Standards-Version: 3.9.8
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/stunnel.git
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/stunnel.git
-Homepage: http://www.stunnel.org/
+Homepage: https://www.stunnel.org/
 
 Package: stunnel4
 Architecture: any
