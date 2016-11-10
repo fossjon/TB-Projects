@@ -4,8 +4,10 @@ stunnel4 (3:5.36-2) UNRELEASED; urgency=medium
   * Add a runtime dependency on lsb-base for /lib/lsb/init-functions.
   * Drop the dh_installinit override: --restart-after-upgrade is already
     the default behavior in debhelper compatibility level 10.
-  * Replace pgpmode=auto with pgpsigurlmangle in the watch file -
-    pgpmode=auto will fail silently on a missing signature.
+  * Update the watch file a bit:
+    - replace pgpmode=auto with pgpsigurlmangle - the former will not
+      fail on a missing upstream signature file
+    - make the version regular expression a bit more sane
 
  -- Peter Pentchev <roam@ringlet.net>  Thu, 10 Nov 2016 01:34:38 +0200
 
