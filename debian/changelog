@@ -1,4 +1,4 @@
-stunnel4 (3:5.37-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.37-1) unstable; urgency=medium
 
   * Reformat the build and runtime dependency lists in the control file.
   * Add a runtime dependency on lsb-base for /lib/lsb/init-functions.
@@ -15,7 +15,7 @@ stunnel4 (3:5.37-1) UNRELEASED; urgency=medium
   * Correct the project homepage's URL in the stunnel3 manual page.
   * Use the HTTPS scheme for various upstream URLs.
 
- -- Peter Pentchev <roam@ringlet.net>  Thu, 10 Nov 2016 01:34:38 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Thu, 10 Nov 2016 02:57:28 +0200
 
 stunnel4 (3:5.36-1) unstable; urgency=medium
 
