@@ -6,3 +6,4 @@
 06-lfs.patch
 07-path-max.patch
 08-typos.patch
+09-realloc.patch
