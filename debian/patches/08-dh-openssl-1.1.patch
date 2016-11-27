@@ -3,7 +3,7 @@ Description: Restore the invocation of DH_set0_pqg().
  .
  This patch actually restores the upstream code introduced in
  stunnel-5.32 and removed in stunnel-5.39.
-Forwarded: not-yet
+Forwarded: yes
 Author: Michal Trojnara <Michal.Trojnara@stunnel.org>
 Last-Update: 2016-11-27
 
