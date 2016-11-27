@@ -1,0 +1,34 @@
+Description: Restore the invocation of DH_set0_pqg().
+ It is needed for OpenSSL 1.1.
+ .
+ This patch actually restores the upstream code introduced in
+ stunnel-5.32 and removed in stunnel-5.39.
+Forwarded: not-yet
+Author: Michal Trojnara <Michal.Trojnara@stunnel.org>
+Last-Update: 2016-11-27
+
+--- a/src/dhparam.c
++++ b/src/dhparam.c
+@@ -34,12 +34,18 @@
+ 		0x02,
+ 		};
+ 	DH *dh;
++	BIGNUM *dhp_bn, *dhg_bn;
+ 
+ 	if ((dh=DH_new()) == NULL) return(NULL);
+-	dh->p=BN_bin2bn(dh2048_p,sizeof(dh2048_p),NULL);
+-	dh->g=BN_bin2bn(dh2048_g,sizeof(dh2048_g),NULL);
+-	if ((dh->p == NULL) || (dh->g == NULL))
+-		{ DH_free(dh); return(NULL); }
++	dhp_bn=BN_bin2bn(dh2048_p,sizeof(dh2048_p),NULL);
++	dhg_bn=BN_bin2bn(dh2048_g,sizeof(dh2048_g),NULL);
++	if ((dhp_bn == NULL) || (dhg_bn == NULL)
++	    || !DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
++		DH_free(dh);
++		BN_free(dhp_bn);
++		BN_free(dhg_bn);
++		return(NULL);
++	}
+ 	return(dh);
+ 	}
+ #endif /* OPENSSL_NO_DH */

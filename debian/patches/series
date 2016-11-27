@@ -4,3 +4,4 @@
 04-restore-pidfile-default.patch
 05-author-tests.patch
 07-path-max.patch
+08-dh-openssl-1.1.patch
