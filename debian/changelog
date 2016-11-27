@@ -1,10 +1,10 @@
-stunnel4 (3:5.38-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.38-1) unstable; urgency=medium
 
   * New upstream release:
     - drop the 06-lfs, 08-typos, and 09-realloc patches, included upstream
     - add the 08-dh-openssl-1.1.patch to fix the build with OpenSSL 1.1
 
- -- Peter Pentchev <roam@ringlet.net>  Sun, 27 Nov 2016 01:48:48 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Sun, 27 Nov 2016 03:31:13 +0200
 
 stunnel4 (3:5.37-2) unstable; urgency=medium
 
