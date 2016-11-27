@@ -95,9 +95,9 @@ Last-Update: 2016-07-18
  .\" ========================================================================
  .\"
 -.IX Title "stunnel 8"
--.TH stunnel 8 "2016.11.03" "5.37" "stunnel TLS Proxy"
+-.TH stunnel 8 "2016.11.26" "5.38" "stunnel TLS Proxy"
 +.IX Title "stunnel4 8"
-+.TH stunnel 8 "2016.11.03" "5.37" "stunnel4 TLS Proxy"
++.TH stunnel 8 "2016.11.26" "5.38" "stunnel4 TLS Proxy"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l

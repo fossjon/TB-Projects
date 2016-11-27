@@ -3,7 +3,4 @@
 03-runas-user.patch
 04-restore-pidfile-default.patch
 05-author-tests.patch
-06-lfs.patch
 07-path-max.patch
-08-typos.patch
-09-realloc.patch
