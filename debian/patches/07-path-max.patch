@@ -16,7 +16,7 @@ Last-Update: 2016-06-27
  #define _CRT_NONSTDC_NO_DEPRECATE
 --- a/src/options.c
 +++ b/src/options.c
-@@ -202,7 +202,7 @@
+@@ -211,7 +211,7 @@
  NOEXPORT char **argalloc(char *);
  #endif
  
@@ -25,7 +25,7 @@ Last-Update: 2016-06-27
  
  GLOBAL_OPTIONS global_options;
  SERVICE_OPTIONS service_options;
-@@ -280,17 +280,27 @@
+@@ -289,17 +289,27 @@
      }
  
  #ifdef HAVE_REALPATH
@@ -60,7 +60,7 @@ Last-Update: 2016-06-27
  
 --- a/src/prototypes.h
 +++ b/src/prototypes.h
-@@ -431,7 +431,7 @@
+@@ -435,7 +435,7 @@
  
  /**************************************** prototypes for options.c */
  

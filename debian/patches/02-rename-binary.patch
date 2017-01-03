@@ -34,7 +34,7 @@ Last-Update: 2016-07-18
 +DEFAULTPIDFILE="/var/run/stunnel4.pid"
 +DAEMON=@bindir@/stunnel4
  NAME=stunnel
- DESC="SSL tunnels"
+ DESC="TLS tunnels"
  OPTIONS=""
 @@ -49,9 +49,9 @@
  startdaemons() {
@@ -95,9 +95,9 @@ Last-Update: 2016-07-18
  .\" ========================================================================
  .\"
 -.IX Title "stunnel 8"
--.TH stunnel 8 "2016.11.26" "5.38" "stunnel TLS Proxy"
+-.TH stunnel 8 "2016.12.13" "5.39" "stunnel TLS Proxy"
 +.IX Title "stunnel4 8"
-+.TH stunnel 8 "2016.11.26" "5.38" "stunnel4 TLS Proxy"
++.TH stunnel 8 "2016.12.13" "5.39" "stunnel4 TLS Proxy"
  .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
  .\" way too many mistakes in technical documents.
  .if n .ad l
