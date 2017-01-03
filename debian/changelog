@@ -1,4 +1,4 @@
-stunnel4 (3:5.39-1) UNRELEASED; urgency=medium
+stunnel4 (3:5.39-1) unstable; urgency=medium
 
   * New upstream version:
     - drop the 08-dh-openssl-1.1 patch, dhparam.c was regenerated with
@@ -7,7 +7,7 @@ stunnel4 (3:5.39-1) UNRELEASED; urgency=medium
   * Remove the cybermirror sites from the watch file; their stunnel
     mirror has been "undergoing maintenance" for at least three months.
 
- -- Peter Pentchev <roam@ringlet.net>  Tue, 03 Jan 2017 11:21:38 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Tue, 03 Jan 2017 12:07:30 +0200
 
 stunnel4 (3:5.38-1) unstable; urgency=medium
 
