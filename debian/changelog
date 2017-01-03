@@ -6,6 +6,7 @@ stunnel4 (3:5.39-1) unstable; urgency=medium
     - refresh the rest of the patches
   * Remove the cybermirror sites from the watch file; their stunnel
     mirror has been "undergoing maintenance" for at least three months.
+  * Bump the year of my debian/* copyright notice.
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 03 Jan 2017 12:07:30 +0200
 
