@@ -4,6 +4,8 @@ stunnel4 (3:5.39-1) UNRELEASED; urgency=medium
     - drop the 08-dh-openssl-1.1 patch, dhparam.c was regenerated with
       OpenSSL 1.1 again
     - refresh the rest of the patches
+  * Remove the cybermirror sites from the watch file; their stunnel
+    mirror has been "undergoing maintenance" for at least three months.
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 03 Jan 2017 11:21:38 +0200
 
