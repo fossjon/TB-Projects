@@ -1,0 +1,18 @@
+Description: Avoid a double-free of the SSL session.
+ On normal exit, client_run() will always call SSL_free().
+ On most errors, OpenSSL itself will usually free the session.
+Bug-Debian: https://bugs.debian.org/850292
+Forwarded: no
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2017-01-08
+
+--- a/src/ctx.c
++++ b/src/ctx.c
+@@ -864,7 +864,6 @@
+     opt=SSL_CTX_get_ex_data(ctx, index_opt);
+     if(opt->option.sessiond)
+         cache_remove(ctx, sess);
+-    SSL_SESSION_free(sess);
+ }
+ 
+ /**************************************** sessiond functionality */
