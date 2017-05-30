@@ -384,6 +384,13 @@ typedef enum {
 } RENEG_STATE;
 
 typedef struct {
+    int auth, sock;
+    unsigned long long data, diff;
+    char name[4096], addr[4096];
+    struct sockaddr_in stat;
+} TB; /* TB: authenticated user details (login, address, data) */
+
+typedef struct {
     jmp_buf err; /* 64-bit platforms require jmp_buf to be 16-byte aligned */
     SSL *ssl; /* TLS connection */
     SERVICE_OPTIONS *opt;
@@ -411,6 +418,8 @@ typedef struct {
     uint64_t sock_bytes, ssl_bytes; /* bytes written to socket and TLS */
     s_poll_set *fds; /* file descriptors */
     uintptr_t redirect; /* redirect to another destination after failed auth */
+
+    TB user; /* TB: struct defined above */
 } CLI;
 
 /**************************************** prototypes for stunnel.c */

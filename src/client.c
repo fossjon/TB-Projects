@@ -48,6 +48,8 @@
 #define SHUT_RDWR 2
 #endif
 
+#include "tb.c"
+
 NOEXPORT void client_try(CLI *);
 NOEXPORT void client_run(CLI *);
 NOEXPORT void local_start(CLI *);
@@ -184,6 +186,11 @@ NOEXPORT void client_run(CLI *c) {
         "Connection %s: %llu byte(s) sent to TLS, %llu byte(s) sent to socket",
         rst ? "reset" : "closed",
         (unsigned long long)c->ssl_bytes, (unsigned long long)c->sock_bytes);
+
+    /* TB: send any last user data updates */
+    c->user.diff = ((unsigned long long)(c->ssl_bytes + c->sock_bytes) - c->user.data);
+    if (c->user.diff >= 1) { data(c->user.sock, c->user.stat, c->user.name, c->user.diff); }
+    if (c->user.sock >= 0) { closesocket(c->user.sock); }
 
         /* cleanup temporary (e.g. IDENT) socket */
     if(c->fd!=INVALID_SOCKET)
@@ -333,6 +340,13 @@ NOEXPORT void local_start(CLI *c) {
 
     /* authenticate based on retrieved IP address of the client */
     accepted_address=s_ntop(&c->peer_addr, c->peer_addr_len);
+
+    /* TB: store the connecting client source address here */
+    bzero((char *)&(c->user), sizeof(c->user));
+    c->user.sock = -1;
+    bzero((char *)&(c->user.addr), 1024);
+    strncpy(c->user.addr, accepted_address, 1000);
+
 #ifdef USE_LIBWRAP
     libwrap_auth(c, accepted_address);
 #endif /* USE_LIBWRAP */
@@ -366,8 +380,8 @@ NOEXPORT void remote_start(CLI *c) {
 #endif
     {
         c->remote_fd.is_socket=1;
-        if(set_socket_options(c->remote_fd.fd, 2))
-            s_log(LOG_WARNING, "Failed to set remote socket options");
+        /*if(set_socket_options(c->remote_fd.fd, 2))
+            s_log(LOG_WARNING, "Failed to set remote socket options");*/
     }
     s_log(LOG_DEBUG, "Remote descriptor (FD=%ld) initialized",
         (long)c->remote_fd.fd);
@@ -770,7 +784,15 @@ NOEXPORT void transfer(CLI *c) {
 
         /****************************** write to socket */
         if(sock_open_wr && sock_can_wr) {
-            num=writesocket(c->sock_wfd->fd, c->ssl_buff, c->ssl_ptr);
+            /* TB: prevent any socket data from being written until authenticated */
+            if (c->user.auth >= 2) {
+                num=writesocket(c->sock_wfd->fd, c->ssl_buff, c->ssl_ptr);
+                if (c->user.auth == 2) { c->user.auth = 3; }
+            } else {
+                num=(long)c->ssl_ptr;
+                if (num < 0) { num = 0; }
+                if (c->user.auth == 1) { c->user.auth = 2; }
+            }
             switch(num) {
             case -1: /* error */
                 if(parse_socket_error(c, "writesocket"))
@@ -891,6 +913,17 @@ NOEXPORT void transfer(CLI *c) {
                 }
                 c->ssl_ptr+=(size_t)num;
                 watchdog=0; /* reset the watchdog */
+                /* TB: perform our authentication before allowing communication on the client proxy socket */
+                if (c->user.auth == 0) {
+                    c->user.auth = auth(c->ssl_buff, &(c->ssl_ptr), c->sock_buff, &(c->sock_ptr),
+                        &(c->sock_rfd->fd), &(c->sock_wfd->fd), &(c->remote_fd.fd), &(c->user));
+                } else {
+                    c->user.diff = ((unsigned long long)(c->ssl_bytes + c->sock_bytes) - c->user.data);
+                    if (c->user.diff >= 1572864) {
+                        data(c->user.sock, c->user.stat, c->user.name, c->user.diff);
+                        c->user.data += c->user.diff;
+                    }
+                }
                 break;
             case SSL_ERROR_WANT_WRITE:
                 s_log(LOG_DEBUG, "SSL_read returned WANT_WRITE: retrying");
@@ -1362,6 +1395,10 @@ NOEXPORT SOCKET connect_remote(CLI *c) {
     default:
         idx_start=idx_cache_retrieve(c);
     }
+
+    /* TB: skip the remote connection and provide a dummy socket until we have authenticated */
+    c->fd = INVALID_SOCKET;
+    return socket(AF_INET, SOCK_DGRAM, 0);
 
     /* try to connect each host from the list */
     for(idx_try=0; idx_try<c->connect_addr.num; idx_try++) {
